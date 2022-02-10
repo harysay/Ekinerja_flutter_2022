@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/app" />
+            <option value="C:/data/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/catcher-0.2.9/android" />
+            <option value="C:/data/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/device_info-0.4.2+4/android" />
+            <option value="C:/data/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_mailer-0.4.3/android" />
+            <option value="C:/data/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/fluttertoast-3.1.3/android" />
+            <option value="C:/data/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/package_info-0.4.0+18/android" />
+            <option value="C:/data/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-0.4.3/android" />
+          </set>
+        </option>
+        <option name="resolveModulePerSourceSet" value="false" />
+        <option name="testRunner" value="PLATFORM" />
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>
