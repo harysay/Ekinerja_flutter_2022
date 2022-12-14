@@ -454,7 +454,7 @@ class _AktivitasListTabState extends State<AktivitasListTab>
             return Center(
               child: Text(
                 "Tidak Ada Data",
-                style: Theme.of(context).textTheme.title,
+                style: Theme.of(context).textTheme.bodyText1,
               ),
             );
           }else{
@@ -544,28 +544,30 @@ class _AktivitasListTabState extends State<AktivitasListTab>
                                         title: Text('Peringatan'),
                                         content: Text('Apakah Anda yakin akan menghapus?'),
                                         actions: <Widget>[
-                                          FlatButton(
+                                          TextButton(
                                             child: Text('No'),
                                             onPressed: () {
                                               Navigator.of(context).pop();
                                             },
                                           ),
-                                          FlatButton(
+                                          TextButton(
                                             child: Text('Yes'),
                                             onPressed: () {
                                               //_deleteTask(aktivitas.idSubPekerjaan);
                                               api.delete(aktivitas.idDataKinerja,widget.tokenlog).then((result) {
                                                 if (result != null) {
-                                                  _scaffoldState.currentState
-                                                      .showSnackBar(SnackBar(
-                                                    content: Text("Hapus data sukses"),
-                                                  ));
+                                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Hapus data sukses"),));
+                                                  // _scaffoldState.currentState
+                                                  //     .showSnackBar(SnackBar(
+                                                  //   content: Text("Hapus data sukses"),
+                                                  // ));
                                                   setState(() {});
                                                 } else {
-                                                  _scaffoldState.currentState
-                                                      .showSnackBar(SnackBar(
-                                                    content: Text("Hapus data gagal"),
-                                                  ));
+                                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Hapus data gagal"),));
+                                                  // _scaffoldState.currentState
+                                                  //     .showSnackBar(SnackBar(
+                                                  //   content: Text("Hapus data gagal"),
+                                                  // ));
                                                 }
                                               });
                                               Navigator.of(context).pop();
@@ -675,7 +677,7 @@ class _AktivitasListTabVerifikasi extends State<AktivitasListTabVerifikasi>
             return Center(
               child: Text(
                 "Tidak Ada Data",
-                style: Theme.of(context).textTheme.title,
+                style: Theme.of(context).textTheme.bodyText1,
               ),
             );
           }else{

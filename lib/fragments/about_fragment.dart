@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutFragment extends StatelessWidget {
+  DateTime sekarang = new DateTime.now();
+  // ApiService getapi = new ApiService();
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -16,7 +19,7 @@ class AboutFragment extends StatelessWidget {
             child: new Center(
               child: new Column(
                 children: <Widget>[
-                  new Text("2021 \u00a9 Dinas Kominfo Kabupaten Kebumen"),
+                  new Text(ApiService.tahunSekarang+" \u00a9 Dinas Kominfo Kabupaten Kebumen"),
                   new Text("All rights reserved"),
                 ],
               ),
@@ -34,12 +37,18 @@ class AboutFragment extends StatelessWidget {
                   ),
                   new Text(ApiService.versionBuildSekarang),
                   new Center(
-                    child: new RaisedButton(
-                      color: Colors.orangeAccent,
+                    child: new ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        onPrimary: Colors.white,
+                        animationDuration: Duration(milliseconds: 1000),
+                        primary: Colors.orangeAccent,
+                        shadowColor: Colors.redAccent,
+                        elevation: 10,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                      ),
                       onPressed: _launchURL,
-                      textColor: Colors.white,
-                      splashColor: Colors.grey,
-                      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                       child: new Text('Manual E-Kinerja Android'),
                     ),
                   ),

@@ -28,7 +28,7 @@ abstract class ShowFunctions {
     return Fluttertoast.showToast(
       msg: msg,
       toastLength: toastLength,
-      timeInSecForIos: timeInSecForIos,
+      timeInSecForIosWeb: timeInSecForIos,
       fontSize: fontSize,
       gravity: gravity,
       textColor: textColor,

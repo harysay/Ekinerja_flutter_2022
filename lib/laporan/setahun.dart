@@ -85,7 +85,7 @@ class _SetahunState extends State<Setahun> {
                   child: Text(
                     header,
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.display1.copyWith(fontWeight: FontWeight.w700, fontSize: 14.0,color: Colors.black87),
+                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14.0,color: Colors.black87),
                   ),
                 );
               },
@@ -96,7 +96,7 @@ class _SetahunState extends State<Setahun> {
                   child: Text(
                     value,
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.display1.copyWith(fontSize: 14.0, color: Colors.grey[900]),
+                    style: TextStyle(fontSize: 14.0, color: Colors.grey[900]),
                   ),
                 );
               },

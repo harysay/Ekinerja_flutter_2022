@@ -4,9 +4,11 @@ import 'dart:io';
 import 'package:ekinerja2020/service/ApiService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:package_info/package_info.dart';
+// import 'package:package_info/package_info.dart';
+// import 'package:package_info_plus/package_info_plus.dart';
 //import 'package:parse_server_sdk/parse_server_sdk.dart';
 import 'package:in_app_update/in_app_update.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -41,7 +43,7 @@ class _UpdateAppState extends State<UpdateApp> {
     //await Future.delayed(Duration(seconds: 5));
 
     //Add query here to get the minimum and latest app version
-    final response = await http.get(ApiService.baseStatusRunning);
+    final response = await http.get(Uri.parse(ApiService.urlUtama+"status/running"));
     final stat = jsonDecode(response.body);
     setState(() {
       statusRun = stat['status'];
@@ -152,7 +154,7 @@ class _UpdateAppState extends State<UpdateApp> {
           ),
           content: Text(message),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text(btnLabel),
               onPressed: _onUpdateNowClicked,
             ),

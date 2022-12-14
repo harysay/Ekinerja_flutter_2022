@@ -73,8 +73,9 @@ class _LoginPageState extends State<LoginPage> {
 
   // membuat method untuk login ke db
   login() async {
+    print("getuser="+username+":"+password);
     // untuk post wajib ada body properti
-    final response = await http.post(ApiService.baseUrlLogin, body: {
+    final response = await http.post(Uri.parse(ApiService.urlUtama+"login/proseslogin"), body: {
       // sesuaikan dengan key yg sudah dibuat pada api
       "username":
       username, // key username kemudian nilai inputnya dari mana,  dari string username
@@ -159,7 +160,7 @@ class _LoginPageState extends State<LoginPage> {
     Map<String, dynamic> inputMap = {
       'id_pns': id_pns,
     };
-    final response = await http.post(ApiService.baseStatusLogout,
+    final response = await http.post(Uri.parse(ApiService.urlUtama+"Login/proses_logout"),
       body: inputMap,
     );
     final data = jsonDecode(response.body);
@@ -276,8 +277,7 @@ class _LoginPageState extends State<LoginPage> {
     //kalau mau setiap kali masuk ke halaman login dulu aktifkan script di bawah ini
 //    if(ststusRun=="true") {
       switch (_loginStatus) {
-        case LoginStatus
-            .notSignIn: // case saat tidak sign in akan masuk ke hal login
+        case LoginStatus.notSignIn: // case saat tidak sign in akan masuk ke hal login
           return Scaffold(
               backgroundColor: Colors.white,
               body: Form(
@@ -358,7 +358,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
-                      FlatButton(
+                      TextButton(
                         child: Text(
                           'Lupa password?',
                           style: TextStyle(color: Colors.black54),

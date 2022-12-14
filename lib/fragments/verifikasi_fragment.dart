@@ -62,7 +62,7 @@ class JsonImageListWidget extends State<VerifikasiFragment> {
         return AlertDialog(
           title: new Text(holder),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: new Text("OK"),
         onPressed: () {
         Navigator.of(context).pop();

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 //import 'package:ekinerja2020/model/daftar_pekerjaan.dart';
+import 'package:ekinerja2020/model/daftar_skp.dart';
 import 'package:flutter/material.dart';
 import 'package:ekinerja2020/model/daftar_aktivitas.dart';
 import 'package:ekinerja2020/service/ApiService.dart';
@@ -16,16 +17,16 @@ import 'customTimePicker.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
-class FormScreen extends StatefulWidget {
-  List<DaftarAktivitas> daftarSudahAda;
-  DaftarAktivitas daftaraktivitas;
-  FormScreen({this.daftarSudahAda, this.daftaraktivitas});
+class FormSkp extends StatefulWidget {
+  List<DaftarSkp> daftarSudahAda;
+  DaftarSkp daftaraktivitas;
+  FormSkp({this.daftarSudahAda, this.daftaraktivitas});
 
   @override
-  _FormScreenState createState() => _FormScreenState();
+  _FormSkpState createState() => _FormSkpState();
 }
 
-class _FormScreenState extends State<FormScreen> {
+class _FormSkpState extends State<FormSkp> {
   //DaftarPekerjaan repo = DaftarPekerjaan();
   var dataJson,_daftarPekerjaan,_daftarSubPekerjaan;
   //List<DaftarPekerjaan> semuaPekerjaan;
@@ -42,7 +43,7 @@ class _FormScreenState extends State<FormScreen> {
   //List<String> _subPekerjaan;
   //String _selectedState = "Choose a state";
   //String _selectedLGA = "Choose ..";
-  String pekerjaanDefaultEdit;
+  String rkAtasan,rencanaKinerja,aspekKuantitas,aspekKuantTarget,aspekKuantSatuan,aspekKual,aspekKualTarget,aspekWaktu,aspekWaktuTarget,aspekWaktuSatuan;
   List statesList = List();
   List provincesList = List();
   List tempList = List();
@@ -120,17 +121,23 @@ class _FormScreenState extends State<FormScreen> {
     _populateDropdown();
     //Jika ada lemparan dari second_fragment (Edit) maka dilakukan berikut
     if (this.widget.daftaraktivitas != null) { //ngecek ada isinya nggak klo ada isinya berarti edit
-      _date = this.widget.daftaraktivitas.tglKinerja;
-      _timeMulai = this.widget.daftaraktivitas.jamMulai;
-      _timeSelesai = this.widget.daftaraktivitas.jamSelesai;
-      pekerjaanDefaultEdit = this.widget.daftaraktivitas.namaPekerjaan;
-      _state = this.widget.daftaraktivitas.idPekerjaan;
-      getIdSubPekerjaanValue = this.widget.daftaraktivitas.idSubPekerjaan;
-      //ctrlTanggalAktivitas.text = this.widget.daftaraktivitas.tglKinerja;
-      ctrlUraianPekerjaan.text = this.widget.daftaraktivitas.uraianPekerjaan;
-      //ctrlIdSubPekerjaan.text = this.widget.daftaraktivitas.idSubPekerjaan;
+      //rkAtasan,rencanaKinerja,aspekKuantitas,aspekKuantTarget,aspekKuantSatuan,aspekKual,aspekKualTarget,aspekWaktu,aspekWaktuTarget,aspekWaktuSatuan
+      rkAtasan = this.widget.daftaraktivitas.rkAtasan;
+      rencanaKinerja = this.widget.daftaraktivitas.rk;
+
+      aspekKuantitas = this.widget.daftaraktivitas.aspekSIkiKuant;
+      aspekKuantTarget = this.widget.daftaraktivitas.aspekSIkiKuantTarget;
+      aspekKuantSatuan = this.widget.daftaraktivitas.aspekSIkiKuantSatuanOutput;
+
+      aspekKual = this.widget.daftaraktivitas.aspekSIkiKual;
+      aspekKualTarget = this.widget.daftaraktivitas.aspekSIkiKualTarget;
+
+      aspekWaktu = this.widget.daftaraktivitas.aspekSIkiWaktu;
+      aspekWaktuTarget = this.widget.daftaraktivitas.aspekSIkiWaktuTarget;
+      aspekWaktuSatuan = this.widget.daftaraktivitas.aspekSIkiWaktuSatuanOutput;
     }
-    super.initState();
+
+
   }
 
   Future<Null> fetchAktivitasSebelumnya()async{
@@ -700,7 +707,7 @@ class _FormScreenState extends State<FormScreen> {
                               if (validateInput()) {
                                 DaftarAktivitas dataIn = new DaftarAktivitas(
                                     idDataKinerja: this.widget.daftaraktivitas != null
-                                        ? this.widget.daftaraktivitas.idDataKinerja
+                                        ? this.widget.daftaraktivitas.idDataSkp
                                         : "",
                                     tglKinerja: _date,
                                     idSubPekerjaan: getIdSubPekerjaanValue,

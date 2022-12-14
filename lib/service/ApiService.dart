@@ -25,17 +25,23 @@ class ApiService {
   // static String versionCodeSekarang = "9"; //harus sama dengan version di buildernya
   // static String versionBuildSekarang = "Version 2.0.db.27082021";
 
-  String urlGetdataPribadi = "https://development.kebumenkab.go.id/siltapkin/index.php/api/rekam/dataDiri?token=";
-  static String baseUrl = "https://development.kebumenkab.go.id/siltapkin/index.php/api/rekam/";
-  static String baseUrlLogin = "https://development.kebumenkab.go.id/siltapkin/index.php/api/login/proseslogin";
-  static String baseTampilPegawaiVerifikasi = "https://development.kebumenkab.go.id/siltapkin/index.php/api/verifikasi/";
-  static String baseLaporan = "https://development.kebumenkab.go.id/siltapkin/index.php/api/laporan/";
-  static String baseStatusLogout = "https://development.kebumenkab.go.id/siltapkin/index.php/api/Login/proses_logout";
-  static String baseStatusRunning = "https://development.kebumenkab.go.id/siltapkin/index.php/api/status/running";
-  static String baseSudahverfiPribadi = "https://development.kebumenkab.go.id/siltapkin/index.php/api/rekam/verif_individu_bulanan?token=";
-  String baseDaftarPekerjaan = "https://development.kebumenkab.go.id/siltapkin/index.php/api/master_data/pekerjaan_lepas?token=";
+  // static String urlUtama = "https://development.kebumenkab.go.id/siltapkin/index.php/api/";
+  // static String urlUtama = "https://tukin.kebumenkab.go.id/api/";
+  static String urlUtama = "https://tukin.kebumenkab.go.id/2020/index.php/api/";
   static String versionCodeSekarang = "9"; //harus sama dengan version di buildernya
+  static String tahunSekarang = "2022";
   static String versionBuildSekarang = "Version 2.0.db.29112021";
+
+  // String urlGetdataPribadi = "https://development.kebumenkab.go.id/siltapkin/index.php/api/rekam/dataDiri?token=";
+  // static String baseUrl = "https://development.kebumenkab.go.id/siltapkin/index.php/api/rekam/";
+  // static String baseUrlLogin = "https://development.kebumenkab.go.id/siltapkin/index.php/api/login/proseslogin";
+  // static String baseTampilPegawaiVerifikasi = "https://development.kebumenkab.go.id/siltapkin/index.php/api/verifikasi/";
+  // static String baseLaporan = "https://development.kebumenkab.go.id/siltapkin/index.php/api/laporan/";
+  // static String baseStatusLogout = "https://development.kebumenkab.go.id/siltapkin/index.php/api/Login/proses_logout";
+  // static String baseStatusRunning = "https://development.kebumenkab.go.id/siltapkin/index.php/api/status/running";
+  // static String baseSudahverfiPribadi = "https://development.kebumenkab.go.id/siltapkin/index.php/api/rekam/verif_individu_bulanan?token=";
+  // String baseDaftarPekerjaan = "https://development.kebumenkab.go.id/siltapkin/index.php/api/master_data/pekerjaan_lepas?token=";
+
 
   //Production
  // String urlGetdataPribadi = "https://tukin.kebumenkab.go.id/api/rekam/dataDiri?token=";
@@ -69,8 +75,8 @@ class ApiService {
   Future<List<DaftarPegawaiVerifikasi>> getAllPegawaiVer(String tokenDafAktiv) async {
     //Map<String, dynamic> inputMap = {'DEMO-API-KEY': '$key'};
     getPrefFromApi();
-    final response = await http.post(
-      baseTampilPegawaiVerifikasi + "tampilpegawai?token="+tokenDafAktiv,
+    final response = await http.post(Uri.parse(
+      ApiService.urlUtama+"verifikasi/tampilpegawai?token="+tokenDafAktiv),
 //      headers: {
 //        "Accept": "application/json",
 //        "Content-Type": "application/x-www-form-urlencoded",
@@ -90,10 +96,22 @@ class ApiService {
 
   DaftarAktivitasResponse rAlActivity = new DaftarAktivitasResponse();
   getSemuaAktivitas(String tokenListAktivitas)async{
-    final response = await http.get(baseUrl+"tampildaftar?token="+tokenListAktivitas);
+    final response = await http.get(Uri.parse(ApiService.urlUtama+"rekam/tampildaftar?token="+tokenListAktivitas));
     rAlActivity = DaftarAktivitasResponse.fromJson(json.decode(response.body));
     if (response.statusCode == 200) {
       var data = rAlActivity.data;
+      return data;
+    } else {
+      return null;
+    }
+  }
+
+  DaftarAktivitasResponse allSkp = new DaftarAktivitasResponse();
+  getSemuaSkp(String tokenGetSkp)async{
+    final response = await http.get(Uri.parse(ApiService.urlUtama+"skp/daftar_skp?token="+tokenGetSkp));
+    allSkp = DaftarAktivitasResponse.fromJson(json.decode(response.body));
+    if (response.statusCode == 200) {
+      var data = allSkp.data;
       return data;
     } else {
       return null;
@@ -109,7 +127,7 @@ class ApiService {
     }else{
       bulan = now.month;
     }
-    final response = await http.get(baseSudahverfiPribadi+tokenverfi+"&bulan="+bulan.toString()+"&tahun="+now.year.toString(),
+    final response = await http.get(Uri.parse(ApiService.urlUtama+"rekam/verif_individu_bulanan?token="+tokenverfi+"&bulan="+bulan.toString()+"&tahun="+now.year.toString()),
 //      headers: {
 //        "Accept": "application/json",
 //        "Content-Type": "application/x-www-form-urlencoded",
@@ -130,7 +148,7 @@ class ApiService {
   DaftarAktivitasResponse rverfi = new DaftarAktivitasResponse();
   Future<List<DaftarAktivitas>> getAllActivityVer(String tokenverfi, String idPns) async {
     //Map<String, dynamic> inputMap = {'DEMO-API-KEY': '$key'};
-    final response = await http.get(baseTampilPegawaiVerifikasi+"tampilpegawaidetail?token="+tokenverfi+"&id_pns="+idPns,
+    final response = await http.get(Uri.parse(ApiService.urlUtama+"verifikasi/tampilpegawaidetail?token="+tokenverfi+"&id_pns="+idPns),
 //      headers: {
 //        "Accept": "application/json",
 //        "Content-Type": "application/x-www-form-urlencoded",
@@ -156,7 +174,7 @@ class ApiService {
   Future<List<DaftarAktivitas>> getAllKontak(String tokenListAktivitas) async {
     //Map<String, dynamic> inputMap = {'DEMO-API-KEY': '$key'};
     //getPrefFromApi();
-    final response = await http.get(baseUrl+"tampildaftar?token="+tokenListAktivitas//      headers: {
+    final response = await http.get(Uri.parse(ApiService.urlUtama+"rekam/tampildaftar?token="+tokenListAktivitas)//      headers: {
 //        "Accept": "application/json",
 //        "Content-Type": "application/x-www-form-urlencoded",
 //        "authorization": basicAuth
@@ -181,8 +199,7 @@ class ApiService {
       //'numb': aktivitas.numb,
       'id_data_kinerja': idDataKinerja,
     };
-    final response = await http.post(
-      baseUrl + "tampildetail?token="+tokenByID,
+    final response = await http.post(Uri.parse(ApiService.urlUtama+"rekam/tampildetail?token="+tokenByID),
 //      headers: {
 //        "Accept": "application/json",
 //        "Content-Type": "application/x-www-form-urlencoded",
@@ -218,8 +235,7 @@ class ApiService {
       //'status': aktivitas.status
     };
 
-    final response = await http.post(
-      baseUrl+"simpanpekerjaan?token="+tokenCreate,
+    final response = await http.post(Uri.parse(ApiService.urlUtama+"rekam/simpanpekerjaan?token="+tokenCreate),
       //headers: {"content-type": "application/json"},
 //      headers: {
 //        "Accept": "application/json",
@@ -250,8 +266,7 @@ class ApiService {
       'jam_mulai': aktivitas.jamMulai,
       'jam_selesai': aktivitas.jamSelesai,
     };
-    final response = await http.post(
-      baseUrl + "update?token="+tokenUpdate+"&id_data_kinerja="+aktivitas.idDataKinerja,
+    final response = await http.post(Uri.parse(ApiService.urlUtama+"rekam/update?token="+tokenUpdate+"&id_data_kinerja="+aktivitas.idDataKinerja),
 //      headers: {
 //        "Accept": "application/json",
 //        "Content-Type": "application/x-www-form-urlencoded",
@@ -274,8 +289,7 @@ class ApiService {
       //'DEMO-API-KEY': '$key',
       'id_data_kinerja': idDataKinerja
     };
-    final response = await http.post(
-      baseUrl + "hapuspekerjaan?token="+tokenDelete,
+    final response = await http.post(Uri.parse(ApiService.urlUtama+"rekam/hapuspekerjaan?token="+tokenDelete),
 //      headers: {
 //        "Accept": "application/json",
 //        "Content-Type": "application/x-www-form-urlencoded",
@@ -295,7 +309,7 @@ class ApiService {
 
   DaftarAktivitasResponse rfi = new DaftarAktivitasResponse();
   setujuiAktivitas(String token, String idDataKinerja, String waktuDiakui, String tglKinerja)async{
-    final response = await http.get(baseTampilPegawaiVerifikasi+"verifikasisatu?token="+token+"&id_kinerja="+idDataKinerja+"&status_verifikasi=Diterima&waktu_diakui="+waktuDiakui+"&tgl_kinerja="+tglKinerja,);
+    final response = await http.get(Uri.parse(ApiService.urlUtama+"verifikasi/verifikasisatu?token="+token+"&id_kinerja="+idDataKinerja+"&status_verifikasi=Diterima&waktu_diakui="+waktuDiakui+"&tgl_kinerja="+tglKinerja),);
     if (response.statusCode == 200) {
       List<DaftarAktivitas> data = rfi.data;
       return data;
@@ -313,8 +327,8 @@ class ApiService {
       'status_verifikasi': statusVerifikasi,
       'keterangan': keterangan,
     };
-    final response = await http.post(
-      baseTampilPegawaiVerifikasi+"tolakkembalikan",
+    final response = await http.post(Uri.parse(
+      ApiService.urlUtama+"verifikasi/tolakkembalikan"),
 //      headers: {
 //        "Accept": "application/json",
 //        "Content-Type": "application/x-www-form-urlencoded",
@@ -340,8 +354,7 @@ class ApiService {
       'status_verifikasi': statusVerifikasi,
       'keterangan': keterangan,
     };
-    final response = await http.post(
-      baseTampilPegawaiVerifikasi+"tolakkembalikan",
+    final response = await http.post(Uri.parse(ApiService.urlUtama+"verifikasi/tolakkembalikan"),
 //      headers: {
 //        "Accept": "application/json",
 //        "Content-Type": "application/x-www-form-urlencoded",
@@ -360,7 +373,7 @@ class ApiService {
 
 
   laporanInividu(String tokenByID, String bulanGet, String tahunGet) async {
-    final response = await http.get(baseLaporan+"individu_bulanan_new?bulan="+bulanGet+"&tahun="+tahunGet+"&token="+tokenByID,);
+    final response = await http.get(Uri.parse(ApiService.urlUtama+"laporan/individu_bulanan_new?bulan="+bulanGet+"&tahun="+tahunGet+"&token="+tokenByID));
     var dataObjJson = jsonDecode(response.body)['data'] as List;
 //    List dataObjs = dataObjJson.map((e) => DaftarAktivitas.fromJson(e)).toList();
     if (response.statusCode == 200) {
@@ -382,7 +395,7 @@ class ApiService {
   }
 
   laporanInividuTahunan(String tokenByID, String tahunGet) async {
-    final response = await http.get(baseLaporan+"individu_tahunan?tahun="+tahunGet+"&token="+tokenByID,);
+    final response = await http.get(Uri.parse(ApiService.urlUtama+"laporan/individu_tahunan?tahun="+tahunGet+"&token="+tokenByID));
     var dataObjJsonTahunan = jsonDecode(response.body)['data'] as List;
 //    List dataObjs = dataObjJson.map((e) => DaftarAktivitas.fromJson(e)).toList();
     if (response.statusCode == 200) {
@@ -397,7 +410,7 @@ class ApiService {
     Map<String, dynamic> inputMap = {
       'id_pns': id_pns,
     };
-    final response = await http.post(baseStatusLogout,
+    final response = await http.post(Uri.parse(ApiService.urlUtama+"Login/proses_logout"),
       body: inputMap,
     );
     var objLogout = jsonDecode(response.body)['data'] as List;

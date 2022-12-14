@@ -19,7 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ekinerja2020/verifikasi/ui/icon_button.dart';
 import 'package:http/http.dart' as http;
 import 'package:ekinerja2020/response/daftar_aktivitas_response.dart';
-import 'package:catcher/catcher_plugin.dart';
+import 'package:catcher/catcher.dart';
 
 import 'animations.dart';
 import 'selection_widgets.dart';
@@ -34,7 +34,7 @@ export 'switcher.dart';
 const kPrimaryColor = Color(0xff4995f7);
 
 void main() async {
-  Catcher(App());
+  Catcher(rootWidget: App());
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -536,7 +536,7 @@ class _AktivitasListTabState extends State<AktivitasListTab>
             return Center(
               child: Text(
                 "Tidak Ada Data",
-                style: Theme.of(context).textTheme.title,
+                style: Theme.of(context).textTheme.bodyText1,
               ),
             );
           }else{

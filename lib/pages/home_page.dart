@@ -2,7 +2,9 @@ import 'package:ekinerja2020/fragments/first_fragment.dart';
 import 'package:ekinerja2020/fragments/second_fragment.dart';
 import 'package:ekinerja2020/fragments/third_fragment.dart';
 import 'package:ekinerja2020/fragments/about_fragment.dart';
+import 'package:ekinerja2020/fragments/skp_fragment.dart';
 import 'package:ekinerja2020/fragments/verifikasi_fragment.dart';
+import 'package:ekinerja2020/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -35,6 +37,7 @@ class HomePageState extends State<HomePage> {
   signOut() {
     setState(() {
       widget.signOut();
+      HomePage(this.signOut);
     });
   }
 
@@ -43,7 +46,7 @@ class HomePageState extends State<HomePage> {
     setState(() {
       tarikanToken = preferences.getString("tokenlogin");
     });
-    final response = await http.get(api.urlGetdataPribadi+tarikanToken);
+    final response = await http.get(Uri.parse(ApiService.urlUtama+"rekam/dataDiri?token="+tarikanToken));
     if(response.statusCode == 200){
       final data = jsonDecode(response.body);
       //final _daftarPekerjaan = data['data'];
@@ -61,6 +64,7 @@ class HomePageState extends State<HomePage> {
     new DrawerItem("Rekam Aktivitas", Icons.add_alarm),
     new DrawerItem("Verifikasi Aktivitas", Icons.check_circle_outline),
     new DrawerItem("Laporan", Icons.calendar_today),
+    new DrawerItem("SKP", Icons.account_circle_rounded),
     new DrawerItem("Tentang Aplikasi", Icons.help_outline),
     new DrawerItem("Keluar", Icons.call_missed_outgoing)
   ];
@@ -100,8 +104,10 @@ class HomePageState extends State<HomePage> {
         case 3:
           return new ThirdFragment();
         case 4:
-          return new AboutFragment();
+          return new SkpFragment();
         case 5:
+          return new AboutFragment();
+        case 6:
           return signOut();
 
         default:
@@ -116,8 +122,10 @@ class HomePageState extends State<HomePage> {
         case 2:
           return new ThirdFragment();
         case 3:
-          return new AboutFragment();
+          return new SkpFragment();
         case 4:
+          return new AboutFragment();
+        case 5:
           return signOut();
 
         default:

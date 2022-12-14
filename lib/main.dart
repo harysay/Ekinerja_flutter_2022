@@ -48,7 +48,7 @@ class _MyApp extends State<MyApp> {
   }
 
   void cekStatusRunning() async{
-    final response = await http.get(ApiService.baseStatusRunning);
+    final response = await http.get(Uri.parse(ApiService.urlUtama+"status/running"));
     final stat = jsonDecode(response.body);
     setState(() {
       statusRun = stat['status'];
@@ -72,16 +72,30 @@ class _MyApp extends State<MyApp> {
         title: 'E-Kinerja',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primarySwatch: colorCustom,
-          fontFamily: 'Nunito',
-          textTheme: TextTheme(
-            headline: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
-            title: TextStyle(fontSize: 20.0,
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.bold,
-                decoration: TextDecoration.underline),
-            body1: TextStyle(fontSize: 18.0, fontFamily: 'Hind', height: 1.5),
-          ),
+            brightness: Brightness.light,
+            textTheme: TextTheme(
+                bodyText1: TextStyle(
+                    fontSize: 18,
+                    fontFamily: 'BreeSerif',
+                    height: 1.5
+                ),
+                bodyText2: TextStyle(
+                    fontSize: 16,
+                    fontFamily: 'Nunito',
+                    height: 1.5
+                ),
+                subtitle1: TextStyle(
+                  fontSize: 14,
+                  fontFamily: 'Nunito',
+                  // fontFamily: 'Pasifico',
+                )
+            ).apply(
+              bodyColor: Colors.orange,
+              displayColor: Colors.blue,
+            )
+        ),
+        darkTheme: ThemeData(
+          brightness: Brightness.dark,
         ),
         home: DoubleBack(
           message:"Tekan sekali lagi untuk keluar",
@@ -95,19 +109,29 @@ class _MyApp extends State<MyApp> {
       return MaterialApp(
         title: 'E-Kinerja',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-//          primarySwatch: Colors.deepOrange,
-          primarySwatch: colorCustom,
-          fontFamily: 'Nunito',
-          textTheme: TextTheme(
-            headline: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
-            title: TextStyle(fontSize: 20.0,
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.bold,
-                decoration: TextDecoration.underline),
-            body1: TextStyle(fontSize: 18.0, fontFamily: 'Hind', height: 1.5),
+          theme: ThemeData(
+              brightness: Brightness.light,
+              textTheme: TextTheme(
+                  bodyText1: TextStyle(
+                      fontSize: 18,
+                      fontFamily: 'BreeSerif',
+                      height: 1.5
+                  ),
+                  bodyText2: TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'Nunito',
+                      height: 1.5
+                  ),
+                  subtitle1: TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'Nunito',
+                    // fontFamily: 'Pasifico',
+                  )
+              ).apply(
+                bodyColor: Colors.orange,
+                displayColor: Colors.blue,
+              )
           ),
-        ),
         home: DoubleBack(
           message:"Tekan sekali lagi untuk keluar",
           child: MaintenancePage(),

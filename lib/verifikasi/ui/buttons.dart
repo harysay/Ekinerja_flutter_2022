@@ -73,17 +73,23 @@ class DialogRaisedButton extends StatelessWidget {
       data: Theme.of(context).copyWith(
         splashFactory: ListTileInkRipple.splashFactory,
       ),
-      child: RaisedButton(
-        splashColor: Colors.black.withOpacity(0.18),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          onPrimary: Colors.white,
+          animationDuration: Duration(milliseconds: 1000),
+          primary: Colors.orangeAccent,
+          shadowColor: Colors.redAccent,
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          padding: padding,
+          elevation: 10,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(borderRadius),
+          ),
+        ),
         child: Text(
           text,
           style: textStyle ??
               TextStyle(color: Theme.of(context).colorScheme.onPrimary),
-        ),
-        color: color ?? Theme.of(context).colorScheme.primary,
-        padding: padding,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(borderRadius),
         ),
         onPressed: () async {
           var res;
@@ -114,15 +120,14 @@ class DialogFlatButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
+    return TextButton(
       key: key,
       child: child,
       onPressed: onPressed,
-      textColor: textColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(borderRadius),
-        ),
+      style: ButtonStyle(
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius),
+                  side: BorderSide(color: textColor)))
       ),
     );
   }

@@ -26,7 +26,7 @@ class _FirstFragmentState extends State<FirstFragment>{
       tokenlogin = preferences.getString("tokenlogin");
 
     });
-    final response = await http.get(api.urlGetdataPribadi+tokenlogin);
+    final response = await http.get(Uri.parse(ApiService.urlUtama+"rekam/dataDiri?token="+tokenlogin));
     if(response.statusCode == 200){
       final data = jsonDecode(response.body);
       //final _daftarPekerjaan = data['data'];
@@ -66,8 +66,8 @@ class _FirstFragmentState extends State<FirstFragment>{
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    TextStyle styleDashboard = Theme.of(context).textTheme.body1;
-    TextStyle styleTitle = Theme.of(context).textTheme.title;
+    TextStyle styleDashboard = Theme.of(context).textTheme.bodyText2;
+    TextStyle styleTitle = Theme.of(context).textTheme.bodyText1;
     return new Center(
       //child: new Text("Hello Fragment 1"),
       child: loading ? Center(child: CircularProgressIndicator())
