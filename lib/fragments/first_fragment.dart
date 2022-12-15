@@ -1,3 +1,4 @@
+import 'package:ekinerja2020/pages/page_login.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -6,6 +7,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 ApiService api = new ApiService();
 
 class FirstFragment extends StatefulWidget {
+  // FirstFragment({
+  //   Key key,
+  //   @required this.wgtarikanNamaUser,this.wgtarikanPangkatUser,this.wgtarikanJabatanUser,this.wgtarikanInstansiUser,
+  //   this.wgtarikanNamaAtasan,this.wgtarikanNipAtasan,this.wgtarikanJabatanAtasan,this.wgtarikanInstansiAtasan
+  // }) : super(key: key);
+  // String wgtarikanNamaUser, wgtarikanPangkatUser, wgtarikanJabatanUser, wgtarikanInstansiUser;
+  // String wgtarikanNamaAtasan, wgtarikanNipAtasan, wgtarikanJabatanAtasan, wgtarikanInstansiAtasan;
   @override
   _FirstFragmentState createState() => _FirstFragmentState();
 
@@ -21,29 +29,43 @@ class _FirstFragmentState extends State<FirstFragment>{
     setState(() {
       loading = true;
     });
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    setState(() {
-      tokenlogin = preferences.getString("tokenlogin");
+    SharedPreferences pref = await SharedPreferences.getInstance();
 
-    });
-    final response = await http.get(Uri.parse(ApiService.urlUtama+"rekam/dataDiri?token="+tokenlogin));
-    if(response.statusCode == 200){
-      final data = jsonDecode(response.body);
-      //final _daftarPekerjaan = data['data'];
-      setState(() {
-        tarikanNamaUser = data["data"]["nama_gelar"];
-        tarikanPangkatUser = data["data"]["panggol"];
-        tarikanJabatanUser = data["data"]["jabatan"];
-        tarikanInstansiUser = data["data"]["unit_kerja"];
+    if(pref.getString("tarikNamaUser")!=null) {
+      tarikanNamaUser = pref.getString("tarikNamaUser");
+      tarikanPangkatUser = pref.getString("tarikPangkatUser");
+      tarikanJabatanUser = pref.getString("tarikJabatanUser");
+      tarikanInstansiUser = pref.getString("tarikInstansiUser");
 
-        tarikanNamaAtasan = data["data"]["nama_gelar_atasan"];
-        tarikanNipAtasan = data["data"]["nip_atasan"];
-        tarikanJabatanAtasan = data["data"]["jabatan_atasan"];
-        tarikanInstansiAtasan = data["data"]["instansi_atas"];
-        loading = false;
-      });
+      tarikanNamaAtasan = pref.getString("tarikNamaAtasan");
+      tarikanNipAtasan = pref.getString("tarikNipAtasan");
+      tarikanJabatanAtasan = pref.getString("tarikJabatanAtasan");
+      tarikanInstansiAtasan = pref.getString("tarikInstansiAtasan");
+      loading = false;
     }else{
-      Text("error bro");
+      setState(() {
+        tokenlogin = pref.getString("tokenlogin");
+      });
+      final response = await http.get(Uri.parse(
+          ApiService.urlUtama + "rekam/dataDiri?token=" + tokenlogin));
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        //final _daftarPekerjaan = data['data'];
+        setState(() {
+          tarikanNamaUser = data["data"]["nama_gelar"];
+          tarikanPangkatUser = data["data"]["panggol"];
+          tarikanJabatanUser = data["data"]["jabatan"];
+          tarikanInstansiUser = data["data"]["unit_kerja"];
+
+          tarikanNamaAtasan = data["data"]["nama_gelar_atasan"];
+          tarikanNipAtasan = data["data"]["nip_atasan"];
+          tarikanJabatanAtasan = data["data"]["jabatan_atasan"];
+          tarikanInstansiAtasan = data["data"]["instansi_atas"];
+          loading = false;
+        });
+      } else {
+        Text("error bro");
+      }
     }
   }
 
@@ -60,6 +82,37 @@ class _FirstFragmentState extends State<FirstFragment>{
     // TODO: implement initState
   _fetchData();
     super.initState();
+  }
+
+  logOut() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      preferences.remove("is_login");
+      // preferences.remove("email");
+      preferences.remove("niplogin");
+      preferences.remove("tokenlogin");
+      preferences.remove("namalogin");
+      preferences.remove("fotoLogin");
+      preferences.remove("ideselon");
+      preferences.remove("jabatan");
+      preferences.remove("id_pns");
+    });
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => const PageLogin(),
+      ),
+          (route) => false,
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+          content: Text(
+            "Berhasil logout",
+            style: TextStyle(fontSize: 16),
+          )),
+    );
   }
 
 
@@ -162,7 +215,14 @@ class _FirstFragmentState extends State<FirstFragment>{
                       )
                     ],
                   )
-              )
+              ),
+              const SizedBox(height: 15),
+              ElevatedButton.icon(
+                  onPressed: () {
+                    logOut();
+                  },
+                  icon: const Icon(Icons.lock_open),
+                  label: const Text("Log Out")),
             ],
           ),
     );

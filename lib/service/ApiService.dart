@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:ekinerja2020/fragments/verifikasi_fragment.dart';
 import 'package:ekinerja2020/model/daftar_pegawaiverifikasi.dart';
+import 'package:ekinerja2020/model/daftar_skp.dart';
 import 'package:ekinerja2020/response/daftar_aktivitas_response_var.dart';
+import 'package:ekinerja2020/response/daftar_skp_response.dart';
 import 'package:http/http.dart' as http;
 import 'package:ekinerja2020/model/daftar_aktivitas.dart';
 import 'package:ekinerja2020/response/daftar_aktivitas_response.dart';
@@ -106,12 +108,12 @@ class ApiService {
     }
   }
 
-  DaftarAktivitasResponse allSkp = new DaftarAktivitasResponse();
-  getSemuaSkp(String tokenGetSkp)async{
+  DaftarSkpResponse allSkp = new DaftarSkpResponse();
+  Future<List<DaftarSkp>> getSemuaSkp(String tokenGetSkp)async{
     final response = await http.get(Uri.parse(ApiService.urlUtama+"skp/daftar_skp?token="+tokenGetSkp));
-    allSkp = DaftarAktivitasResponse.fromJson(json.decode(response.body));
+    allSkp = DaftarSkpResponse.fromJson(json.decode(response.body));
     if (response.statusCode == 200) {
-      var data = allSkp.data;
+      List<DaftarSkp> data = allSkp.data;
       return data;
     } else {
       return null;

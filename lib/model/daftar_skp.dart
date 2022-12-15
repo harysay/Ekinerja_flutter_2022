@@ -39,7 +39,7 @@ class DaftarSkp{
     );
   }
 
-  static List<DaftarSkp> daftarAktivitasFromJson(String jsonData){
+  static List<DaftarSkp> daftarSkpFromJson(String jsonData){
     final data = json.decode(jsonData);
     return List<DaftarSkp>.from(data.map((item) => DaftarSkp.fromJson(item)));
   }

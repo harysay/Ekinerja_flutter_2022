@@ -294,6 +294,7 @@ class _LoginPageState extends State<LoginPage> {
                       )),
                       SizedBox(height: 48.0),
                       TextFormField(
+                        initialValue:'198707212010011005',
                         keyboardType: TextInputType.number,
                         autofocus: true,
 //                        initialValue: '197305241999032004/197008281997031012',
@@ -314,6 +315,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       SizedBox(height: 8.0),
                       TextFormField(
+                        initialValue:'ROV3R84',
                         enableSuggestions: false,
                         autocorrect: false,
                         autofocus: false,
@@ -374,7 +376,7 @@ class _LoginPageState extends State<LoginPage> {
           );
           break;
         case LoginStatus.signIn: // jika sudah login akan masuk ke main menu
-          return HomePage(signOut);//(statusRun=="true") ? HomePage(signOut): MaintenancePage();
+          return HomePage();//(statusRun=="true") ? HomePage(signOut): MaintenancePage();
           break;
 
 //        case statusRun=="true":

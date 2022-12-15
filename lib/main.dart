@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'package:ekinerja2020/UpdateApp.dart';
 import 'package:ekinerja2020/pages/maintenancePage.dart';
+import 'package:ekinerja2020/view/splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'login_page.dart';
+// import 'login_page.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:ekinerja2020/pages/home_page.dart';
@@ -12,15 +13,14 @@ import 'package:ekinerja2020/service/ApiService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:double_back_to_close/double_back_to_close.dart';
 
-void main() => runApp(MyApp(
-
-));
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const MyApp());
+}
 
 class MyApp extends StatefulWidget {
-//  final routes = <String, WidgetBuilder>{
-//    LoginPage.tag: (context) => LoginPage(),
-//    //MaintenancePage.tag: (context) => MaintenancePage(),
-//  };
+  const MyApp({Key key}) : super(key: key);
+
   @override
   _MyApp createState() => new _MyApp();
 }
@@ -99,7 +99,7 @@ class _MyApp extends State<MyApp> {
         ),
         home: DoubleBack(
           message:"Tekan sekali lagi untuk keluar",
-          child: LoginPage(),
+          child: const SplashScreen(),
         ),
 //        home: LoginPage(),
 //        routes: widget.routes,
