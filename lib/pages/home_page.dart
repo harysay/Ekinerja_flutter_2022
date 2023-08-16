@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
     new DrawerItem("Rekam Aktivitas", Icons.add_alarm),
     new DrawerItem("Verifikasi Aktivitas", Icons.check_circle_outline),
     new DrawerItem("Laporan", Icons.calendar_today),
-    new DrawerItem("SKP", Icons.account_circle_rounded),
+    // new DrawerItem("SKP", Icons.account_circle_rounded),
     new DrawerItem("Tentang Aplikasi", Icons.help_outline),
     // new DrawerItem("Keluar", Icons.call_missed_outgoing)
   ];
@@ -164,9 +164,9 @@ class _HomePageState extends State<HomePage> {
           return new VerifikasiFragment();
         case 3:
           return new ThirdFragment();
+        // case 4:
+        //   return new SkpFragment(); //aktifkan jika menu SKP siap
         case 4:
-          return new SkpFragment();
-        case 5:
           return new AboutFragment();
         // case 6:
         //   return logOut();
@@ -182,9 +182,9 @@ class _HomePageState extends State<HomePage> {
           return new SecondFragment();
         case 2:
           return new ThirdFragment();
+        // case 3:
+        //   return new SkpFragment(); //aktifkan jika menu SKP siap
         case 3:
-          return new SkpFragment();
-        case 4:
           return new AboutFragment();
         // case 5:
         //   return logOut();
@@ -233,15 +233,33 @@ class _HomePageState extends State<HomePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       new Text(username),
-                      Row(children: <Widget>[
-                        Text('Telah bekerja: '),
-                        Text(tarikanLamaAktivitas??'tidak terdefinisi'),
-                        Text(' jam'),
-                      ],),
-                      Row(children: <Widget>[
-                        Text('Grade: '),
-                        Text(tarikanGrade??'tidak terdefinisi'),
-                      ],)
+                      // Expanded(child: child)
+                      Expanded(
+                        child: Row(
+                          children: <Widget>[
+                            Text('Telah bekerja: '),
+                            Text(tarikanLamaAktivitas ?? 'tidak terdefinisi'),
+                            Text(' jam'),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Row(
+                          children: <Widget>[
+                            Text('Grade: '),
+                            Text(tarikanGrade ?? 'tidak terdefinisi'),
+                          ],
+                        ),
+                      ),
+                      // Row(children: <Widget>[
+                      //   Text('Telah bekerja: '),
+                      //   Text(tarikanLamaAktivitas??'tidak terdefinisi'),
+                      //   Text(' jam'),
+                      // ],),
+                      // Row(children: <Widget>[
+                      //   Text('Grade: '),
+                      //   Text(tarikanGrade??'tidak terdefinisi'),
+                      // ],)
                     ],
                   ),
 

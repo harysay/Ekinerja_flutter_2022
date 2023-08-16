@@ -245,7 +245,7 @@ class _PageLoginState extends State<PageLogin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueAccent,
+      backgroundColor: Colors.orange,
       body: Container(
         margin: const EdgeInsets.all(0),
         decoration: const BoxDecoration(

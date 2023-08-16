@@ -10,15 +10,15 @@ final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
 class SkpFragment extends StatefulWidget {
   @override
-  _SecondFragmentState createState() => _SecondFragmentState();
+  _SkpFragmentState createState() => _SkpFragmentState();
 }
 
-class _SecondFragmentState extends State<SkpFragment>{
+class _SkpFragmentState extends State<SkpFragment>{
   DaftarSkp data;
   // late List<DaftarAktivitas> semuaAktivitas;
   final _messangerKey = GlobalKey<ScaffoldMessengerState>();
   String tokenlistaktivitas="";
-  List<DaftarSkp> semuaAktivitas = [];
+  List<DaftarSkp> semuaSkp = [];
   // String userId="";
   _getRequests() async {
     setState(() {});
@@ -28,8 +28,8 @@ class _SecondFragmentState extends State<SkpFragment>{
   @override
   void initState() {
     // TODO: implement initState
-    getPref();
     super.initState();
+    getPref();
   }
 
   Future<Null> getPref() async {
@@ -99,12 +99,12 @@ class _SecondFragmentState extends State<SkpFragment>{
   }
 
   Future refreshData() async {
-    // semuaAktivitas.clear();
+    // semuaSkp.clear();
     // await Future.delayed(Duration(seconds: 2));
     // for (var index = 0; index < 10; index++) {
     //   var nama = 'User ${index + 1}';
     //   var nomor = Random().nextInt(100);
-    //   semuaAktivitas.add(User(nama, nomor));
+    //   semuaSkp.add(User(nama, nomor));
     // }
     setState(() {});
   }
@@ -117,11 +117,11 @@ class _SecondFragmentState extends State<SkpFragment>{
     return Scaffold(
       key: _scaffoldState,
       body: FutureBuilder<List<DaftarSkp>>(
-        future: api.getSemuaSkp(tokenlistaktivitas),
+        future: api.getSemuaSkp(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            semuaAktivitas = snapshot.data;
-            if (semuaAktivitas.length == 0) {
+            semuaSkp = snapshot.data;
+            if (semuaSkp.length == 0) {
               return Center(
                 child: Text(
                   "Tidak Ada Data",
@@ -133,9 +133,9 @@ class _SecondFragmentState extends State<SkpFragment>{
                   onRefresh: refreshData,
                   child: ListView.builder(
                     itemExtent: 100,
-                    itemCount: semuaAktivitas.length,
+                    itemCount: semuaSkp.length,
                     itemBuilder: (context, index) {
-                      DaftarSkp aktivitas = semuaAktivitas[index];
+                      DaftarSkp aktivitas = semuaSkp[index];
                       return Dismissible(
                         key: UniqueKey(),
                         child: InkWell(
@@ -184,7 +184,7 @@ class _SecondFragmentState extends State<SkpFragment>{
 //                                             MaterialPageRoute(builder: (context) {
 //                                               return FormScreen(
 //                                                 daftaraktivitas: aktivitas,
-//                                                 daftarSudahAda: semuaAktivitas,
+//                                                 daftarSudahAda: semuaSkp,
 //                                               );
 //                                             })).then((value) => value?_getRequests():null);
 //                                       },
@@ -336,7 +336,7 @@ class _SecondFragmentState extends State<SkpFragment>{
                                         onPressed: () {
                                           // TODO: Delete the item from DB etc..
                                           // setState(() {
-                                          //   semuaAktivitas.removeAt(index);
+                                          //   semuaSkp.removeAt(index);
                                           // });
                                           // setState(() {
                                           api.delete(aktivitas.idDataSkp,tokenlistaktivitas).then((result) {
@@ -383,7 +383,7 @@ class _SecondFragmentState extends State<SkpFragment>{
                                 MaterialPageRoute(builder: (context) {
                                   return FormSkp(
                                     daftaraktivitas: aktivitas,
-                                    daftarSudahAda: semuaAktivitas,
+                                    daftarSudahAda: semuaSkp,
                                   );
                                 })).then((value) => value?_getRequests():null);
                           }
@@ -413,7 +413,7 @@ class _SecondFragmentState extends State<SkpFragment>{
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (_) => new FormSkp(daftarSudahAda: semuaAktivitas)),).then((val) => val ? _getRequests() : null),
+        onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (_) => new FormSkp(daftarSudahAda: semuaSkp)),).then((val) => val ? _getRequests() : null),
         tooltip: 'Tambah Aktivitas',
         child: Icon(Icons.add_circle_outline),
       ),

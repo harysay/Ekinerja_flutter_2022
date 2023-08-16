@@ -55,7 +55,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     return ScaleTransition(scale: animation, child: child);
                   },
                   child: isVisible
-                      ? FlutterLogo(size: screenSize.height / 4)
+                      ? Image.asset('assets/ekinerja2020.png')
                       : const SizedBox()),
               const SizedBox(height: 25),
               const Text("Welcome the app..", style: TextStyle(fontSize: 18)),

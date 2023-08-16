@@ -19,7 +19,7 @@ class AboutFragment extends StatelessWidget {
             child: new Center(
               child: new Column(
                 children: <Widget>[
-                  new Text(ApiService.tahunSekarang+" \u00a9 Dinas Kominfo Kabupaten Kebumen"),
+                  new Text(" \u00a9 Dinas Kominfo Kabupaten Kebumen "+ApiService.tahunSekarang),
                   new Text("All rights reserved"),
                 ],
               ),
@@ -56,12 +56,12 @@ class AboutFragment extends StatelessWidget {
               ),
             ),
           ),
-          new Positioned(
-            child: new Align(
-                alignment: FractionalOffset.bottomCenter,
-                child: new Text("Develop by Imanaji Hari Sayekti"),
-            ),
-          )
+          // new Positioned(
+          //   child: new Align(
+          //       alignment: FractionalOffset.bottomCenter,
+          //       child: new Text("Pemerintah Kabupaten Kebumen"),
+          //   ),
+          // )
         ],
       ),
     );

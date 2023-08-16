@@ -28,11 +28,11 @@ class ApiService {
   // static String versionBuildSekarang = "Version 2.0.db.27082021";
 
   // static String urlUtama = "https://development.kebumenkab.go.id/siltapkin/index.php/api/";
-  // static String urlUtama = "https://tukin.kebumenkab.go.id/api/";
-  static String urlUtama = "https://tukin.kebumenkab.go.id/2020/index.php/api/";
+  static String urlUtama = "https://tukin.kebumenkab.go.id/api/";
+  // static String urlUtama = "https://tukin.kebumenkab.go.id/2020/index.php/api/";
   static String versionCodeSekarang = "9"; //harus sama dengan version di buildernya
-  static String tahunSekarang = "2022";
-  static String versionBuildSekarang = "Version 2.0.db.29112021";
+  static String tahunSekarang = "2023";
+  static String versionBuildSekarang = "Version 2.0.pb.10072023";
 
   // String urlGetdataPribadi = "https://development.kebumenkab.go.id/siltapkin/index.php/api/rekam/dataDiri?token=";
   // static String baseUrl = "https://development.kebumenkab.go.id/siltapkin/index.php/api/rekam/";
@@ -109,8 +109,9 @@ class ApiService {
   }
 
   DaftarSkpResponse allSkp = new DaftarSkpResponse();
-  Future<List<DaftarSkp>> getSemuaSkp(String tokenGetSkp)async{
-    final response = await http.get(Uri.parse(ApiService.urlUtama+"skp/daftar_skp?token="+tokenGetSkp));
+  Future<List<DaftarSkp>> getSemuaSkp()async{
+    await getPrefFromApi();
+    final response = await http.get(Uri.parse(ApiService.urlUtama+"skp/daftar_skp?token="+tokenlogin));
     allSkp = DaftarSkpResponse.fromJson(json.decode(response.body));
     if (response.statusCode == 200) {
       List<DaftarSkp> data = allSkp.data;
@@ -407,6 +408,25 @@ class ApiService {
       return null;
     }
   }
+
+  getDataPresensiBlnLalu(String tokenByID,String bulan) async {
+    final response = await http.get(Uri.parse(ApiService.urlUtama+"Login/data_diri?token="+tokenByID));
+    if (response.statusCode == 200) {
+      var bulanLaluData;
+      if(bulan=="0"){
+        bulanLaluData = jsonDecode(response.body)['berjalan'] as List<dynamic>;
+      }else if(bulan=="1"){
+        bulanLaluData = jsonDecode(response.body)['bulan_lalu'] as List<dynamic>;
+      }else if(bulan=="2"){
+        bulanLaluData = jsonDecode(response.body)['bulan_lusa'] as List<dynamic>;
+      }
+      // var presensiBulanLalu = jsonDecode(response.body)['bulan_lalu'] as List;
+      return bulanLaluData;
+    } else{
+      return null;
+    }
+  }
+
 
   kirimStatusLogout(String id_pns) async {
     Map<String, dynamic> inputMap = {

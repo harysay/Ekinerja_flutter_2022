@@ -22,7 +22,6 @@ class DaftarSkp{
   
   factory DaftarSkp.fromJson(Map<String, dynamic> map) {
     return DaftarSkp(
-        numb: map["numb"],
       idDataSkp: map["id"],
       rkAtasan: map["rk_atasan"],
       rk: map["rk"],

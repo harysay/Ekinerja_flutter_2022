@@ -58,9 +58,9 @@ class _MyApp extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    MaterialColor colorCustom;
+    // MaterialColor colorCustom;
     if(statusRun=="1"){
-      colorCustom = MaterialColor(0xFFFF6C37, color);
+      // colorCustom = MaterialColor(0xFFFF6C37, color);
       return MaterialApp(
         builder: (context,widget) => Navigator(
           onGenerateRoute: (settings) => MaterialPageRoute(
@@ -72,6 +72,10 @@ class _MyApp extends State<MyApp> {
         title: 'E-Kinerja',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
+            appBarTheme: AppBarTheme(
+              backgroundColor: Color(0xFFFF6C37), // Atur warna latar belakang header menjadi orange
+              foregroundColor: Colors.white, // Atur warna teks header menjadi putih
+            ),
             brightness: Brightness.light,
             textTheme: TextTheme(
                 bodyText1: TextStyle(
@@ -90,7 +94,7 @@ class _MyApp extends State<MyApp> {
                   // fontFamily: 'Pasifico',
                 )
             ).apply(
-              bodyColor: Colors.orange,
+              bodyColor: Colors.black,
               displayColor: Colors.blue,
             )
         ),
@@ -105,7 +109,7 @@ class _MyApp extends State<MyApp> {
 //        routes: widget.routes,
       );
     }else{
-      colorCustom = MaterialColor(0xFFFF6C37, color);
+      // colorCustom = MaterialColor(0xFFFF6C37, color);
       return MaterialApp(
         title: 'E-Kinerja',
         debugShowCheckedModeBanner: false,
@@ -128,7 +132,7 @@ class _MyApp extends State<MyApp> {
                     // fontFamily: 'Pasifico',
                   )
               ).apply(
-                bodyColor: Colors.orange,
+                bodyColor: Colors.black,
                 displayColor: Colors.blue,
               )
           ),
