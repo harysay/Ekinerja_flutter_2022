@@ -427,6 +427,21 @@ class ApiService {
     }
   }
 
+  getDataTamsil(String tokenByID,String bulan) async {
+    final response = await http.get(Uri.parse(ApiService.urlUtama+"Login/data_pagu?token="+tokenByID));
+    if (response.statusCode == 200) {
+      var decodedData = jsonDecode(response.body);
+
+      if (bulan == "0") {
+        return decodedData['berjalan'][0];
+      } else if (bulan == "1") {
+        return decodedData['bulan_lalu'][0];
+      } else if (bulan == "2") {
+        return decodedData['bulan_lusa'][0];
+      }
+    }
+  }
+
 
   kirimStatusLogout(String id_pns) async {
     Map<String, dynamic> inputMap = {

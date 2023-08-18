@@ -4,8 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:ekinerja2020/service/ApiService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:json_table/json_table.dart';
-import 'package:json_table/src/json_table_column.dart';
+import 'package:intl/intl.dart';
 ApiService api = new ApiService();
 
 class FirstFragment extends StatefulWidget {
@@ -49,6 +48,7 @@ class _FirstFragmentState extends State<FirstFragment>{
               DataColumn(label: Text('Pulang')),
               DataColumn(label: Text('Terlambat')),
               DataColumn(label: Text('Mendahului')),
+              DataColumn(label: Text('Keterangan')),
               // DataColumn lainnya...
             ],
             rows: buildRows(bulanLaluData),
@@ -60,13 +60,11 @@ class _FirstFragmentState extends State<FirstFragment>{
   }
 
   List<DataRow> buildRows(List<dynamic> bulanLaluData) {
-    // Fungsi ini mengambil data dari bulanLaluData dan mengembalikan List<DataRow>.
-    // Sesuaikan dengan struktur data dan logic Anda.
-    // Misalnya, jika bulanLaluData adalah List<Map<String, dynamic>>, maka Anda dapat
-    // melakukan iterasi untuk mengambil nilai yang dibutuhkan dan mengembalikan List<DataRow>.
-    // Contoh:
+
     return bulanLaluData.map<DataRow>((data) {
-      // Ubah kode ini sesuai dengan struktur data Anda.
+      if (data['info'] == null || bulanLaluData.isEmpty) {
+
+      }
       return DataRow(
         cells: [
           DataCell(Text(data['tanggal'])),
@@ -74,6 +72,7 @@ class _FirstFragmentState extends State<FirstFragment>{
           DataCell(Text(data['jam_pulang'])),
           DataCell(Text(data['mnt_terlambat'].toString())),
           DataCell(Text(data['mnt_mendahului'].toString())),
+          DataCell(Text(data['info'] != null && data['info']['info'] != null ? '${data['info']['info']} - ${data['info']['status']}' : '')),
           // DataCell lainnya...
         ],
       );
@@ -88,7 +87,7 @@ class _FirstFragmentState extends State<FirstFragment>{
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Container(
-              width: 100.0, //untuk mengatur jarak setelah titik dua
+              width: 120.0, //untuk mengatur jarak setelah titik dua
               child: Text(label, style: styleDashboard),
             ),
             Flexible(
@@ -208,6 +207,17 @@ class _FirstFragmentState extends State<FirstFragment>{
   // ];
   }
 
+  String formatCurrency(String amount) {
+    var formatter = NumberFormat.currency(
+      locale: 'id_ID',
+      symbol: 'Rp',  // Simbol Rupiah
+      decimalDigits: 0,  // Jumlah digit desimal
+    );
+
+    double parsedAmount = double.tryParse(amount) ?? 0.0;
+    return formatter.format(parsedAmount);
+  }
+
   logOut() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
@@ -245,17 +255,6 @@ class _FirstFragmentState extends State<FirstFragment>{
     // TODO: implement build
     TextStyle styleDashboard = Theme.of(context).textTheme.bodyText2;
     TextStyle styleTitle = Theme.of(context).textTheme.bodyText1;
-    // setJsonPresensi();
-    // List<DataRow> rows = jsonDataPresensi.map((data) {
-    //   // Ubah tipe data dari data ke Map<String, dynamic>
-    //   Map<String, dynamic> rowData = data as Map<String, dynamic>;
-    //
-    //   return DataRow(cells: [
-    //     DataCell(Text(rowData['tanggal'] ?? 'Tidak Ada')),
-    //     DataCell(Text(rowData['jam_datang'] ?? 'Tidak Ada')),
-    //     DataCell(Text(rowData['jam_pulang'] ?? 'Tidak Ada')),
-    //   ]);
-    // }).toList();
     return new SingleChildScrollView(
       padding: EdgeInsets.all(16.0),
       child:Center(
@@ -325,10 +324,8 @@ class _FirstFragmentState extends State<FirstFragment>{
                               } else {
                                 // Menampilkan data dalam ExpansionTile.
                                 return ExpansionTile(
-                                  title: Text('Data Bulan Ini'),
+                                  title: Text('Data Kehadiran Bulan Ini'),
                                   children: [
-                                    // Menggunakan widget DataTable atau ListView sesuai preferensi Anda.
-                                    // Contoh menggunakan DataTable:
                                     buildDataTable(snapshot.data),
                                   ],
                                 );
@@ -351,10 +348,49 @@ class _FirstFragmentState extends State<FirstFragment>{
                               } else {
                                 // Menampilkan data dalam ExpansionTile.
                                 return ExpansionTile(
-                                  title: Text('Data Bulan Lalu'),
+                                  title: Text('Data Kehadiran Bulan Lalu'),
                                   children: [
-                                    // Menggunakan widget DataTable atau ListView sesuai preferensi Anda.
-                                    // Contoh menggunakan DataTable:
+                                    new FutureBuilder(future: ApiService().getDataTamsil(tokenlogin,"1"),
+                                        builder: (context, datatamsil) {
+                                          if (datatamsil.connectionState == ConnectionState.waiting) {
+                                            // Menampilkan indikator loading jika data masih diambil.
+                                            return Center(
+                                              child: CircularProgressIndicator(),
+                                            );
+                                          } else if (datatamsil.hasError) {
+                                            // Menampilkan pesan error jika terjadi kesalahan saat mengambil data.
+                                            return Center(
+                                              child: Text('Error: ${datatamsil.error}'),
+                                            );
+                                          } else {
+                                            // Menampilkan data pagu di atas ExpansionTile.
+                                            return Container(
+                                              padding: EdgeInsets.all(20.0),
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: Colors.yellow[100],
+                                                ),
+                                                borderRadius: BorderRadius.all(Radius.circular(20)),
+                                              ),
+                                              child: Column(
+                                                children: <Widget>[
+                                                  Center(
+                                                    child: Text("Info Tamsil", style: styleTitle),
+                                                  ),
+                                                  buildDataRow("Unit Kerja", datatamsil.data['unit_kerja_tpp']),
+                                                  buildDataRow("Jabatan/Kelas", datatamsil.data['jabatan_tpp']),
+                                                  buildDataRow("Pagu", formatCurrency(datatamsil.data['pagu_tamsilpeg'])),
+                                                  buildDataRow("Realisasi", formatCurrency(datatamsil.data['jumlah_tamsil_diterima'])),
+
+                                                  // buildDataRow("Entri/Target", datatamsil.data['unit_kerja_tpp']),
+                                                  // buildDataRow("Terverifikasi", tarikanInstansiAtasan),
+                                                  // buildDataRow("Ditolak", tarikanInstansiAtasan),
+                                                  // buildDataRow("Capaian", tarikanInstansiAtasan),
+                                                ],
+                                              ),
+                                            );
+                                          }
+                                        }),
                                     buildDataTable(snapshot.data),
                                   ],
                                 );
@@ -377,10 +413,8 @@ class _FirstFragmentState extends State<FirstFragment>{
                               } else {
                                 // Menampilkan data dalam ExpansionTile.
                                 return ExpansionTile(
-                                  title: Text('Data Bulan Lusa'),
+                                  title: Text('Data Kehadiran Bulan Lusa'),
                                   children: [
-                                    // Menggunakan widget DataTable atau ListView sesuai preferensi Anda.
-                                    // Contoh menggunakan DataTable:
                                     buildDataTable(snapshot.data),
                                   ],
                                 );
