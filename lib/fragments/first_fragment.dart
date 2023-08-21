@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:ekinerja2020/service/ApiService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart'; // Import untuk date Indonesia
 ApiService api = new ApiService();
 
 class FirstFragment extends StatefulWidget {
@@ -79,7 +80,7 @@ class _FirstFragmentState extends State<FirstFragment>{
     }).toList();
   }
 
-  Widget buildDataRow(String label, String value) {
+  Widget buildDataRow(String label, String value,double jarakTitik) {
     TextStyle styleDashboard = Theme.of(context).textTheme.bodyText2;
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -87,7 +88,7 @@ class _FirstFragmentState extends State<FirstFragment>{
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Container(
-              width: 120.0, //untuk mengatur jarak setelah titik dua
+              width: jarakTitik, //untuk mengatur jarak setelah titik dua
               child: Text(label, style: styleDashboard),
             ),
             Flexible(
@@ -98,37 +99,6 @@ class _FirstFragmentState extends State<FirstFragment>{
       },
     );
   }
-  // List<Widget> buildRows() {
-  //   setJsonPresensi();
-  //   // var bulanLaluData = jsonDecode(jsonString)['bulan_lalu'] as List<dynamic>;
-  // }
-
-  // void setJsonPresensi() async{
-  //   await getPref();
-  //   // DateTime now = new DateTime.now();
-  //   await api.getDataPresensiBlnLalu(tokenlogin).then((data){
-  //     setState(() {
-  //       jsonDataPresensi = data;
-  //       if (jsonDataPresensi == null || jsonDataPresensi.isEmpty) {
-  //         return []; // Mengembalikan list kosong jika bulanLaluData null atau kosong.
-  //       } else {
-  //         return jsonDataPresensi.map<DataRow>((data) {
-  //           // Ubah kode ini sesuai dengan struktur data Anda.
-  //           return DataRow(
-  //             cells: [
-  //               DataCell(Text(data['tanggal'])),
-  //               DataCell(Text(data['jam_datang'])),
-  //               DataCell(Text(data['jam_pulang'])),
-  //               // DataCell lainnya...
-  //             ],
-  //           );
-  //         }).toList();
-  //       }
-  //     });
-  //   });
-  //
-  //
-  // }
 
   Future<Null> getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -194,7 +164,7 @@ class _FirstFragmentState extends State<FirstFragment>{
     // TODO: implement initState
   _fetchData();
   getPref();
-
+  initializeDateFormatting('id_ID', null); // Initialize Indonesian locale
     super.initState();
   // setJsonPresensi();
   // columns = [
@@ -216,6 +186,22 @@ class _FirstFragmentState extends State<FirstFragment>{
 
     double parsedAmount = double.tryParse(amount) ?? 0.0;
     return formatter.format(parsedAmount);
+  }
+  String getMonth(int months) {
+    DateTime now = DateTime.now();
+    DateTime nameMonths = DateTime(now.year, now.month - months, now.day);
+    String namaBulan = DateFormat('MMMM', 'id_ID').format(nameMonths);
+    return namaBulan;
+  }
+
+  int calculateTotalWaktuDiakui(List<dynamic> kinerjaList) {
+    int totalWaktuDiakui = 0;
+    for (var kinerja in kinerjaList) {
+      if (kinerja['waktu_diakui'] != "-") {
+        totalWaktuDiakui += int.parse(kinerja['waktu_diakui']);
+      }
+    }
+    return totalWaktuDiakui;
   }
 
   logOut() async {
@@ -275,10 +261,10 @@ class _FirstFragmentState extends State<FirstFragment>{
                       Center(
                         child: Text("Data Pribadi", style: styleTitle),
                       ),
-                      buildDataRow("Nama", tarikanNamaUser),
-                      buildDataRow("Pangkat/Gol", tarikanPangkatUser),
-                      buildDataRow("Jabatan", tarikanJabatanUser),
-                      buildDataRow("Instansi", tarikanInstansiUser),
+                      buildDataRow("Nama", tarikanNamaUser,120.0),
+                      buildDataRow("Pangkat/Gol", tarikanPangkatUser,120.0),
+                      buildDataRow("Jabatan", tarikanJabatanUser,120.0),
+                      buildDataRow("Instansi", tarikanInstansiUser,120.0),
                     ],
                   ),
                 ),
@@ -295,10 +281,10 @@ class _FirstFragmentState extends State<FirstFragment>{
                       Center(
                         child: Text("Verifikator Kinerja", style: styleTitle),
                       ),
-                      buildDataRow("Nama", tarikanNamaAtasan),
-                      buildDataRow("NIP", tarikanNipAtasan),
-                      buildDataRow("Jabatan", tarikanJabatanAtasan),
-                      buildDataRow("Instansi", tarikanInstansiAtasan),
+                      buildDataRow("Nama", tarikanNamaAtasan,120.0),
+                      buildDataRow("NIP", tarikanNipAtasan,120.0),
+                      buildDataRow("Jabatan", tarikanJabatanAtasan,120.0),
+                      buildDataRow("Instansi", tarikanInstansiAtasan,120.0),
                     ],
                   ),
                 ),
@@ -324,7 +310,7 @@ class _FirstFragmentState extends State<FirstFragment>{
                               } else {
                                 // Menampilkan data dalam ExpansionTile.
                                 return ExpansionTile(
-                                  title: Text('Data Kehadiran Bulan Ini'),
+                                  title: Text('Data Bulan '+getMonth(0)+" "+DateTime.now().year.toString()),
                                   children: [
                                     buildDataTable(snapshot.data),
                                   ],
@@ -348,7 +334,7 @@ class _FirstFragmentState extends State<FirstFragment>{
                               } else {
                                 // Menampilkan data dalam ExpansionTile.
                                 return ExpansionTile(
-                                  title: Text('Data Kehadiran Bulan Lalu'),
+                                  title: Text('Data Bulan '+getMonth(1)+" "+DateTime.now().year.toString()),
                                   children: [
                                     new FutureBuilder(future: ApiService().getDataTamsil(tokenlogin,"1"),
                                         builder: (context, datatamsil) {
@@ -363,10 +349,13 @@ class _FirstFragmentState extends State<FirstFragment>{
                                               child: Text('Error: ${datatamsil.error}'),
                                             );
                                           } else {
+                                            var kinerjaTpp = datatamsil.data['kinerja_tpp'];
+                                            int totalWaktuDiakui = calculateTotalWaktuDiakui(kinerjaTpp);
                                             // Menampilkan data pagu di atas ExpansionTile.
                                             return Container(
                                               padding: EdgeInsets.all(20.0),
                                               decoration: BoxDecoration(
+                                                color: Colors.lime,
                                                 border: Border.all(
                                                   color: Colors.yellow[100],
                                                 ),
@@ -377,15 +366,11 @@ class _FirstFragmentState extends State<FirstFragment>{
                                                   Center(
                                                     child: Text("Info Tamsil", style: styleTitle),
                                                   ),
-                                                  buildDataRow("Unit Kerja", datatamsil.data['unit_kerja_tpp']),
-                                                  buildDataRow("Jabatan/Kelas", datatamsil.data['jabatan_tpp']),
-                                                  buildDataRow("Pagu", formatCurrency(datatamsil.data['pagu_tamsilpeg'])),
-                                                  buildDataRow("Realisasi", formatCurrency(datatamsil.data['jumlah_tamsil_diterima'])),
-
-                                                  // buildDataRow("Entri/Target", datatamsil.data['unit_kerja_tpp']),
-                                                  // buildDataRow("Terverifikasi", tarikanInstansiAtasan),
-                                                  // buildDataRow("Ditolak", tarikanInstansiAtasan),
-                                                  // buildDataRow("Capaian", tarikanInstansiAtasan),
+                                                  // buildDataRow("Unit Kerja", datatamsil.data['unit_kerja_tpp'],160.0),
+                                                  // buildDataRow("Jabatan/Kelas", datatamsil.data['jabatan_tpp'],160.0),
+                                                  buildDataRow("Pagu", formatCurrency(datatamsil.data['pagu_tamsilpeg']),160.0),
+                                                  buildDataRow("Realisasi", formatCurrency(datatamsil.data['jumlah_tamsil_diterima']),160.0),
+                                                  buildDataRow("Capaian", totalWaktuDiakui.toString()+"/6.751 menit",160.0), // Menampilkan total waktu diakui
                                                 ],
                                               ),
                                             );
@@ -413,8 +398,48 @@ class _FirstFragmentState extends State<FirstFragment>{
                               } else {
                                 // Menampilkan data dalam ExpansionTile.
                                 return ExpansionTile(
-                                  title: Text('Data Kehadiran Bulan Lusa'),
+                                  title: Text('Data Bulan '+getMonth(2)+" "+DateTime.now().year.toString()),
                                   children: [
+                                    new FutureBuilder(future: ApiService().getDataTamsil(tokenlogin,"2"),
+                                        builder: (context, datatamsil) {
+                                          if (datatamsil.connectionState == ConnectionState.waiting) {
+                                            // Menampilkan indikator loading jika data masih diambil.
+                                            return Center(
+                                              child: CircularProgressIndicator(),
+                                            );
+                                          } else if (datatamsil.hasError) {
+                                            // Menampilkan pesan error jika terjadi kesalahan saat mengambil data.
+                                            return Center(
+                                              child: Text('Error: ${datatamsil.error}'),
+                                            );
+                                          } else {
+                                            var kinerjaTpp = datatamsil.data['kinerja_tpp'];
+                                            int totalWaktuDiakui = calculateTotalWaktuDiakui(kinerjaTpp);
+                                            // Menampilkan data pagu di atas ExpansionTile.
+                                            return Container(
+                                              padding: EdgeInsets.all(20.0),
+                                              decoration: BoxDecoration(
+                                                color: Colors.lime,
+                                                border: Border.all(
+                                                  color: Colors.yellow[100],
+                                                ),
+                                                borderRadius: BorderRadius.all(Radius.circular(20)),
+                                              ),
+                                              child: Column(
+                                                children: <Widget>[
+                                                  Center(
+                                                    child: Text("Info Tamsil", style: styleTitle),
+                                                  ),
+                                                  // buildDataRow("Unit Kerja", datatamsil.data['unit_kerja_tpp'],160.0),
+                                                  // buildDataRow("Jabatan/Kelas", datatamsil.data['jabatan_tpp'],160.0),
+                                                  buildDataRow("Pagu", formatCurrency(datatamsil.data['pagu_tamsilpeg']),160.0),
+                                                  buildDataRow("Realisasi", formatCurrency(datatamsil.data['jumlah_tamsil_diterima']),160.0),
+                                                  buildDataRow("Capaian", totalWaktuDiakui.toString()+"/6.751 menit",160.0), // Menampilkan total waktu diakui
+                                                ],
+                                              ),
+                                            );
+                                          }
+                                        }),
                                     buildDataTable(snapshot.data),
                                   ],
                                 );
