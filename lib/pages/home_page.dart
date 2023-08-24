@@ -4,7 +4,6 @@ import 'package:ekinerja2020/fragments/third_fragment.dart';
 import 'package:ekinerja2020/fragments/about_fragment.dart';
 import 'package:ekinerja2020/fragments/skp_fragment.dart';
 import 'package:ekinerja2020/fragments/verifikasi_fragment.dart';
-// import 'package:ekinerja2020/login_page.dart';
 import 'package:ekinerja2020/pages/page_login.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -232,34 +231,25 @@ class _HomePageState extends State<HomePage> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      new Text(username),
+                      new Text(username,style: TextStyle(fontSize: 11, fontFamily: 'Nunito'),),
                       // Expanded(child: child)
                       Expanded(
                         child: Row(
                           children: <Widget>[
-                            Text('Telah bekerja: '),
-                            Text(tarikanLamaAktivitas ?? 'tidak terdefinisi'),
-                            Text(' jam'),
+                            Text('Telah bekerja: ',style: TextStyle(fontSize: 11, fontFamily: 'Nunito')),
+                            Text(tarikanLamaAktivitas,style: TextStyle(fontSize: 11, fontFamily: 'Nunito') ?? 'tidak terdefinisi',),
+                            Text(' jam',style: TextStyle(fontSize: 11, fontFamily: 'Nunito')),
                           ],
                         ),
                       ),
                       Expanded(
                         child: Row(
                           children: <Widget>[
-                            Text('Grade: '),
-                            Text(tarikanGrade ?? 'tidak terdefinisi'),
+                            Text('Grade: ',style: TextStyle(fontSize: 11, fontFamily: 'Nunito')),
+                            Text(tarikanGrade,style: TextStyle(fontSize: 11, fontFamily: 'Nunito') ?? 'tidak terdefinisi'),
                           ],
                         ),
                       ),
-                      // Row(children: <Widget>[
-                      //   Text('Telah bekerja: '),
-                      //   Text(tarikanLamaAktivitas??'tidak terdefinisi'),
-                      //   Text(' jam'),
-                      // ],),
-                      // Row(children: <Widget>[
-                      //   Text('Grade: '),
-                      //   Text(tarikanGrade??'tidak terdefinisi'),
-                      // ],)
                     ],
                   ),
 

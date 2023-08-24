@@ -15,9 +15,6 @@ import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 
 import 'DoNotAskAgainDialog.dart';
-//import 'package:talkfootball/constants.dart';
-//import 'package:talkfootball/dialogs/do_not_ask_again_dialog.dart';
-//import 'package:talkfootball/models/app_version.dart';
 
 class UpdateApp extends StatefulWidget {
   final Widget child;
@@ -35,13 +32,10 @@ class _UpdateAppState extends State<UpdateApp> {
   @override
   void initState() {
     super.initState();
-
     checkLatestVersion(context);
   }
 
   checkLatestVersion(context) async {
-    //await Future.delayed(Duration(seconds: 5));
-
     //Add query here to get the minimum and latest app version
     final response = await http.get(Uri.parse(ApiService.urlUtama+"status/running"));
     final stat = jsonDecode(response.body);
@@ -49,14 +43,6 @@ class _UpdateAppState extends State<UpdateApp> {
       statusRun = stat['status'];
       getVersionLastServer = stat['version'];
     });
-
-    //Change
-    //Here is a sample query to ParseServer(open-source NodeJs server with MongoDB database)
-//    var queryBuilder = QueryBuilder<AppVersion>(AppVersion())
-//      ..orderByDescending("publishDate")
-//      ..setLimit(1);
-//
-//    var response = await queryBuilder.query();
 
     if (statusRun == "1") {
       PackageInfo packageInfo = await PackageInfo.fromPlatform();

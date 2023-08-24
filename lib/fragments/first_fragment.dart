@@ -99,6 +99,25 @@ class _FirstFragmentState extends State<FirstFragment>{
       },
     );
   }
+  Widget buildDataRowInfo(String label, String value,double jarakTitik) {
+    TextStyle styleDashboard = Theme.of(context).textTheme.bodyText2;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              width: jarakTitik, //untuk mengatur jarak setelah titik dua
+              child: Text(label, style: TextStyle(fontWeight: FontWeight.bold,)),
+            ),
+            Flexible(
+              child: Text(": $value", overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.bold,),),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   Future<Null> getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -166,15 +185,6 @@ class _FirstFragmentState extends State<FirstFragment>{
   getPref();
   initializeDateFormatting('id_ID', null); // Initialize Indonesian locale
     super.initState();
-  // setJsonPresensi();
-  // columns = [
-  //   JsonTableColumn("tgl_kinerja", label: "Tanggal"),
-  //   JsonTableColumn("jam_datang", label: "Datang"),
-  //   JsonTableColumn("jam_pulang", label: "Pulang"),
-  //   JsonTableColumn("mnt_terlambat", label: "Terlambat"),
-  //    JsonTableColumn("mnt_mendahului", label: "Mendahului"),
-  //   JsonTableColumn("info", label: "Status", defaultValue: "-"),
-  // ];
   }
 
   String formatCurrency(String amount) {
@@ -355,7 +365,7 @@ class _FirstFragmentState extends State<FirstFragment>{
                                             return Container(
                                               padding: EdgeInsets.all(20.0),
                                               decoration: BoxDecoration(
-                                                color: Colors.lime,
+                                                color: Colors.lime[200],
                                                 border: Border.all(
                                                   color: Colors.yellow[100],
                                                 ),
@@ -368,9 +378,9 @@ class _FirstFragmentState extends State<FirstFragment>{
                                                   ),
                                                   // buildDataRow("Unit Kerja", datatamsil.data['unit_kerja_tpp'],160.0),
                                                   // buildDataRow("Jabatan/Kelas", datatamsil.data['jabatan_tpp'],160.0),
-                                                  buildDataRow("Pagu", formatCurrency(datatamsil.data['pagu_tamsilpeg']),160.0),
-                                                  buildDataRow("Realisasi", formatCurrency(datatamsil.data['jumlah_tamsil_diterima']),160.0),
-                                                  buildDataRow("Capaian", totalWaktuDiakui.toString()+"/6.751 menit",160.0), // Menampilkan total waktu diakui
+                                                  buildDataRowInfo("Pagu", formatCurrency(datatamsil.data['pagu_tamsilpeg']),120.0),
+                                                  buildDataRowInfo("Realisasi", formatCurrency(datatamsil.data['jumlah_tamsil_diterima']),120.0),
+                                                  buildDataRowInfo("Capaian", totalWaktuDiakui.toString()+"/6.751 menit",120.0), // Menampilkan total waktu diakui
                                                 ],
                                               ),
                                             );
@@ -419,7 +429,7 @@ class _FirstFragmentState extends State<FirstFragment>{
                                             return Container(
                                               padding: EdgeInsets.all(20.0),
                                               decoration: BoxDecoration(
-                                                color: Colors.lime,
+                                                color: Colors.lime[200],
                                                 border: Border.all(
                                                   color: Colors.yellow[100],
                                                 ),
@@ -432,9 +442,9 @@ class _FirstFragmentState extends State<FirstFragment>{
                                                   ),
                                                   // buildDataRow("Unit Kerja", datatamsil.data['unit_kerja_tpp'],160.0),
                                                   // buildDataRow("Jabatan/Kelas", datatamsil.data['jabatan_tpp'],160.0),
-                                                  buildDataRow("Pagu", formatCurrency(datatamsil.data['pagu_tamsilpeg']),160.0),
-                                                  buildDataRow("Realisasi", formatCurrency(datatamsil.data['jumlah_tamsil_diterima']),160.0),
-                                                  buildDataRow("Capaian", totalWaktuDiakui.toString()+"/6.751 menit",160.0), // Menampilkan total waktu diakui
+                                                  buildDataRowInfo("Pagu", formatCurrency(datatamsil.data['pagu_tamsilpeg']),120.0),
+                                                  buildDataRowInfo("Realisasi", formatCurrency(datatamsil.data['jumlah_tamsil_diterima']),120.0),
+                                                  buildDataRowInfo("Capaian", totalWaktuDiakui.toString()+"/6.751 menit",120.0), // Menampilkan total waktu diakui
                                                 ],
                                               ),
                                             );

@@ -13,7 +13,7 @@ class PageLogin extends StatefulWidget {
   @override
   _PageLoginState createState() => _PageLoginState();
 }
-
+enum LoginStatus { notSignIn, signIn }
 class HeadClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
@@ -36,6 +36,7 @@ class _PageLoginState extends State<PageLogin> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   var txtEditUsername = TextEditingController();
   var txtEditPwd = TextEditingController();
+  LoginStatus _loginStatus;
 
   // membuat show hide password
   bool _secureText = true;
@@ -207,14 +208,17 @@ class _PageLoginState extends State<PageLogin> {
     await pref.setString("jabatan", jabatan);
     await pref.setString("id_pns", idPns);
     await pref.setBool("is_login", true);
-
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (BuildContext context) => const HomePage(),
-      ),
-          (route) => false,
-    );
+    setState(() {
+      _loginStatus = LoginStatus.signIn;
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()),);
+    });
+    // Navigator.pushAndRemoveUntil(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (BuildContext context) => const HomePage(),
+    //   ),
+    //       (route) => false,
+    // );
   }
 
   void ceckLogin() async {
