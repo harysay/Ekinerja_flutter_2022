@@ -36,9 +36,9 @@ class SelectionController<T>
         AnimationEagerListenerMixin,
         SelectionStatusListenersMixin {
   SelectionController({
-    @required this.loadedAktivitas,
-    @required this.animationController,
-    @required this.switcher,
+    required this.loadedAktivitas,
+    required this.animationController,
+    required this.switcher,
   }) {
     animationController?.addStatusListener((status) {
       SelectionStatus localStatus;

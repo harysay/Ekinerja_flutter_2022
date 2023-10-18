@@ -1,9 +1,9 @@
 import 'package:ekinerja2020/model/daftar_skp.dart';
 
 class DaftarSkpResponse{
-  String status;
-  String info;
-  List<DaftarSkp> data;
+  String? status;
+  String? info;
+  List<DaftarSkp>? data;
 
   DaftarSkpResponse({this.status,
     this.info,

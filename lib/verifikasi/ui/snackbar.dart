@@ -15,7 +15,7 @@ const int kSMMSnackBarMaxQueueLength = 15;
 
 class SMMSnackbarSettings {
   SMMSnackbarSettings({
-    @required this.child,
+    required this.child,
     this.globalKey,
     this.duration = const Duration(seconds: 4),
     this.important = false,
@@ -25,16 +25,16 @@ class SMMSnackbarSettings {
   }
 
   /// Main widget to display as a snackbar
-  final Widget child;
-  GlobalKey<SMMSnackBarWrapperState> globalKey;
+  final Widget? child;
+  GlobalKey<SMMSnackBarWrapperState>? globalKey;
 
   /// How long the snackbar will be shown
-  final Duration duration;
+  final Duration? duration;
 
   /// Whether the snack bar is important and must interrupt the current displaying one
   final bool important;
 
-  OverlayEntry overlayEntry;
+  OverlayEntry? overlayEntry;
 
   /// True when snackbar is visible
   bool onScreen = false;
@@ -46,7 +46,7 @@ class SMMSnackbarSettings {
       builder: (BuildContext context) => Container(
         child: Align(
           alignment: Alignment.bottomCenter,
-          child: _SMMSnackBarWrapper(settings: this, key: globalKey),
+          child: _SMMSnackBarWrapper(settings: this, key: globalKey!),
         ),
       ),
     );
@@ -55,7 +55,7 @@ class SMMSnackbarSettings {
   /// Removes [OverlayEntry]
   void removeSnackbar() {
     onScreen = false;
-    overlayEntry.remove();
+    overlayEntry!.remove();
   }
 }
 
@@ -106,8 +106,7 @@ abstract class SnackBarControl {
   static void _showSnackBar({int index = 0}) {
     assert(!snackbarsList[index].onScreen);
     snackbarsList[index].createSnackbar();
-    App.navigatorKey.currentState.overlay
-        .insert(snackbarsList[index].overlayEntry);
+    App.navigatorKey!.currentState!.overlay!.insert(snackbarsList[index].overlayEntry!);
   }
 
   /// Removes next snackbar from screen without animation
@@ -123,8 +122,8 @@ abstract class SnackBarControl {
 /// Custom snackbar to display it in the [Overlay]
 class _SMMSnackBarWrapper extends StatefulWidget {
   _SMMSnackBarWrapper({
-    Key key,
-    @required this.settings,
+    Key? key,
+    required this.settings,
   })  : assert(settings != null),
         super(key: key);
 
@@ -137,11 +136,11 @@ class _SMMSnackBarWrapper extends StatefulWidget {
 class SMMSnackBarWrapperState extends State<_SMMSnackBarWrapper>
     with TickerProviderStateMixin {
   /// TODO: use [AsyncOperationsQueue] here
-  AsyncOperation<bool> asyncOperation;
-  AnimationController controller;
-  AnimationController timeoutController;
-  Animation animation;
-  Key dismissibleKey;
+  AsyncOperation<bool>? asyncOperation;
+  AnimationController? controller;
+  AnimationController? timeoutController;
+  Animation? animation;
+  Key? dismissibleKey;
 
   @override
   void initState() {
@@ -160,14 +159,14 @@ class SMMSnackBarWrapperState extends State<_SMMSnackBarWrapper>
       duration: widget.settings.duration,
     );
     animation = Tween(begin: const Offset(0.0, 32.0), end: Offset.zero).animate(
-      CurvedAnimation(curve: Curves.easeOutCubic, parent: controller),
+      CurvedAnimation(curve: Curves.easeOutCubic, parent: controller!),
     );
 
-    controller.forward();
-    timeoutController.value = 1;
-    timeoutController.reverse();
-    timeoutController.addStatusListener((status) {
-      if (status == AnimationStatus.dismissed) asyncOperation.finish(true);
+    controller!.forward();
+    timeoutController!.value = 1;
+    timeoutController!.reverse();
+    timeoutController!.addStatusListener((status) {
+      if (status == AnimationStatus.dismissed) asyncOperation!.finish(true);
     });
 
     _handleEnd();
@@ -175,16 +174,16 @@ class SMMSnackBarWrapperState extends State<_SMMSnackBarWrapper>
 
   @override
   void dispose() {
-    if (asyncOperation.isWorking) {
-      asyncOperation.finish(false);
+    if (asyncOperation!.isWorking) {
+      asyncOperation!.finish(false);
     }
-    controller.dispose();
-    timeoutController.dispose();
+    controller!.dispose();
+    timeoutController!.dispose();
     super.dispose();
   }
 
   void _handleEnd() async {
-    var res = await asyncOperation.wait();
+    var res = await asyncOperation!.wait();
     if (res) {
       close();
     }
@@ -195,13 +194,13 @@ class SMMSnackBarWrapperState extends State<_SMMSnackBarWrapper>
   /// If [notifyControl] is true, the [SnackBarControl._handleSnackBarDismissed] will be called internally after the closure
   Future<void> close({bool notifyControl = true}) async {
     asyncOperation = AsyncOperation()..start();
-    controller.addStatusListener((status) {
+    controller!.addStatusListener((status) {
       if (status == AnimationStatus.dismissed) {
-        asyncOperation.finish(true);
+        asyncOperation!.finish(true);
       }
     });
-    controller.reverse();
-    var res = await asyncOperation.wait();
+    controller!.reverse();
+    var res = await asyncOperation!.wait();
     if (res && notifyControl) {
       SnackBarControl._handleSnackBarDismissed();
     }
@@ -209,25 +208,25 @@ class SMMSnackBarWrapperState extends State<_SMMSnackBarWrapper>
 
   /// Will stop snackbar timeout close timer
   void stopTimer() {
-    timeoutController.stop();
+    timeoutController!.stop();
   }
 
   /// Will resume snackbar timeout close timer
   void resumeTimer() {
-    timeoutController.reverse();
+    timeoutController!.reverse();
   }
 
   @override
   Widget build(BuildContext context) {
     return FadeTransition(
       opacity: Tween(begin: 0.1, end: 1.0).animate(
-        CurvedAnimation(curve: Curves.easeOutCubic, parent: controller),
+        CurvedAnimation(curve: Curves.easeOutCubic, parent: controller!),
       ),
       child: AnimatedBuilder(
-        animation: animation,
+        animation: animation!,
         child: widget.settings.child,
-        builder: (BuildContext context, Widget child) => IgnorePointer(
-          ignoring: controller.status == AnimationStatus.reverse,
+        builder: (BuildContext? context, Widget? child) => IgnorePointer(
+          ignoring: controller!.status == AnimationStatus.reverse,
           child: GestureDetector(
             onPanDown: (_) {
               stopTimer();
@@ -245,12 +244,12 @@ class SMMSnackBarWrapperState extends State<_SMMSnackBarWrapper>
               resumeTimer();
             },
             child: Dismissible(
-              key: dismissibleKey,
+              key: dismissibleKey!,
               movementDuration: kSMMSnackBarDismissMovementDuration,
               direction: DismissDirection.down,
               onDismissed: (_) => SnackBarControl._handleSnackBarDismissed(),
               child: Transform.translate(
-                offset: animation.value,
+                offset: animation!.value,
                 child: Padding(
                   padding:
                       const EdgeInsets.only(bottom: 8.0, left: 8.0, right: 8.0),
@@ -261,7 +260,7 @@ class SMMSnackBarWrapperState extends State<_SMMSnackBarWrapper>
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        child,
+                        child!,
                       ],
                     ),
                   ),
@@ -277,18 +276,18 @@ class SMMSnackBarWrapperState extends State<_SMMSnackBarWrapper>
 
 class SMMSnackBar extends StatelessWidget {
   const SMMSnackBar({
-    Key key,
+    Key? key,
     this.message,
     this.leading,
     this.action,
     this.color,
     this.messagePadding = EdgeInsets.zero,
   }) : super(key: key);
-  final Widget leading;
-  final String message;
-  final Widget action;
-  final Color color;
-  final EdgeInsets messagePadding;
+  final Widget? leading;
+  final String? message;
+  final Widget? action;
+  final Color? color;
+  final EdgeInsets? messagePadding;
 
   @override
   Widget build(BuildContext context) {
@@ -310,9 +309,9 @@ class SMMSnackBar extends StatelessWidget {
                 ),
               Expanded(
                 child: Padding(
-                  padding: messagePadding,
+                  padding: messagePadding!,
                   child: Text(
-                    message,
+                    message!,
                     style: TextStyle(
                       fontSize: 15.0,
                       color: Theme.of(context).colorScheme.onError,

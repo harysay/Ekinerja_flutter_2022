@@ -14,7 +14,7 @@ import 'package:ekinerja2020/verifikasi/splash/list_tile_splash.dart';
 
 class DialogRaisedButton extends StatelessWidget {
   const DialogRaisedButton({
-    Key key,
+    Key? key,
     this.text = "Menutup",
     this.textStyle,
     this.color,
@@ -24,20 +24,20 @@ class DialogRaisedButton extends StatelessWidget {
   }) : super(key: key);
 
   /// Text to show inside button
-  final String text;
-  final TextStyle textStyle;
-  final Color color;
-  final EdgeInsets padding;
-  final double borderRadius;
+  final String? text;
+  final TextStyle? textStyle;
+  final Color? color;
+  final EdgeInsets? padding;
+  final double? borderRadius;
 
   /// The returned value will be passed to [Navigator.maybePop()] method call
-  final Function onPressed;
+  final Function? onPressed;
 
   /// Constructs an accept button.
   ///
   /// `true` will be always passed to [Navigator.maybePop()] call.
   factory DialogRaisedButton.accept(
-      {String text = "Setuju", Function onPressed}) {
+      {String text = "Setuju", Function? onPressed}) {
     return DialogRaisedButton(
       text: text,
       onPressed: () {
@@ -53,7 +53,7 @@ class DialogRaisedButton extends StatelessWidget {
   ///
   /// `false` will be always passed to [Navigator.maybePop()] call.
   factory DialogRaisedButton.decline(
-      {String text = "Batal", Function onPressed}) {
+      {String text = "Batal", Function? onPressed}) {
     return DialogRaisedButton(
       text: text,
       color: AppColors.whiteDarkened,
@@ -83,18 +83,18 @@ class DialogRaisedButton extends StatelessWidget {
           padding: padding,
           elevation: 10,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(borderRadius),
+            borderRadius: BorderRadius.circular(borderRadius!),
           ),
         ),
         child: Text(
-          text,
+          text!,
           style: textStyle ??
               TextStyle(color: Theme.of(context).colorScheme.onPrimary),
         ),
         onPressed: () async {
           var res;
           if (onPressed != null) {
-            res = await onPressed();
+            res = await onPressed!();
           }
           //App.navigatorKey.currentState.maybePop(res);
         },
@@ -106,28 +106,28 @@ class DialogRaisedButton extends StatelessWidget {
 /// Creates [FlatButton] with border radius, perfect for [showDialog]s accept and decline buttons
 class DialogFlatButton extends StatelessWidget {
   DialogFlatButton({
-    Key key,
-    @required this.child,
-    @required this.onPressed,
+    Key? key,
+    required this.child,
+    required this.onPressed,
     this.textColor,
     this.borderRadius = 5.0,
   });
 
-  final Widget child;
-  final Function onPressed;
-  final Color textColor;
-  final double borderRadius;
+  final Widget? child;
+  final VoidCallback onPressed;
+  final Color? textColor;
+  final double? borderRadius;
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
       key: key,
-      child: child,
+      child: child!,
       onPressed: onPressed,
       style: ButtonStyle(
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius),
-                  side: BorderSide(color: textColor)))
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius!),
+                  side: BorderSide(color: textColor!)))
       ),
     );
   }

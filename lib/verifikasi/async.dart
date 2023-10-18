@@ -15,7 +15,7 @@ class AsyncOperation<T> {
 
   /// Async callback, represents some action, e.g. start of data feting
   final AsyncValueGetter<T> _callback;
-  AsyncOperation([AsyncValueGetter<T> callback]) : this._callback = callback;
+  AsyncOperation([AsyncValueGetter<T>? callback]) : this._callback = callback!;
 
   /// Returns status of the operation
   ///
@@ -33,12 +33,12 @@ class AsyncOperation<T> {
   }
 
   /// End operation
-  void finish([FutureOr<T> value]) {
+  void finish([FutureOr<T>? value]) {
     _completer.complete(value);
   }
 
   /// Fill completer future that is returned from [wait] method with error
-  void errorFinish(Object error, [StackTrace stackTrace]) {
+  void errorFinish(Object error, [StackTrace? stackTrace]) {
     _completer.completeError(error, stackTrace);
   }
 }
@@ -59,7 +59,7 @@ class AsyncOperationsQueue {
   /// If [_queue] length equals 1 calls [_completeQueue] to start queue completion
   ///
   /// @return [AsyncOperation.wait] future
-  Future<T> add<T>(AsyncValueGetter<T> callback) {
+  Future add<T>(AsyncValueGetter<T> callback) {
     _queue.add(AsyncOperation(callback));
     if (_queue.length == 1) _completeQueue();
     return _queue[_queue.length - 1]

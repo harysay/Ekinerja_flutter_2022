@@ -93,13 +93,13 @@ abstract class RouteTransition<T extends Widget> extends PageRouteBuilder<T> {
   /// Function to get system Ui to be set when navigating to route
   ///
   /// Defaults to [Constants.AppSstemUIThemes.allScreens.auto(context)]
-  UIFunction checkSystemUi;
+  UIFunction? checkSystemUi;
 
-  @override
-  RoutePageBuilder pageBuilder;
+  // @override
+  // RoutePageBuilder pageBuilder;
 
-  @override
-  RouteTransitionsBuilder transitionsBuilder;
+  // @override
+  // RouteTransitionsBuilder transitionsBuilder;
 
   /// Variable to disable the animation switch call if ui is already animating.
   ///
@@ -119,7 +119,7 @@ abstract class RouteTransition<T extends Widget> extends PageRouteBuilder<T> {
   bool secondaryIgnore = false;
 
   RouteTransition({
-    @required this.route,
+    required this.route,
     this.checkEntAnimationEnabled = defBoolFunc,
     this.checkExitAnimationEnabled = defBoolFunc,
     this.entCurve = Curves.linearToEaseOut,
@@ -130,19 +130,19 @@ abstract class RouteTransition<T extends Widget> extends PageRouteBuilder<T> {
     this.exitIgnoreEventsForward = false,
     this.exitIgnoreEventsReverse = false,
     this.checkSystemUi,
-    Duration transitionDuration = kSMMRouteTransitionDuration,
-    RouteSettings settings,
-    bool opaque = true,
-    bool maintainState = false,
+    Duration? transitionDuration = kSMMRouteTransitionDuration,
+    RouteSettings? settings,
+    bool? opaque = true,
+    bool? maintainState = false,
   }) : super(
             settings: settings,
-            opaque: opaque,
-            maintainState: maintainState,
-            transitionDuration: transitionDuration,
+            opaque: opaque!,
+            maintainState: maintainState!,
+            transitionDuration: transitionDuration!,
             pageBuilder: (
-              BuildContext context,
-              Animation<double> animation,
-              Animation<double> secondaryAnimation,
+              BuildContext? context,
+              Animation<double>? animation,
+              Animation<double>? secondaryAnimation,
             ) {
               return route;
             });
@@ -179,12 +179,12 @@ abstract class RouteTransition<T extends Widget> extends PageRouteBuilder<T> {
 /// [SlideTransition] class, but with [enabled] parameter
 class TurnableSlideTransition extends SlideTransition {
   TurnableSlideTransition(
-      {Key key,
-      @required Animation<Offset> position,
-      bool transformHitTests: true,
-      TextDirection textDirection,
-      Widget child,
-      this.enabled: true})
+      {Key? key,
+      required Animation<Offset> position,
+      bool transformHitTests = true,
+      TextDirection? textDirection,
+      Widget? child,
+      this.enabled = true})
       : super(
           key: key,
           position: position,
@@ -208,6 +208,6 @@ class TurnableSlideTransition extends SlideTransition {
         child: child,
       );
     }
-    return child;
+    return child!;
   }
 }

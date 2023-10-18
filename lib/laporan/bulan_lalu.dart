@@ -14,7 +14,7 @@ class BulanLalu extends StatefulWidget {
 
 class _BulanLalu extends State<BulanLalu> {
   ApiService api = new ApiService();
-  String tokenlogin;
+  late String tokenlogin;
   var json;
 //  final String jsonSample =
 //      '[{"name":"Ram","email":"ram@gmail.com","age":23,"DOB":"1990-12-01"},'
@@ -22,8 +22,8 @@ class _BulanLalu extends State<BulanLalu> {
 //      '{"name":"John","email":"john@gmail.com","age":10,"DOB":"2000-02-24"},'
 //      '{"name":"Ram","age":12,"DOB":"2000-02-01"}]';
   bool toggle = true;
-  List<JsonTableColumn> columns;
-  String getData;
+  late List<JsonTableColumn> columns;
+  late String getData;
 
   void setJson() async{
     await getPref();
@@ -82,7 +82,7 @@ class _BulanLalu extends State<BulanLalu> {
   Future<Null> getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
-      tokenlogin = preferences.getString("tokenlogin");
+      tokenlogin = preferences.getString("tokenlogin")!;
     });
   }
 
@@ -111,7 +111,7 @@ class _BulanLalu extends State<BulanLalu> {
               columns: columns,
               showColumnToggle: true,
               allowRowHighlight: true,
-              rowHighlightColor: Colors.yellow[500].withOpacity(0.7),
+              rowHighlightColor: Colors.yellow[500]!.withOpacity(0.7),
             ),
             SizedBox(
               height: 16.0,

@@ -4,7 +4,6 @@
 *--------------------------------------------------------------------------------------------*/
 
 import 'package:ekinerja2020/model/daftar_aktivitas.dart';
-import 'package:ekinerja2020/verifikasi/halVerifikasi.dart';
 
 /// Features to sort by
 enum SortFeature { date, title }
@@ -30,11 +29,11 @@ enum PlaylistType {
 /// Though it doesn't allow to have two songs with a unique id (it is possible only via constructor, but e.g. [add] method will do a check)
 ///
 class Playlist {
-  List<DaftarAktivitas> _songs;
+  List<DaftarAktivitas?> _songs;
 
   // Constructors
 
-  Playlist(List<DaftarAktivitas> songs) : this._songs = songs;
+  Playlist(List<DaftarAktivitas?> songs) : this._songs = songs;
 
   /// Creates playlist and shuffles specified songs array
 //  Playlist.shuffled(List<DaftarAktivitas> songs)
@@ -52,7 +51,7 @@ class Playlist {
 //  }
 
   // Getters
-  List<DaftarAktivitas> get songs => _songs;
+  List<DaftarAktivitas?> get songs => _songs;
 
   /// Get playlist length
   int get length => _songs.length;
@@ -75,7 +74,7 @@ class Playlist {
   /// Checks if playlist contains song
   bool contains(DaftarAktivitas song) {
     for (var _song in _songs) {
-      if (_song.numb == song.numb) return true;
+      if (_song!.numb == song.numb) return true;
     }
     return false;
   }
@@ -89,63 +88,63 @@ class Playlist {
   }
 
   void removeSongById(int id) {
-    _songs.removeWhere((el) => el.numb == id);
+    _songs.removeWhere((el) => el!.numb == id);
   }
 
   /// Returns the removed object
-  DaftarAktivitas removeSongAt(int index) {
+  DaftarAktivitas? removeSongAt(int index) {
     return _songs.removeAt(index);
   }
 
   /// Returns song object by song id
-  DaftarAktivitas getSongById(String id) {
-    return _songs.firstWhere((el) => el.idDataKinerja == id, orElse: () => null);
+  DaftarAktivitas? getSongById(String? id) {
+    return _songs.firstWhere((el) => el!.idDataKinerja == id, orElse: () => null);
   }
 
-  DaftarAktivitas getAktivitasById(String idKinerja){
-    return _songs.firstWhere((element) => element.idDataKinerja==idKinerja, orElse: () => null);
+  DaftarAktivitas? getAktivitasById(String idKinerja){
+    return _songs.firstWhere((element) => element!.idDataKinerja==idKinerja, orElse: () => null);
   }
 
   /// Returns song index in array by its id
   int getSongIndexById(int id) {
-    return _songs.indexWhere((el) => el.numb == id);
+    return _songs.indexWhere((el) => el!.numb == id);
   }
 
   /// Returns next song id
-  int getNextSongId(int id) {
+  int? getNextSongId(int id) {
     final int nextSongIndex = getSongIndexById(id) + 1;
     if (nextSongIndex == -1) {
       return null;
     } else if (nextSongIndex >= length) {
-      return _songs[0].numb;
+      return _songs[0]!.numb;
     }
-    return _songs[nextSongIndex].numb;
+    return _songs[nextSongIndex]!.numb;
   }
 
   /// Returns prev song id
-  int getPrevSongId(int id) {
+  int? getPrevSongId(int id) {
     final int prevSongIndex = getSongIndexById(id) - 1;
     if (prevSongIndex == -2) {
       return null;
     } else if (prevSongIndex < 0) {
-      return _songs[length - 1].numb;
+      return _songs[length - 1]!.numb;
     }
-    return _songs[prevSongIndex].numb;
+    return _songs[prevSongIndex]!.numb;
   }
 
   // TODO: implement file size filter
-  void filter(FilterFeature feature, {Duration duration}) {
+  void filter(FilterFeature feature, {Duration? duration}) {
     if (feature == FilterFeature.duration) {
       assert(duration != null);
       _songs
-          .retainWhere((el) => Duration(milliseconds: el.numb) >= duration);
+          .retainWhere((el) => Duration(milliseconds: el!.numb!) >= duration!);
     }
   }
 
   /// Will search each song in another playlist and remove it if won't find it.
   void compareAndRemoveObsolete(Playlist playlist) {
     _songs.removeWhere((song) {
-      return playlist.getSongById(song.idDataKinerja) == null;
+      return playlist.getSongById(song!.idDataKinerja) == null;
     });
   }
 }

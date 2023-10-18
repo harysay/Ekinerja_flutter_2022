@@ -26,40 +26,40 @@ const _kSMMScrollBarHeight = 40.0;
 /// TODO: add scrollbar pad with letters
 class SMMDefaultDraggableScrollbar extends StatelessWidget {
   SMMDefaultDraggableScrollbar({
-    Key key,
+    Key? key,
     this.scrollThumbKey,
-    @required this.child,
-    @required this.controller,
+    required this.child,
+    required this.controller,
     this.labelContentBuilder,
     this.alwaysVisibleScrollThumb = false,
   })  : assert(child != null),
         assert(controller != null),
         super(key: key);
 
-  final Widget child;
-  final Key scrollThumbKey;
-  final Widget Function(double) labelContentBuilder;
-  final ScrollController controller;
+  final Widget? child;
+  final Key? scrollThumbKey;
+  final Widget Function(double)? labelContentBuilder;
+  final ScrollController? controller;
   final bool alwaysVisibleScrollThumb;
 
   @override
   Widget build(BuildContext context) {
     return SMMDraggableScrollbar.rrect(
       alwaysVisibleScrollThumb: alwaysVisibleScrollThumb,
-      scrollThumbKey: scrollThumbKey,
+      scrollThumbKey: scrollThumbKey!,
       // padding: const EdgeInsets.only(right: 3.0),
       // labelConstraints: const BoxConstraints(maxWidth: 56.0, maxHeight: 24.0),
       labelConstraints: BoxConstraints(
           maxWidth: MediaQuery.of(context).size.width - 28.0, maxHeight: 36.0),
-      labelContentBuilder: labelContentBuilder,
+      labelContentBuilder: labelContentBuilder!,
       marginBottom: 40.0,
       marginTop: 3.0,
       widthScrollThumb: 7.0,
       // backgroundColor: Constants.AppTheme.menuItem.auto(context),
       backgroundColor: Theme.of(context).colorScheme.onBackground,
       borderRadius:  const BorderRadius.all(Radius.circular(4.0)),
-      controller: controller,
-      child: child,
+      controller: controller!,
+      child: child!,
     );
   }
 }
@@ -84,8 +84,8 @@ class SMMScrollbar extends StatefulWidget {
   /// The [child] should be a source of [ScrollNotification] notifications,
   /// typically a [Scrollable] widget.
   const SMMScrollbar({
-    Key key,
-    @required this.child,
+    Key? key,
+    required this.child,
     this.color,
     this.thickness = _kScrollbarThickness,
     this.padding = EdgeInsets.zero,
@@ -106,16 +106,16 @@ class SMMScrollbar extends StatefulWidget {
   final Widget child;
 
   /// These are just properties from the [ScrollbarPainter]
-  final Color color;
+  final Color? color;
   final double thickness;
   final EdgeInsets padding;
   final double mainAxisMargin;
   final double crossAxisMargin;
   final Radius radius;
   final double minLength;
-  final double minOverscrollLength;
+  final double? minOverscrollLength;
 
-  final ScrollController controller;
+  final ScrollController? controller;
 
   @override
   _SMMScrollbarState createState() => _SMMScrollbarState();
@@ -123,12 +123,12 @@ class SMMScrollbar extends StatefulWidget {
 
 class _SMMScrollbarState extends State<SMMScrollbar>
     with TickerProviderStateMixin {
-  ScrollbarPainter _scrollbarPainter;
-  TextDirection _textDirection;
-  Color _themeColor;
-  AnimationController _fadeoutAnimationController;
-  Animation<double> _fadeoutOpacityAnimation;
-  Timer _fadeoutTimer;
+  ScrollbarPainter? _scrollbarPainter;
+  TextDirection? _textDirection;
+  Color? _themeColor;
+  AnimationController? _fadeoutAnimationController;
+  Animation<double>? _fadeoutOpacityAnimation;
+  Timer? _fadeoutTimer;
 
   @override
   void initState() {
@@ -138,7 +138,7 @@ class _SMMScrollbarState extends State<SMMScrollbar>
       duration: _kScrollbarFadeDuration,
     );
     _fadeoutOpacityAnimation = CurvedAnimation(
-      parent: _fadeoutAnimationController,
+      parent: _fadeoutAnimationController!,
       curve: Curves.fastOutSlowIn,
     );
   }
@@ -163,7 +163,7 @@ class _SMMScrollbarState extends State<SMMScrollbar>
 
   ScrollbarPainter _buildScrollbarPainter() {
     return ScrollbarPainter(
-      color: widget.color ?? _themeColor,
+      color: widget.color ?? _themeColor!,
       thickness: widget.thickness ?? _kScrollbarThickness,
       padding: widget.padding,
       mainAxisMargin: widget.mainAxisMargin,
@@ -171,13 +171,13 @@ class _SMMScrollbarState extends State<SMMScrollbar>
       radius: widget.radius,
       minLength: widget.minLength,
       minOverscrollLength: widget.minOverscrollLength,
-      fadeoutOpacityAnimation: _fadeoutOpacityAnimation,
+      fadeoutOpacityAnimation: _fadeoutOpacityAnimation!,
       textDirection: _textDirection,
     );
   }
 
-  bool _handleScrollNotification(ScrollNotification notification) {
-    final ScrollMetrics metrics = notification.metrics;
+  bool _handleScrollNotification(ScrollNotification? notification) {
+    final ScrollMetrics metrics = notification!.metrics;
     if (metrics.maxScrollExtent <= metrics.minScrollExtent) {
       return false;
     }
@@ -186,15 +186,15 @@ class _SMMScrollbarState extends State<SMMScrollbar>
     // scroll notifications here.
     if ((notification is ScrollUpdateNotification ||
         notification is OverscrollNotification)) {
-      if (_fadeoutAnimationController.status != AnimationStatus.forward) {
-        _fadeoutAnimationController.forward();
+      if (_fadeoutAnimationController!.status != AnimationStatus.forward) {
+        _fadeoutAnimationController!.forward();
       }
 
-      _scrollbarPainter.update(
+      _scrollbarPainter!.update(
           notification.metrics, notification.metrics.axisDirection);
       _fadeoutTimer?.cancel();
       _fadeoutTimer = Timer(_kScrollbarTimeToFade, () {
-        _fadeoutAnimationController.reverse();
+        _fadeoutAnimationController!.reverse();
         _fadeoutTimer = null;
       });
     }
@@ -203,7 +203,7 @@ class _SMMScrollbarState extends State<SMMScrollbar>
 
   @override
   void dispose() {
-    _fadeoutAnimationController.dispose();
+    _fadeoutAnimationController!.dispose();
     _fadeoutTimer?.cancel();
     _scrollbarPainter?.dispose();
     super.dispose();
@@ -257,46 +257,46 @@ class SMMDraggableScrollbar extends StatefulWidget {
   final double heightScrollThumb;
 
   /// The width of the scroll thumb
-  final double widthScrollThumb;
+  final double? widthScrollThumb;
 
   /// Margin for thumb from top
-  final double marginBottom;
+  final double? marginBottom;
 
   /// Margin for thumb from bottom
-  final double marginTop;
+  final double? marginTop;
 
   /// The background color of the label and thumb
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   /// The amount of padding that should surround the thumb
-  final EdgeInsetsGeometry padding;
+  final EdgeInsetsGeometry? padding;
 
   /// Determines how quickly the scrollbar will animate in and out
-  final Duration scrollbarAnimationDuration;
+  final Duration? scrollbarAnimationDuration;
 
   /// How long should the thumb be visible before fading out
-  final Duration scrollbarTimeToFade;
+  final Duration? scrollbarTimeToFade;
 
   /// Build a Widget from the current offset in the BoxScrollView
-  final LabelContentBuilder labelContentBuilder;
+  final LabelContentBuilder? labelContentBuilder;
 
   /// Determines box constraints for Container displaying label
-  final BoxConstraints labelConstraints;
+  final BoxConstraints? labelConstraints;
 
   /// The ScrollController for the BoxScrollView
-  final ScrollController controller;
+  final ScrollController? controller;
 
   /// Determines scrollThumb displaying. If you draw own ScrollThumb and it is true you just don't need to use animation parameters in [scrollThumbBuilder]
   final bool alwaysVisibleScrollThumb;
 
   SMMDraggableScrollbar({
-    Key key,
+    Key? key,
     this.alwaysVisibleScrollThumb = false,
-    @required this.heightScrollThumb,
-    @required this.backgroundColor,
-    @required this.scrollThumbBuilder,
-    @required this.child,
-    @required this.controller,
+    required this.heightScrollThumb,
+    required this.backgroundColor,
+    required this.scrollThumbBuilder,
+    required this.child,
+    required this.controller,
     this.widthScrollThumb,
     this.marginBottom = 0.0,
     this.marginTop = 0.0,
@@ -310,11 +310,11 @@ class SMMDraggableScrollbar extends StatefulWidget {
         super(key: key);
 
   SMMDraggableScrollbar.rrect({
-    Key key,
-    Key scrollThumbKey,
+    Key? key,
+    Key? scrollThumbKey,
     this.alwaysVisibleScrollThumb = false,
-    @required this.child,
-    @required this.controller,
+    required this.child,
+    required this.controller,
     this.heightScrollThumb = 48.0,
     this.widthScrollThumb = 16.0,
     this.marginBottom = 0.0,
@@ -328,15 +328,15 @@ class SMMDraggableScrollbar extends StatefulWidget {
     BorderRadiusGeometry borderRadius =
         const BorderRadius.all(Radius.circular(0.0)),
   })  : scrollThumbBuilder = _thumbRRectBuilder(
-            scrollThumbKey, alwaysVisibleScrollThumb, borderRadius),
+            scrollThumbKey!, alwaysVisibleScrollThumb, borderRadius),
         super(key: key);
 
   SMMDraggableScrollbar.arrows({
-    Key key,
-    Key scrollThumbKey,
+    Key? key,
+    Key? scrollThumbKey,
     this.alwaysVisibleScrollThumb = false,
-    @required this.child,
-    @required this.controller,
+    required this.child,
+    required this.controller,
     this.heightScrollThumb = 48.0,
     this.widthScrollThumb = 20.0,
     this.marginBottom = 0.0,
@@ -348,15 +348,15 @@ class SMMDraggableScrollbar extends StatefulWidget {
     this.labelContentBuilder,
     this.labelConstraints,
   })  : scrollThumbBuilder =
-            _thumbArrowBuilder(scrollThumbKey, alwaysVisibleScrollThumb),
+            _thumbArrowBuilder(scrollThumbKey!, alwaysVisibleScrollThumb),
         super(key: key);
 
   SMMDraggableScrollbar.semicircle({
-    Key key,
-    Key scrollThumbKey,
+    Key? key,
+    Key? scrollThumbKey,
     this.alwaysVisibleScrollThumb = false,
-    @required this.child,
-    @required this.controller,
+    required this.child,
+    required this.controller,
     this.heightScrollThumb = 48.0,
     this.widthScrollThumb,
     this.marginBottom = 0.0,
@@ -368,20 +368,20 @@ class SMMDraggableScrollbar extends StatefulWidget {
     this.labelContentBuilder,
     this.labelConstraints,
   })  : scrollThumbBuilder =
-            _thumbSemicircleBuilder(scrollThumbKey, alwaysVisibleScrollThumb),
+            _thumbSemicircleBuilder(scrollThumbKey!, alwaysVisibleScrollThumb),
         super(key: key);
 
   @override
   _SMMDraggableScrollbarState createState() => _SMMDraggableScrollbarState();
 
   static buildScrollThumbAndLabel({
-    @required Widget scrollThumb,
-    @required Color backgroundColor,
-    @required Animation<double> thumbAnimation,
-    @required Animation<double> labelAnimation,
-    @required Widget labelContent,
-    @required BoxConstraints labelConstraints,
-    @required bool alwaysVisibleScrollThumb,
+    required Widget scrollThumb,
+    required Color backgroundColor,
+    required Animation<double> thumbAnimation,
+    required Animation<double> labelAnimation,
+    required Widget labelContent,
+    required BoxConstraints labelConstraints,
+    required bool alwaysVisibleScrollThumb,
   }) {
     var scrollThumbAndLabel = labelContent == null
         ? scrollThumb
@@ -417,8 +417,8 @@ class SMMDraggableScrollbar extends StatefulWidget {
       double height,
       double width,
       bool shouldAppear, {
-      Widget labelContent,
-      BoxConstraints labelConstraints,
+      Widget? labelContent,
+      BoxConstraints? labelConstraints,
     }) {
       final scrollThumb = CustomPaint(
         key: scrollThumbKey,
@@ -443,8 +443,8 @@ class SMMDraggableScrollbar extends StatefulWidget {
         backgroundColor: backgroundColor,
         thumbAnimation: thumbAnimation,
         labelAnimation: labelAnimation,
-        labelContent: labelContent,
-        labelConstraints: labelConstraints,
+        labelContent: labelContent!,
+        labelConstraints: labelConstraints!,
         alwaysVisibleScrollThumb: shouldAppear && alwaysVisibleScrollThumb,
       );
     };
@@ -459,8 +459,8 @@ class SMMDraggableScrollbar extends StatefulWidget {
       double height,
       double width,
       bool shouldAppear, {
-      Widget labelContent,
-      BoxConstraints labelConstraints,
+      Widget? labelContent,
+      BoxConstraints? labelConstraints,
     }) {
       final scrollThumb = ClipPath(
         child: Container(
@@ -481,8 +481,8 @@ class SMMDraggableScrollbar extends StatefulWidget {
         backgroundColor: backgroundColor,
         thumbAnimation: thumbAnimation,
         labelAnimation: labelAnimation,
-        labelContent: labelContent,
-        labelConstraints: labelConstraints,
+        labelContent: labelContent!,
+        labelConstraints: labelConstraints!,
         alwaysVisibleScrollThumb: shouldAppear && alwaysVisibleScrollThumb,
       );
     };
@@ -497,8 +497,8 @@ class SMMDraggableScrollbar extends StatefulWidget {
       double height,
       double width,
       bool shouldAppear, {
-      Widget labelContent,
-      BoxConstraints labelConstraints,
+      Widget? labelContent,
+      BoxConstraints? labelConstraints,
     }) {
       final scrollThumb = Material(
           key: scrollThumbKey,
@@ -516,8 +516,8 @@ class SMMDraggableScrollbar extends StatefulWidget {
         backgroundColor: backgroundColor,
         thumbAnimation: thumbAnimation,
         labelAnimation: labelAnimation,
-        labelContent: labelContent,
-        labelConstraints: labelConstraints,
+        labelContent: labelContent!,
+        labelConstraints: labelConstraints!,
         alwaysVisibleScrollThumb: shouldAppear && alwaysVisibleScrollThumb,
       );
     };
@@ -525,33 +525,33 @@ class SMMDraggableScrollbar extends StatefulWidget {
 }
 
 class ScrollLabel extends StatelessWidget {
-  final Animation<double> animation;
-  final Color backgroundColor;
-  final Widget child;
+  final Animation<double>? animation;
+  final Color? backgroundColor;
+  final Widget? child;
 
   final BoxConstraints constraints;
   static const BoxConstraints _defaultConstraints =
       BoxConstraints.tightFor(width: 72.0, height: 28.0);
 
   const ScrollLabel({
-    Key key,
-    @required this.child,
-    @required this.animation,
-    @required this.backgroundColor,
+    Key? key,
+    required this.child,
+    required this.animation,
+    required this.backgroundColor,
     this.constraints = _defaultConstraints,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return FadeTransition(
-      opacity: animation,
+      opacity: animation!,
       child: SlideTransition(
         position:
             Tween(begin: const Offset(0.005, 0.0), end: Offset.zero).animate(
           CurvedAnimation(
             curve: Curves.easeOutCubic,
             reverseCurve: Curves.easeInCubic,
-            parent: animation,
+            parent: animation!,
           ),
         ),
         child: Container(
@@ -575,15 +575,15 @@ class ScrollLabel extends StatelessWidget {
 
 class _SMMDraggableScrollbarState extends State<SMMDraggableScrollbar>
     with TickerProviderStateMixin {
-  double _barOffset;
-  double _viewOffset;
-  bool _isDragInProcess;
+  double? _barOffset;
+  double? _viewOffset;
+  bool? _isDragInProcess;
 
-  AnimationController _thumbAnimationController;
-  Animation<double> _thumbAnimation;
-  AnimationController _labelAnimationController;
-  Animation<double> _labelAnimation;
-  Timer _fadeoutTimer;
+  AnimationController? _thumbAnimationController;
+  Animation<double>? _thumbAnimation;
+  AnimationController? _labelAnimationController;
+  Animation<double>? _labelAnimation;
+  Timer? _fadeoutTimer;
 
   @override
   void initState() {
@@ -598,7 +598,7 @@ class _SMMDraggableScrollbarState extends State<SMMDraggableScrollbar>
     );
 
     _thumbAnimation = CurvedAnimation(
-      parent: _thumbAnimationController,
+      parent: _thumbAnimationController!,
       curve: Curves.fastOutSlowIn,
     );
 
@@ -608,7 +608,7 @@ class _SMMDraggableScrollbarState extends State<SMMDraggableScrollbar>
     );
 
     _labelAnimation = CurvedAnimation(
-      parent: _labelAnimationController,
+      parent: _labelAnimationController!,
       curve: Curves.fastOutSlowIn,
     );
 
@@ -620,34 +620,32 @@ class _SMMDraggableScrollbarState extends State<SMMDraggableScrollbar>
 
   @override
   void dispose() {
-    _thumbAnimationController.dispose();
+    _thumbAnimationController!.dispose();
     _fadeoutTimer?.cancel();
     super.dispose();
   }
 
-  double get barMaxScrollExtent =>
-      context.size.height - widget.heightScrollThumb - widget.marginBottom;
+  double? get barMaxScrollExtent =>
+      context.size!.height - widget.heightScrollThumb - widget.marginBottom!;
 
-  double get barMinScrollExtent => 0.0 + widget.marginTop;
+  double? get barMinScrollExtent => 0.0 + widget.marginTop!;
 
-  double get viewMaxScrollExtent => widget.controller.position.maxScrollExtent;
+  double? get viewMaxScrollExtent => widget.controller!.position.maxScrollExtent;
 
-  double get viewMinScrollExtent => widget.controller.position.minScrollExtent;
+  double? get viewMinScrollExtent => widget.controller!.position.minScrollExtent;
 
   /// Whether the scrollbar should appear on the screen
-  bool get shouldAppear =>
-      widget.controller.position.maxScrollExtent != 0.0 &&
-      widget.controller.position.maxScrollExtent -
-              widget.controller.position.minScrollExtent >
+  bool? get shouldAppear =>
+      widget.controller!.position.maxScrollExtent != 0.0 &&
+      widget.controller!.position.maxScrollExtent -
+              widget.controller!.position.minScrollExtent >
           300.0;
 
   @override
   Widget build(BuildContext context) {
-    Widget labelContent;
-    if (widget.labelContentBuilder != null && _isDragInProcess) {
-      labelContent = widget.labelContentBuilder(
-        _viewOffset + _barOffset + widget.heightScrollThumb / 2,
-      );
+    Widget? labelContent;
+    if (widget.labelContentBuilder != null && _isDragInProcess!) {
+      labelContent = widget.labelContentBuilder!(_viewOffset! + _barOffset! + widget.heightScrollThumb / 2,);
     }
 
     return LayoutBuilder(
@@ -667,17 +665,17 @@ class _SMMDraggableScrollbarState extends State<SMMDraggableScrollbar>
               onVerticalDragUpdate: _onVerticalDragUpdate,
               child: Container(
                 alignment: Alignment.topRight,
-                margin: EdgeInsets.only(top: _barOffset),
+                margin: EdgeInsets.only(top: _barOffset!),
                 padding: widget.padding,
                 child: widget.scrollThumbBuilder(
-                  widget.backgroundColor,
-                  _thumbAnimation,
-                  _labelAnimation,
+                  widget.backgroundColor!,
+                  _thumbAnimation!,
+                  _labelAnimation!,
                   widget.heightScrollThumb,
-                  widget.widthScrollThumb,
-                  widget.controller.hasClients && shouldAppear,
-                  labelContent: labelContent,
-                  labelConstraints: widget.labelConstraints,
+                  widget.widthScrollThumb!,
+                  widget.controller!.hasClients && shouldAppear!,
+                  labelContent: labelContent!,
+                  labelConstraints: widget.labelConstraints!,
                 ),
               ),
             )),
@@ -690,40 +688,43 @@ class _SMMDraggableScrollbarState extends State<SMMDraggableScrollbar>
   //scroll bar has received notification that it's view was scrolled
   //so it should also changes his position
   //but only if it isn't dragged
-  bool _handleScrollNotification(ScrollNotification notification) {
-    if (_isDragInProcess ||
-        notification.metrics.maxScrollExtent <
+  bool _handleScrollNotification(ScrollNotification? notification) {
+    if (_isDragInProcess! ||
+        notification!.metrics.maxScrollExtent <
             notification.metrics.minScrollExtent) {
       return false;
     }
 
     setState(() {
       if (notification is ScrollUpdateNotification) {
-        _viewOffset += notification.scrollDelta;
-        if (_viewOffset < widget.controller.position.minScrollExtent) {
-          _viewOffset = widget.controller.position.minScrollExtent;
+        if (notification.scrollDelta != null) {
+          _viewOffset = _viewOffset! + notification.scrollDelta!;
         }
-        if (_viewOffset > viewMaxScrollExtent) {
+        // _viewOffset += notification.scrollDelta!;
+        if (_viewOffset! < widget.controller!.position.minScrollExtent) {
+          _viewOffset = widget.controller!.position.minScrollExtent;
+        }
+        if (_viewOffset! > viewMaxScrollExtent!) {
           _viewOffset = viewMaxScrollExtent;
         }
 
-        _barOffset = _viewOffset *
-                (barMaxScrollExtent - barMinScrollExtent) /
-                viewMaxScrollExtent +
-            barMinScrollExtent;
+        _barOffset = _viewOffset! *
+                (barMaxScrollExtent! - barMinScrollExtent!) /
+                viewMaxScrollExtent! +
+            barMinScrollExtent!;
       }
 
       if (notification is ScrollUpdateNotification ||
           notification is OverscrollNotification) {
-        if (shouldAppear &&
-            _thumbAnimationController.status != AnimationStatus.forward) {
-          _thumbAnimationController.forward();
+        if (shouldAppear! &&
+            _thumbAnimationController!.status != AnimationStatus.forward) {
+          _thumbAnimationController!.forward();
         }
 
         _fadeoutTimer?.cancel();
-        _fadeoutTimer = Timer(widget.scrollbarTimeToFade, () {
-          _thumbAnimationController.reverse();
-          _labelAnimationController.reverse();
+        _fadeoutTimer = Timer(widget.scrollbarTimeToFade!, () {
+          _thumbAnimationController!.reverse();
+          _labelAnimationController!.reverse();
           _fadeoutTimer = null;
         });
       }
@@ -735,32 +736,35 @@ class _SMMDraggableScrollbarState extends State<SMMDraggableScrollbar>
   void _onVerticalDragStart(DragStartDetails details) {
     setState(() {
       _isDragInProcess = true;
-      _labelAnimationController.forward();
+      _labelAnimationController!.forward();
       _fadeoutTimer?.cancel();
     });
   }
 
-  void _onVerticalDragUpdate(DragUpdateDetails details) {
+  void _onVerticalDragUpdate(DragUpdateDetails? details) {
     setState(() {
-      if (_thumbAnimationController.status != AnimationStatus.forward) {
-        _thumbAnimationController.forward();
+      if (_thumbAnimationController!.status != AnimationStatus.forward) {
+        _thumbAnimationController!.forward();
       }
-      if (_isDragInProcess) {
-        _barOffset += details.delta.dy;
-
-        if (_barOffset < barMinScrollExtent) {
-          _barOffset = barMinScrollExtent;
+      if (_isDragInProcess!) {
+        if (_barOffset != null && details != null && details.delta != null) {
+          _barOffset = _barOffset! + details.delta.dy;
         }
-        if (_barOffset > barMaxScrollExtent) {
-          _barOffset = barMaxScrollExtent;
+        // _barOffset! += details!.delta.dy;
+
+        if (_barOffset! < barMinScrollExtent!) {
+          _barOffset = barMinScrollExtent!;
+        }
+        if (_barOffset! > barMaxScrollExtent!) {
+          _barOffset = barMaxScrollExtent!;
         }
 
-        _viewOffset = (_barOffset - barMinScrollExtent) *
-            (viewMaxScrollExtent +
-                barMinScrollExtent * viewMaxScrollExtent / barMaxScrollExtent) /
-            barMaxScrollExtent;
+        _viewOffset = (_barOffset! - barMinScrollExtent!) *
+            (viewMaxScrollExtent! +
+                barMinScrollExtent! * viewMaxScrollExtent! / barMaxScrollExtent!) /
+            barMaxScrollExtent!;
 
-        widget.controller.jumpTo(_viewOffset);
+        widget.controller!.jumpTo(_viewOffset!);
       }
     });
   }
@@ -768,7 +772,7 @@ class _SMMDraggableScrollbarState extends State<SMMDraggableScrollbar>
 
 /// Draws 2 triangles like arrow up and arrow down
 class ArrowCustomPainter extends CustomPainter {
-  Color color;
+  Color? color;
 
   ArrowCustomPainter(this.color);
 
@@ -777,7 +781,7 @@ class ArrowCustomPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = color;
+    final paint = Paint()..color = color!;
     const width = 12.0;
     const height = 8.0;
     final baseX = size.width / 2;
@@ -843,27 +847,27 @@ class ArrowClipper extends CustomClipper<Path> {
 }
 
 class SlideFadeTransition extends StatelessWidget {
-  final Animation<double> animation;
-  final Widget child;
+  final Animation<double>? animation;
+  final Widget? child;
 
   const SlideFadeTransition({
-    Key key,
-    @required this.animation,
-    @required this.child,
+    Key? key,
+    required this.animation,
+    required this.child,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: animation,
-      builder: (context, child) => animation.value == 0.0 ? Container() : child,
+      animation: animation!,
+      builder: (context, child) => animation!.value == 0.0 ? Container() : child!,
       child: SlideTransition(
         position: Tween(
           begin: Offset(0.3, 0.0),
           end: Offset(0.0, 0.0),
-        ).animate(animation),
+        ).animate(animation!),
         child: FadeTransition(
-          opacity: animation,
+          opacity: animation!,
           child: child,
         ),
       ),

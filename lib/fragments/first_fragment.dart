@@ -9,28 +9,22 @@ import 'package:intl/date_symbol_data_local.dart'; // Import untuk date Indonesi
 ApiService api = new ApiService();
 
 class FirstFragment extends StatefulWidget {
-  // FirstFragment({
-  //   Key key,
-  //   @required this.wgtarikanNamaUser,this.wgtarikanPangkatUser,this.wgtarikanJabatanUser,this.wgtarikanInstansiUser,
-  //   this.wgtarikanNamaAtasan,this.wgtarikanNipAtasan,this.wgtarikanJabatanAtasan,this.wgtarikanInstansiAtasan
-  // }) : super(key: key);
-  // String wgtarikanNamaUser, wgtarikanPangkatUser, wgtarikanJabatanUser, wgtarikanInstansiUser;
-  // String wgtarikanNamaAtasan, wgtarikanNipAtasan, wgtarikanJabatanAtasan, wgtarikanInstansiAtasan;
   @override
   _FirstFragmentState createState() => _FirstFragmentState();
 
 }
 class _FirstFragmentState extends State<FirstFragment>{
-  var tarikanNamaUser, tarikanPangkatUser, tarikanJabatanUser, tarikanInstansiUser;
+  var tarikanNamaUser,tarikanNIPUser, tarikanPangkatUser, tarikanJabatanUser, tarikanInstansiUser;
   var tarikanNamaAtasan, tarikanNipAtasan, tarikanJabatanAtasan, tarikanInstansiAtasan;
   String username="", nama="",tokenlogin="";
   var loading = false;
+  String? dataJson;
 
-  List<Map<String, dynamic>> jsonDataPresensi;
+  late List<Map<String, dynamic>> jsonDataPresensi;
   bool toggle = true;
   // List<JsonTableColumn> columns;
 
-  String url;
+  late String url;
   bool _customTileExpanded = false;
 
   Widget buildDataTable(List<dynamic> bulanLaluData) {
@@ -81,7 +75,7 @@ class _FirstFragmentState extends State<FirstFragment>{
   }
 
   Widget buildDataRow(String label, String value,double jarakTitik) {
-    TextStyle styleDashboard = Theme.of(context).textTheme.bodyText2;
+    TextStyle? styleDashboard = Theme.of(context).textTheme.bodyText2;
     return LayoutBuilder(
       builder: (context, constraints) {
         return Row(
@@ -100,7 +94,7 @@ class _FirstFragmentState extends State<FirstFragment>{
     );
   }
   Widget buildDataRowInfo(String label, String value,double jarakTitik) {
-    TextStyle styleDashboard = Theme.of(context).textTheme.bodyText2;
+    TextStyle? styleDashboard = Theme.of(context).textTheme.bodyText2;
     return LayoutBuilder(
       builder: (context, constraints) {
         return Row(
@@ -122,7 +116,7 @@ class _FirstFragmentState extends State<FirstFragment>{
   Future<Null> getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
-      tokenlogin = preferences.getString("tokenlogin");
+      tokenlogin = preferences.getString("tokenlogin")!;
     });
   }
 
@@ -134,6 +128,7 @@ class _FirstFragmentState extends State<FirstFragment>{
 
     if(pref.getString("tarikNamaUser")!=null) {
       tarikanNamaUser = pref.getString("tarikNamaUser");
+      tarikanNIPUser = pref.getString("niploginterakhir");
       tarikanPangkatUser = pref.getString("tarikPangkatUser");
       tarikanJabatanUser = pref.getString("tarikJabatanUser");
       tarikanInstansiUser = pref.getString("tarikInstansiUser");
@@ -145,7 +140,7 @@ class _FirstFragmentState extends State<FirstFragment>{
       loading = false;
     }else{
       setState(() {
-        tokenlogin = pref.getString("tokenlogin");
+        tokenlogin = pref.getString("tokenlogin")!;
       });
       final response = await http.get(Uri.parse(
           ApiService.urlUtama + "rekam/dataDiri?token=" + tokenlogin));
@@ -219,6 +214,7 @@ class _FirstFragmentState extends State<FirstFragment>{
     setState(() {
       preferences.remove("is_login");
       // preferences.remove("email");
+      // preferences.setString("niploginterakhir", tarikanNIPUser);
       preferences.remove("niplogin");
       preferences.remove("tokenlogin");
       preferences.remove("namalogin");
@@ -226,6 +222,15 @@ class _FirstFragmentState extends State<FirstFragment>{
       preferences.remove("ideselon");
       preferences.remove("jabatan");
       preferences.remove("id_pns");
+
+      preferences.remove("tarikNamaUser");
+      preferences.remove("tarikPangkatUser");
+      preferences.remove("tarikJabatanUser");
+      preferences.remove("tarikInstansiUser");
+      preferences.remove("tarikNamaAtasan");
+      preferences.remove("tarikNipAtasan");
+      preferences.remove("tarikJabatanAtasan");
+      preferences.remove("tarikInstansiAtasan");
     });
 
     Navigator.pushAndRemoveUntil(
@@ -249,8 +254,8 @@ class _FirstFragmentState extends State<FirstFragment>{
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    TextStyle styleDashboard = Theme.of(context).textTheme.bodyText2;
-    TextStyle styleTitle = Theme.of(context).textTheme.bodyText1;
+    TextStyle? styleDashboard = Theme.of(context).textTheme.bodyText2;
+    TextStyle? styleTitle = Theme.of(context).textTheme.bodyText1;
     return new SingleChildScrollView(
       padding: EdgeInsets.all(16.0),
       child:Center(
@@ -262,7 +267,7 @@ class _FirstFragmentState extends State<FirstFragment>{
                   padding: EdgeInsets.all(20.0),
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: Colors.yellow[100],
+                      color: Colors.yellow.shade100,
                     ),
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
@@ -282,7 +287,7 @@ class _FirstFragmentState extends State<FirstFragment>{
                   padding: EdgeInsets.all(20.0),
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: Colors.yellow[100],
+                      color: Colors.yellow.shade100,
                     ),
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
@@ -301,7 +306,7 @@ class _FirstFragmentState extends State<FirstFragment>{
                 const SizedBox(height: 15),
                 new Container(
                       padding: new EdgeInsets.all(20.0),
-                      color: Colors.yellow[50],
+                      // color: Colors.yellow[50],
                       child: new Column(
                         children: <Widget>[
                           FutureBuilder(
@@ -322,7 +327,7 @@ class _FirstFragmentState extends State<FirstFragment>{
                                 return ExpansionTile(
                                   title: Text('Data Bulan '+getMonth(0)+" "+DateTime.now().year.toString()),
                                   children: [
-                                    buildDataTable(snapshot.data),
+                                    buildDataTable(snapshot.data as List),
                                   ],
                                 );
                               }
@@ -348,6 +353,7 @@ class _FirstFragmentState extends State<FirstFragment>{
                                   children: [
                                     new FutureBuilder(future: ApiService().getDataTamsil(tokenlogin,"1"),
                                         builder: (context, datatamsil) {
+                                          Map<String, dynamic>? datatam = datatamsil.data as Map<String, dynamic>?;
                                           if (datatamsil.connectionState == ConnectionState.waiting) {
                                             // Menampilkan indikator loading jika data masih diambil.
                                             return Center(
@@ -359,7 +365,7 @@ class _FirstFragmentState extends State<FirstFragment>{
                                               child: Text('Error: ${datatamsil.error}'),
                                             );
                                           } else {
-                                            var kinerjaTpp = datatamsil.data['kinerja_tpp'];
+                                            var kinerjaTpp = datatam!['kinerja_tpp'];
                                             int totalWaktuDiakui = calculateTotalWaktuDiakui(kinerjaTpp);
                                             // Menampilkan data pagu di atas ExpansionTile.
                                             return Container(
@@ -367,7 +373,7 @@ class _FirstFragmentState extends State<FirstFragment>{
                                               decoration: BoxDecoration(
                                                 color: Colors.lime[200],
                                                 border: Border.all(
-                                                  color: Colors.yellow[100],
+                                                  color: Colors.yellow.shade100,
                                                 ),
                                                 borderRadius: BorderRadius.all(Radius.circular(20)),
                                               ),
@@ -378,15 +384,15 @@ class _FirstFragmentState extends State<FirstFragment>{
                                                   ),
                                                   // buildDataRow("Unit Kerja", datatamsil.data['unit_kerja_tpp'],160.0),
                                                   // buildDataRow("Jabatan/Kelas", datatamsil.data['jabatan_tpp'],160.0),
-                                                  buildDataRowInfo("Pagu", formatCurrency(datatamsil.data['pagu_tamsilpeg']),120.0),
-                                                  buildDataRowInfo("Realisasi", formatCurrency(datatamsil.data['jumlah_tamsil_diterima']),120.0),
+                                                  buildDataRowInfo("Pagu", formatCurrency(datatam!['pagu_tamsilpeg']),120.0),
+                                                  buildDataRowInfo("Realisasi", formatCurrency(datatam!['jumlah_tamsil_diterima']),120.0),
                                                   buildDataRowInfo("Capaian", totalWaktuDiakui.toString()+"/6.751 menit",120.0), // Menampilkan total waktu diakui
                                                 ],
                                               ),
                                             );
                                           }
                                         }),
-                                    buildDataTable(snapshot.data),
+                                    buildDataTable(snapshot.data as List),
                                   ],
                                 );
                               }
@@ -412,6 +418,7 @@ class _FirstFragmentState extends State<FirstFragment>{
                                   children: [
                                     new FutureBuilder(future: ApiService().getDataTamsil(tokenlogin,"2"),
                                         builder: (context, datatamsil) {
+                                          Map<String, dynamic>? datatam = datatamsil.data as Map<String, dynamic>?;
                                           if (datatamsil.connectionState == ConnectionState.waiting) {
                                             // Menampilkan indikator loading jika data masih diambil.
                                             return Center(
@@ -423,7 +430,7 @@ class _FirstFragmentState extends State<FirstFragment>{
                                               child: Text('Error: ${datatamsil.error}'),
                                             );
                                           } else {
-                                            var kinerjaTpp = datatamsil.data['kinerja_tpp'];
+                                            var kinerjaTpp = datatam!['kinerja_tpp'];
                                             int totalWaktuDiakui = calculateTotalWaktuDiakui(kinerjaTpp);
                                             // Menampilkan data pagu di atas ExpansionTile.
                                             return Container(
@@ -431,7 +438,7 @@ class _FirstFragmentState extends State<FirstFragment>{
                                               decoration: BoxDecoration(
                                                 color: Colors.lime[200],
                                                 border: Border.all(
-                                                  color: Colors.yellow[100],
+                                                  color: Colors.yellow.shade100,
                                                 ),
                                                 borderRadius: BorderRadius.all(Radius.circular(20)),
                                               ),
@@ -442,15 +449,15 @@ class _FirstFragmentState extends State<FirstFragment>{
                                                   ),
                                                   // buildDataRow("Unit Kerja", datatamsil.data['unit_kerja_tpp'],160.0),
                                                   // buildDataRow("Jabatan/Kelas", datatamsil.data['jabatan_tpp'],160.0),
-                                                  buildDataRowInfo("Pagu", formatCurrency(datatamsil.data['pagu_tamsilpeg']),120.0),
-                                                  buildDataRowInfo("Realisasi", formatCurrency(datatamsil.data['jumlah_tamsil_diterima']),120.0),
+                                                  buildDataRowInfo("Pagu", formatCurrency(datatam['pagu_tamsilpeg']),120.0),
+                                                  buildDataRowInfo("Realisasi", formatCurrency(datatam['jumlah_tamsil_diterima']),120.0),
                                                   buildDataRowInfo("Capaian", totalWaktuDiakui.toString()+"/6.751 menit",120.0), // Menampilkan total waktu diakui
                                                 ],
                                               ),
                                             );
                                           }
                                         }),
-                                    buildDataTable(snapshot.data),
+                                    buildDataTable(snapshot.data as List),
                                   ],
                                 );
                               }

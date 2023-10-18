@@ -14,7 +14,7 @@ class SkpFragment extends StatefulWidget {
 }
 
 class _SkpFragmentState extends State<SkpFragment>{
-  DaftarSkp data;
+  late DaftarSkp data;
   // late List<DaftarAktivitas> semuaAktivitas;
   final _messangerKey = GlobalKey<ScaffoldMessengerState>();
   String tokenlistaktivitas="";
@@ -35,7 +35,7 @@ class _SkpFragmentState extends State<SkpFragment>{
   Future<Null> getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
-      tokenlistaktivitas = preferences.getString("tokenlogin");
+      tokenlistaktivitas = preferences.getString("tokenlogin")!;
       // userId = preferences.getString("userid")!;
     });
   }
@@ -116,11 +116,11 @@ class _SkpFragmentState extends State<SkpFragment>{
 
     return Scaffold(
       key: _scaffoldState,
-      body: FutureBuilder<List<DaftarSkp>>(
+      body: FutureBuilder<List<DaftarSkp>?>(
         future: api.getSemuaSkp(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            semuaSkp = snapshot.data;
+            semuaSkp = snapshot.data!;
             if (semuaSkp.length == 0) {
               return Center(
                 child: Text(
@@ -153,7 +153,7 @@ class _SkpFragmentState extends State<SkpFragment>{
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: <Widget>[
-                                        Text(aktivitas.idDataSkp,style: TextStyle(fontSize: 14, color: Colors.black)),
+                                        Text(aktivitas.idDataSkp!,style: TextStyle(fontSize: 14, color: Colors.black)),
                                         // Padding(
                                         //     padding: EdgeInsets.only(
                                         //         bottom: 2)), //atur jarak antar InkWell
@@ -207,7 +207,7 @@ class _SkpFragmentState extends State<SkpFragment>{
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: <Widget>[
                                           Flexible(
-                                              child: new Text(aktivitas.rkAtasan,
+                                              child: new Text(aktivitas.rkAtasan!,
                                                   overflow: TextOverflow.fade,
                                                   maxLines: 2,
                                                   softWrap: false,
@@ -218,7 +218,7 @@ class _SkpFragmentState extends State<SkpFragment>{
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: <Widget>[
                                           Flexible(
-                                              child: new Text(aktivitas.rk,
+                                              child: new Text(aktivitas.rk!,
                                                   maxLines: 3,
                                                   overflow: TextOverflow.fade,
                                                   style: TextStyle(
@@ -259,7 +259,7 @@ class _SkpFragmentState extends State<SkpFragment>{
                                                         child: Text('Ya'),
                                                         onPressed: () {
                                                           //_deleteTask(aktivitas.idSubPekerjaan);
-                                                          api.delete(aktivitas.idDataSkp,tokenlistaktivitas)
+                                                          api.delete(aktivitas.idDataSkp!,tokenlistaktivitas)
                                                               .then((result) {
                                                             if (result != null) {
                                                               ScaffoldMessenger.of(
@@ -339,7 +339,7 @@ class _SkpFragmentState extends State<SkpFragment>{
                                           //   semuaSkp.removeAt(index);
                                           // });
                                           // setState(() {
-                                          api.delete(aktivitas.idDataSkp,tokenlistaktivitas).then((result) {
+                                          api.delete(aktivitas.idDataSkp!,tokenlistaktivitas).then((result) {
                                             if (result == "success") {
                                               // Navigator.of(context).pop();
                                               _getRequests();

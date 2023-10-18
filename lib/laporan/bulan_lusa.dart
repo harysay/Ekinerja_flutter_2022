@@ -14,11 +14,11 @@ class BulanLusa extends StatefulWidget {
 
 class _BulanLusaState extends State<BulanLusa> {
   ApiService api = new ApiService();
-  String tokenlogin;
+  late String tokenlogin;
   var json;
   bool toggle = true;
-  List<JsonTableColumn> columns;
-  String getData;
+  late List<JsonTableColumn> columns;
+  late String getData;
 
   void setJson() async{
     await getPref();
@@ -53,7 +53,7 @@ class _BulanLusaState extends State<BulanLusa> {
   Future<Null> getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
-      tokenlogin = preferences.getString("tokenlogin");
+      tokenlogin = preferences.getString("tokenlogin")!;
     });
   }
 
@@ -79,7 +79,7 @@ class _BulanLusaState extends State<BulanLusa> {
               columns: columns,
               showColumnToggle: true,
               allowRowHighlight: true,
-              rowHighlightColor: Colors.yellow[500].withOpacity(0.7),
+              rowHighlightColor: Colors.yellow[500]!.withOpacity(0.7),
             ),
             SizedBox(
               height: 16.0,

@@ -6,7 +6,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:async/async.dart';
 import 'package:ekinerja2020/model/daftar_aktivitas.dart';
 import 'package:ekinerja2020/service/ApiService.dart';
 import 'package:ekinerja2020/verifikasi/logic/prefs.dart';
@@ -19,19 +18,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ContentState {
   //ContentState();
-  final String idpns,tokenver;
-  ContentState({@required this.idpns,@required this.tokenver});
+  final String? idpns,tokenver;
+  ContentState({this.idpns,this.tokenver});
 
   /// Current id of playing song
-  int _currentSongId;
+  int? _currentSongId;
 
   /// A general art color change the UI
-  Color _currentArtColor;
+  Color? _currentArtColor;
 
   /// Cancelable operation for getting the art color
-  CancelableOperation _thiefOperation;
+  // CancelableOperation? _thiefOperation;
 
-  final Map<PlaylistType, Playlist> _playlists = {
+  final Map<PlaylistType, Playlist?> _playlists = {
     PlaylistType.global: null,
 //    PlaylistType.searched: Playlist([]),
 //    PlaylistType.shuffled: Playlist([]),
@@ -61,11 +60,11 @@ class ContentState {
 //  }
 
   /// Get current playing id
-  int get currentSongId => _currentSongId;
-  Color get currentArtColor => _currentArtColor;
+  int? get currentSongId => _currentSongId;
+  Color? get currentArtColor => _currentArtColor;
   PlaylistType get currentPlaylistType => _currentPlaylistType;
-  Playlist get currentPlaylist => _playlists[_currentPlaylistType];
-  Playlist getPlaylist(PlaylistType playlistType) => _playlists[playlistType];
+  Playlist? get currentPlaylist => _playlists[_currentPlaylistType];
+  Playlist? getPlaylist(PlaylistType playlistType) => _playlists[playlistType];
   SortFeature get currentSortFeature => _currentSortFeature;
 
   //****************** Setters *****************************************************
@@ -78,16 +77,16 @@ class ContentState {
 
   //****************** Methods *****************************************************
   /// Returns a [currentSong] index in current playlist (by default)
-  int get currentSongIndex => currentPlaylist.getSongIndexById(_currentSongId);
+  int get currentSongIndex => currentPlaylist!.getSongIndexById(_currentSongId!);
 
   //****************** Streams *****************************************************
   /// Controller for stream of playlist changes
   StreamController<void> _playlistChangeStreamController =
       StreamController<void>.broadcast();
 
-  /// Controller for stream of fetched albums changes
-  StreamController<void> _albumsChangeStreamController =
-      StreamController<void>.broadcast();
+  // /// Controller for stream of fetched albums changes
+  // StreamController<void> _albumsChangeStreamController =
+  //     StreamController<void>.broadcast();
 
   /// Controller for stream of current song changes
   StreamController<DaftarAktivitas> _songChangeStreamController =
@@ -147,7 +146,7 @@ class ContentState {
 ///
 /// etc.
 abstract class ContentControl {
-  static ContentState state = ContentState();
+  static ContentState? state = ContentState();
   /// An object to serialize songs
   // static SongsSerialization songsSerializer = SongsSerialization();
 
@@ -161,7 +160,7 @@ abstract class ContentControl {
   static bool initFetching = true;
 
   /// Whether playlist control is ready to provide to player instance the sources to play tracks
-  static bool get playReady => state._playlists[PlaylistType.global] != null;
+  static bool get playReady => state!._playlists[PlaylistType.global] != null;
 
   /// The main data app initialization function
   /// Inits all playlists
@@ -169,7 +168,8 @@ abstract class ContentControl {
   static Future<void> init() async {
 //    if (Permissions.granted) {
       // Reset [playReady]
-      state._playlists[PlaylistType.global] = null;
+      state!._playlists[PlaylistType.global] = null;
+      // state!._playlists.remove(PlaylistType.global);
       initFetching = true;
 //      await playlistSerializer.initJson(); // Init playlist json
       await _restoreSortFeature();
@@ -178,7 +178,7 @@ abstract class ContentControl {
 //      await _restoreLastSong();
 //      await _restorePlaylist();
       // Retry do all the same as before fetching songs (set duration, set track uri), if it hadn't been performed before (_playingSongIdState == null)
-      if (state._currentSongId == null) {
+      if (state!._currentSongId == null) {
 //        await _restoreLastSong();
       }
       initFetching = false;
@@ -216,7 +216,7 @@ abstract class ContentControl {
 //    }
 
     // Emit event to track change stream
-    state.emitPlaylistChange();
+    state!.emitPlaylistChange();
   }
 
   //****************** Playlist manipulation methods *****************************************************
@@ -227,14 +227,14 @@ abstract class ContentControl {
   ///
   /// @param [songs] — can be omitted and if so, then the playlist itself won't be changed,
   /// the state is only will get switched to it, and also playlist will be is serialized
-  static Future<void> setSearchedPlaylist({List<DaftarAktivitas> songs}) async {
+  static Future<void> setSearchedPlaylist({List<DaftarAktivitas>? songs}) async {
     if (songs != null) {
-      state._playlists[PlaylistType.searched].setSongs(songs);
+      state!._playlists[PlaylistType.searched]!.setSongs(songs);
     }
     //playlistSerializer.saveJson(state._playlists[PlaylistType.searched].songs);
-    state._currentPlaylistType = PlaylistType.searched;
+    state!._currentPlaylistType = PlaylistType.searched;
     Prefs.playlistTypeInt.setPref(value: 1);
-    state._playlists[PlaylistType.shuffled].clear();
+    state!._playlists[PlaylistType.shuffled]!.clear();
   }
 
   /// Shuffles from current playlist (by default)
@@ -295,15 +295,15 @@ abstract class ContentControl {
   ///
   /// This function doesn't call [ContentState.emitPlaylistChange] by default
   static void resetPlaylists({bool emitChangeEvent = false}) {
-    if (state._currentPlaylistType != PlaylistType.global) {
+    if (state!._currentPlaylistType != PlaylistType.global) {
       Prefs.playlistTypeInt.setPref(value: 0); // Save to prefs
       //playlistSerializer.saveJson(const []);
-      state._currentPlaylistType = PlaylistType.global;
-      state._playlists[PlaylistType.searched].clear();
-      state._playlists[PlaylistType.shuffled].clear();
+      state!._currentPlaylistType = PlaylistType.global;
+      state!._playlists[PlaylistType.searched]!.clear();
+      state!._playlists[PlaylistType.shuffled]!.clear();
     }
     if (emitChangeEvent) {
-      state.emitPlaylistChange();
+      state!.emitPlaylistChange();
     }
   }
 //
@@ -312,22 +312,22 @@ abstract class ContentControl {
 //  ///
 //  /// @param [emitChangeEvent] - if false, [ContentState.emitPlaylistChange] won't be called.
   static void updatePlaylistsWithGlobal({bool emitChangeEvent = true}) {
-    if (state._currentPlaylistType == PlaylistType.searched ||
-        state._currentPlaylistType == PlaylistType.shuffled &&
-            state._playlistTypeBeforeShuffle == PlaylistType.searched) {
+    if (state!._currentPlaylistType == PlaylistType.searched ||
+        state!._currentPlaylistType == PlaylistType.shuffled &&
+            state!._playlistTypeBeforeShuffle == PlaylistType.searched) {
       // Match searched playlist when it's the current or the current is shuffled, but it's been created from searched
 
-      state._playlists[PlaylistType.searched]
-          .compareAndRemoveObsolete(state._playlists[PlaylistType.global]);
+      state!._playlists[PlaylistType.searched]!
+          .compareAndRemoveObsolete(state!._playlists[PlaylistType.global]!);
     }
 
-    if (state._currentPlaylistType != PlaylistType.global &&
-        state.currentPlaylist.isEmpty) {
+    if (state!._currentPlaylistType != PlaylistType.global &&
+        state!.currentPlaylist!.isEmpty) {
       //  Set playlist to global if searched or shuffled are happened to be zero-length
       ContentControl.resetPlaylists();
     } else {
       // Else update playlists
-      switch (state._currentPlaylistType) {
+      switch (state!._currentPlaylistType) {
         case PlaylistType.searched:
           // Update searched playlist
           setSearchedPlaylist();
@@ -337,7 +337,7 @@ abstract class ContentControl {
     }
 
     if (emitChangeEvent) {
-      state.emitPlaylistChange();
+      state!.emitPlaylistChange();
     }
   }
 //
@@ -346,23 +346,23 @@ abstract class ContentControl {
   /// Refetch songs and update playlist
   static Future<void> refetchSongs({bool emitChangeEvent = true}) async {
     ApiService api = new ApiService();
-    final json = await api.getAllActivityVer(state.tokenver, state.idpns).toString();
+    final json = await api.getAllActivityVer(state!.tokenver!, state!.idpns!).toString();
     final List<DaftarAktivitas> songs = [];
     for (int i = 0; i < json.length; i++) {
       String songStr = json[i];
       songs.add(DaftarAktivitas.fromJson(jsonDecode(songStr)));
     }
 
-    if (state._playlists[PlaylistType.global] == null) {
-      state._playlists[PlaylistType.global] = Playlist([]);
+    if (state!._playlists[PlaylistType.global] == null) {
+      state!._playlists[PlaylistType.global] = Playlist([]);
     }
-    state._playlists[PlaylistType.global].setSongs(songs);
+    state!._playlists[PlaylistType.global]!.setSongs(songs);
     await filterSongs(emitChangeEvent: false);
     sortSongs(emitChangeEvent: false);
     updatePlaylistsWithGlobal(emitChangeEvent: false);
     // songsSerializer.saveJson(state._playlists[PlaylistType.global].songs);
     if (emitChangeEvent) {
-      state.emitPlaylistChange();
+      state!.emitPlaylistChange();
     }
   }
 //
@@ -410,19 +410,19 @@ abstract class ContentControl {
 //  /// @param [feature] - feature to sort by. If no value has passed then will sort by current sort feature.
 //  ///
   /// @param [emitChangeEvent] - if false, [ContentState.emitPlaylistChange] won't be called.
-  static void sortSongs({SortFeature feature, bool emitChangeEvent = true}) {
-    feature ??= state._currentSortFeature;
+  static void sortSongs({SortFeature? feature, bool emitChangeEvent = true}) {
+    feature ??= state!._currentSortFeature;
     switch (feature) {
       case SortFeature.date:
-        state._playlists[PlaylistType.global].songs
-            .sort((b, a) => a.jamMulai.compareTo(b.jamMulai));
-        state._currentSortFeature = feature;
+        state!._playlists[PlaylistType.global]!.songs
+            .sort((b, a) => a!.jamMulai!.compareTo(b!.jamMulai!));
+        state!._currentSortFeature = feature;
         Prefs.sortFeatureInt.setPref(value: 0);
         break;
       case SortFeature.title:
-        state._playlists[PlaylistType.global].songs.sort(
-            (a, b) => a.namaPekerjaan.toLowerCase().compareTo(b.namaPekerjaan.toLowerCase()));
-        state._currentSortFeature = feature;
+        state!._playlists[PlaylistType.global]!.songs.sort(
+            (a, b) => a!.namaPekerjaan!.toLowerCase().compareTo(b!.namaPekerjaan!.toLowerCase()));
+        state!._currentSortFeature = feature;
         Prefs.sortFeatureInt.setPref(value: 1);
         break;
       default:
@@ -432,7 +432,7 @@ abstract class ContentControl {
 
     // Emit event to track change stream
     if (emitChangeEvent) {
-      state.emitPlaylistChange();
+      state!.emitPlaylistChange();
     }
   }
 
@@ -440,13 +440,13 @@ abstract class ContentControl {
   ///
   /// @param [emitChangeEvent] - if false, [ContentState.emitPlaylistChange] won't be called.
   static Future<void> filterSongs({bool emitChangeEvent = true}) async {
-    state._playlists[PlaylistType.global].filter(
+    state!._playlists[PlaylistType.global]!.filter(
       FilterFeature.duration,
       duration: Duration(seconds: await Settings.minFileDurationInt.getPref()),
     );
     // Emit event to track change stream
     if (emitChangeEvent) {
-      state.emitPlaylistChange();
+      state!.emitPlaylistChange();
     }
   }
 
@@ -479,9 +479,9 @@ abstract class ContentControl {
   static Future<void> _restoreSortFeature() async {
     final int savedSortFeature = await Prefs.sortFeatureInt.getPref();
     if (savedSortFeature == 0) {
-      state._currentSortFeature = SortFeature.date;
+      state!._currentSortFeature = SortFeature.date;
     } else if (savedSortFeature == 1) {
-      state._currentSortFeature = SortFeature.title;
+      state!._currentSortFeature = SortFeature.title;
     } else
       throw Exception(
           "_restoreSortFeature: wrong saved sortFeatureInt: $savedSortFeature");

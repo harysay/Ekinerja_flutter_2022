@@ -1,7 +1,7 @@
 
 class Localization {
-  final List <DataPekerjaan> pekerjaan;
-  final List <SubPekerjaan> subpekerjaan;
+  final List <DataPekerjaan>? pekerjaan;
+  final List <SubPekerjaan>? subpekerjaan;
   //DataPekerjaan nd = new DataPekerjaan();
 
   Localization({this.pekerjaan, this.subpekerjaan});
@@ -38,10 +38,10 @@ class Localization {
 }
 
 class SubPekerjaan {
-  final String idSubPekerjaan;
-  final String namaSubPekerjaan;
-  final String standarWaktu;
-  final String idPekerjaan;
+  final String? idSubPekerjaan;
+  final String? namaSubPekerjaan;
+  final String? standarWaktu;
+  final String? idPekerjaan;
 
 
   SubPekerjaan({this.idSubPekerjaan, this.namaSubPekerjaan, this.standarWaktu,this.idPekerjaan});
@@ -70,8 +70,8 @@ class SubPekerjaan {
 }
 
 class DataPekerjaan {
-  final String idPekerjaan;
-  final String namaPekerjaan;
+  final String? idPekerjaan;
+  final String? namaPekerjaan;
   //final List<String> subPekerjaan;
 
   DataPekerjaan({

@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       builder: (context,widget) => Navigator(
         onGenerateRoute: (settings) => MaterialPageRoute(
             builder: (context) => UpdateApp(
-              child: widget,
+              child: widget!,
             )
         ),
       ),
@@ -73,7 +73,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  String statusRun;
+  String? statusRun;
   var valueLogin;
 
   @override

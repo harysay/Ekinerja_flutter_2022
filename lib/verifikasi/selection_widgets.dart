@@ -91,16 +91,16 @@ const double kIconButtonIconSize = 24.0;
 /// Also performs a fade switch animation while switching in and out of the selection mode.
 class SelectionAppBar extends AppBar {
   SelectionAppBar({
-    Key key,
-    @required SelectionController selectionController,
-    @required Widget title,
+    Key? key,
+    required SelectionController selectionController,
+    required Widget title,
 
     /// Title to show in selection
-    @required Widget titleSelection,
-    @required List<Widget> actions,
+    required Widget titleSelection,
+    required List<Widget> actions,
 
     /// Actions to show in selection
-    @required List<Widget> actionsSelection,
+    required List<Widget> actionsSelection,
 
     /// Go to selection animation
     Curve curve = Curves.easeOutCubic,
@@ -108,20 +108,20 @@ class SelectionAppBar extends AppBar {
     /// Back from selection animation
     Curve reverseCurve = Curves.easeInCubic,
     bool automaticallyImplyLeading = false,
-    Widget flexibleSpace,
-    PreferredSizeWidget bottom,
+    Widget? flexibleSpace,
+    PreferredSizeWidget? bottom,
     double elevation = 2.0,
 
     /// Elevation in selection
     double elevationSelection = 2.0,
-    ShapeBorder shape,
-    Color backgroundColor,
-    Brightness brightness,
-    IconThemeData iconTheme,
-    IconThemeData actionsIconTheme,
-    TextTheme textTheme,
+    ShapeBorder? shape,
+    Color? backgroundColor,
+    Brightness? brightness,
+    IconThemeData? iconTheme,
+    IconThemeData? actionsIconTheme,
+    TextTheme? textTheme,
     bool primary = true,
-    bool centerTitle,
+    bool? centerTitle,
     bool excludeHeaderSemantics = false,
     double titleSpacing = NavigationToolbar.kMiddleSpacing,
     double toolbarOpacity = 1.0,
@@ -175,10 +175,10 @@ class SelectionAppBar extends AppBar {
               selectionController.inSelection ? elevationSelection : elevation,
           shape: shape,
           backgroundColor: backgroundColor,
-          brightness: brightness,
+          // brightness: brightness,
           iconTheme: iconTheme,
           actionsIconTheme: actionsIconTheme,
-          textTheme: textTheme,
+          // textTheme: textTheme,
           primary: primary,
           centerTitle: centerTitle,
           //excludeHeaderSemantics: excludeHeaderSemantics,
@@ -192,9 +192,9 @@ class SelectionAppBar extends AppBar {
 /// In this example it's a song tile.
 class SelectableActivityTile extends StatefulWidget {
   SelectableActivityTile({
-    Key key,
-    @required this.listAktivitas,
-    @required this.selectionController,
+    Key? key,
+    required this.listAktivitas,
+    required this.selectionController,
     this.onTap,
     this.selected = false,
   })  : assert(listAktivitas != null),
@@ -204,7 +204,7 @@ class SelectableActivityTile extends StatefulWidget {
 
   /// Our controller to have a control of a selection from the tile widget
   final SelectionController selectionController;
-  final Function onTap;
+  final Function? onTap;
 
   /// Basically makes tiles to be selected on first render, after this can be done via internal state
   final bool selected;
@@ -215,15 +215,15 @@ class SelectableActivityTile extends StatefulWidget {
 
 class _SelectableActivityTileState extends State<SelectableActivityTile>
     with SingleTickerProviderStateMixin {
-  bool _selected;
+  bool? _selected;
 
   // Declare some animations for our tile
-  AnimationController _animationController;
-  Animation<double> _animationOpacity;
-  Animation<double> _animationOpacityInverse;
-  Animation<double> _animationBorderRadius;
-  Animation<double> _animationScale;
-  Animation<double> _animationScaleInverse;
+  AnimationController? _animationController;
+  Animation<double>? _animationOpacity;
+  Animation<double>? _animationOpacityInverse;
+  Animation<double>? _animationBorderRadius;
+  Animation<double>? _animationScale;
+  Animation<double>? _animationScaleInverse;
 
   @override
   void initState() {
@@ -238,7 +238,7 @@ class _SelectableActivityTileState extends State<SelectableActivityTile>
 
     /// Define our animations
     final CurvedAnimation animationBase = CurvedAnimation(
-      parent: _animationController,
+      parent: _animationController!,
       curve: Curves.easeOutCubic,
       reverseCurve: Curves.easeInCubic,
     );
@@ -258,22 +258,22 @@ class _SelectableActivityTileState extends State<SelectableActivityTile>
     /// will know about they have to play the unselection animation too.
     if (widget.selectionController.notInSelection) {
       // Perform unselection animation
-      if (_selected) {
+      if (_selected!) {
         _selected = false;
-        _animationController.value =
+        _animationController!.value =
             widget.selectionController.animationController.value;
-        _animationController.reverse();
+        _animationController!.reverse();
       }
     } else {
-      if (_selected) {
-        _animationController.value = 1;
+      if (_selected!) {
+        _animationController!.value = 1;
       }
     }
   }
 
   @override
   void dispose() {
-    _animationController.dispose();
+    _animationController!.dispose();
     super.dispose();
   }
 
@@ -288,22 +288,22 @@ class _SelectableActivityTileState extends State<SelectableActivityTile>
   }
 
   void _select() {
-    widget.selectionController.selectItem(widget.listAktivitas.idDataKinerja,widget.listAktivitas.tglKinerja, widget.listAktivitas.waktuDiakui);
+    widget.selectionController.selectItem(widget.listAktivitas.idDataKinerja!,widget.listAktivitas.tglKinerja!, widget.listAktivitas.waktuDiakui!);
     //Playlist(widget.listAktivitas);
-    _animationController.forward();
+    _animationController!.forward();
   }
 
   // Performs unselect animation and calls [onSelected] and [notifyUnselection]
   void _unselect() {
-    widget.selectionController.unselectItem(widget.listAktivitas.idDataKinerja,widget.listAktivitas.tglKinerja, widget.listAktivitas.waktuDiakui);
-    _animationController.reverse();
+    widget.selectionController.unselectItem(widget.listAktivitas.idDataKinerja!,widget.listAktivitas.tglKinerja!, widget.listAktivitas.waktuDiakui!);
+    _animationController!.reverse();
   }
 
   void _toggleSelection() {
     setState(() {
-      _selected = !_selected;
+      _selected = !_selected!;
     });
-    if (_selected) {
+    if (_selected!) {
       _select();
     } else
       _unselect();
@@ -312,26 +312,26 @@ class _SelectableActivityTileState extends State<SelectableActivityTile>
   @override
   Widget build(BuildContext context) {
     return ListTileTheme(
-      selectedColor: Theme.of(context).textTheme.bodyText1.color,
+      selectedColor: Theme.of(context).textTheme.bodyText1!.color,
       child: ListTile(
         subtitle: Text(
-          widget.listAktivitas.uraianPekerjaan,
+          widget.listAktivitas.uraianPekerjaan!,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
             fontSize: 13.5,
             fontWeight: FontWeight.w500,
-            color: Theme.of(context).textTheme.caption.color,
+            color: Theme.of(context).textTheme.caption!.color,
             height: 0.9,
           ),
         ),
-        selected: _selected,
+        selected: _selected!,
         dense: true,
         isThreeLine: false,
         contentPadding: const EdgeInsets.only(left: 10.0, top: 0.0),
         onTap: _handleTap,
         onLongPress: _toggleSelection,
         title: Text(
-          widget.listAktivitas.namaPekerjaan,
+          widget.listAktivitas.namaPekerjaan!,
           overflow: TextOverflow.ellipsis,
           style: const TextStyle(
             fontSize: 15.0,
@@ -339,25 +339,25 @@ class _SelectableActivityTileState extends State<SelectableActivityTile>
           ),
         ),
         leading: AnimatedBuilder(
-          animation: _animationController,
-          builder: (BuildContext context, Widget child) => ClipRRect(
-            borderRadius: BorderRadius.circular(_animationBorderRadius.value),
+          animation: _animationController!,
+          builder: (BuildContext context, Widget? child) => ClipRRect(
+            borderRadius: BorderRadius.circular(_animationBorderRadius!.value),
             child: Stack(
               children: <Widget>[
                 FadeTransition(
-                  opacity: _animationOpacityInverse, // Inverse values
+                  opacity: _animationOpacityInverse!, // Inverse values
                   child: ScaleTransition(
-                    scale: _animationScale,
+                    scale: _animationScale!,
                     child: Container(
                       width: 60.0,
                       height: 48.0,
-                      child: Text(widget.listAktivitas.tglKinerja,style: TextStyle(fontSize: 14, color: Colors.black)),
+                      child: Text(widget.listAktivitas.tglKinerja!,style: TextStyle(fontSize: 14, color: Colors.black)),
                     ),
                   ),
                 ),
-                if (_animationController.value != 0)
+                if (_animationController!.value != 0)
                   FadeTransition(
-                    opacity: _animationOpacity,
+                    opacity: _animationOpacity!,
                     child: Container(
                       width: 48.0,
                       height: 48.0,
@@ -365,7 +365,7 @@ class _SelectableActivityTileState extends State<SelectableActivityTile>
                           .of(context)
                           .primaryColor,
                       child: ScaleTransition(
-                        scale: _animationScaleInverse,
+                        scale: _animationScaleInverse!,
                         child: const Icon(
                           Icons.check,
                           color: Colors.white,

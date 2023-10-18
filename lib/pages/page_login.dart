@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PageLogin extends StatefulWidget {
-  const PageLogin({Key key}) : super(key: key);
+  const PageLogin({Key? key}) : super(key: key);
 
   @override
   _PageLoginState createState() => _PageLoginState();
@@ -36,7 +36,8 @@ class _PageLoginState extends State<PageLogin> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   var txtEditUsername = TextEditingController();
   var txtEditPwd = TextEditingController();
-  LoginStatus _loginStatus;
+  String getNipTerakhir="";
+  LoginStatus? _loginStatus;
 
   // membuat show hide password
   bool _secureText = true;
@@ -50,6 +51,7 @@ class _PageLoginState extends State<PageLogin> {
 
   Widget inputUsername() {
     return TextFormField(
+      // initialValue: getNipTerakhir ?? "",
         cursorColor: Colors.white,
         keyboardType: TextInputType.emailAddress,
         autofocus: false,
@@ -57,9 +59,7 @@ class _PageLoginState extends State<PageLogin> {
         //     ? 'Masukkan email yang valid'
         //     : null,
         controller: txtEditUsername,
-        onSaved: (String val) {
-          txtEditUsername.text = val;
-        },
+        onSaved: (String? val) {txtEditUsername.text = val!; },
         decoration: InputDecoration(
           hintText: 'Masukkan Username',
           hintStyle: const TextStyle(color: Colors.white),
@@ -93,7 +93,7 @@ class _PageLoginState extends State<PageLogin> {
       keyboardType: TextInputType.text,
       autofocus: false,
       obscureText: _secureText, //make decript inputan
-      validator: (String arg) {
+      validator: (String? arg) {
         if (arg == null || arg.isEmpty) {
           return 'Password harus diisi';
         } else {
@@ -101,8 +101,8 @@ class _PageLoginState extends State<PageLogin> {
         }
       },
       controller: txtEditPwd,
-      onSaved: (String val) {
-        txtEditPwd.text = val;
+      onSaved: (String? val) {
+        txtEditPwd.text = val!;
       },
       decoration: InputDecoration(
         hintText: 'Masukkan Password',
@@ -135,9 +135,9 @@ class _PageLoginState extends State<PageLogin> {
   }
 
   void _validateInputs() {
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState!.validate()) {
       //If all data are correct then save data to out variables
-      _formKey.currentState.save();
+      _formKey.currentState!.save();
       doLogin(txtEditUsername.text, txtEditPwd.text);
     }
   }
@@ -157,7 +157,7 @@ class _PageLoginState extends State<PageLogin> {
 
       final output = jsonDecode(response.body);
       if (response.statusCode == 200) {
-        Navigator.of(_keyLoader.currentContext, rootNavigator: false).pop();
+        Navigator.of(_keyLoader.currentContext!, rootNavigator: false).pop();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
               content: Text(
@@ -180,7 +180,7 @@ class _PageLoginState extends State<PageLogin> {
         }
         //debugPrint(output['message']);
       } else {
-        Navigator.of(_keyLoader.currentContext, rootNavigator: false).pop();
+        Navigator.of(_keyLoader.currentContext!, rootNavigator: false).pop();
         //debugPrint(output['message']);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -191,7 +191,7 @@ class _PageLoginState extends State<PageLogin> {
         );
       }
     } catch (e) {
-      Navigator.of(_keyLoader.currentContext, rootNavigator: false).pop();
+      Navigator.of(_keyLoader.currentContext!, rootNavigator: false).pop();
       Dialogs.popUp(context, '$e');
       debugPrint('$e');
     }
@@ -201,6 +201,7 @@ class _PageLoginState extends State<PageLogin> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     // await pref.setString("email", username);
     await pref.setString("niplogin", username);
+    await pref.setString("niploginterakhir", username);
     await pref.setString("tokenlogin", token);
     await pref.setString("namalogin", nama);
     await pref.setString("fotoLogin", foto);
@@ -212,18 +213,16 @@ class _PageLoginState extends State<PageLogin> {
       _loginStatus = LoginStatus.signIn;
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()),);
     });
-    // Navigator.pushAndRemoveUntil(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (BuildContext context) => const HomePage(),
-    //   ),
-    //       (route) => false,
-    // );
   }
 
   void ceckLogin() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     var islogin = pref.getBool("is_login");
+    if (pref.getString("niploginterakhir")!=""){
+      getNipTerakhir = pref.getString("niploginterakhir")!;
+      txtEditUsername.text = getNipTerakhir;
+    }
+
     if (islogin != null && islogin) {
       Navigator.pushAndRemoveUntil(
         context,

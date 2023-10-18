@@ -8,10 +8,10 @@ import 'package:flutter/material.dart';
 /// An analogue of the [AnimatedSwitcher], but based on explicit [animation] property
 class AnimationSwitcher extends StatelessWidget {
   const AnimationSwitcher({
-    Key key,
-    @required this.child1,
-    @required this.child2,
-    @required this.animation,
+    Key? key,
+    required this.child1,
+    required this.child2,
+    required this.animation,
   })  : assert(child1 != null),
         assert(child2 != null),
         assert(animation != null),
@@ -19,13 +19,13 @@ class AnimationSwitcher extends StatelessWidget {
 
   final Widget child1;
   final Widget child2;
-  final Animation animation;
+  final Animation<double> animation;
 
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: animation,
-      builder: (BuildContext context, Widget child) => Stack(
+      builder: (BuildContext context, Widget? child) => Stack(
         children: [
           IgnorePointer(
             ignoring: animation.status == AnimationStatus.forward ||
@@ -56,7 +56,7 @@ class AnimationSwitcher extends StatelessWidget {
 /// Perfect for showing number counters.
 class CountSwitcher extends StatelessWidget {
   const CountSwitcher({
-    Key key,
+    Key? key,
     this.childKey,
     this.child,
     this.valueIncreased = true,
@@ -65,8 +65,8 @@ class CountSwitcher extends StatelessWidget {
   /// A key that will be applied to the child widget.
   ///
   /// Can be used to lock the switch animation.
-  final Key childKey;
-  final Widget child;
+  final Key? childKey;
+  final Widget? child;
 
   /// `true` will play top-to-down animation, `false` vice-versa
   final bool valueIncreased;

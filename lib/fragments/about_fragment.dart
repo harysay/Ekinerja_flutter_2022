@@ -1,6 +1,7 @@
 import 'package:ekinerja2020/service/ApiService.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:ekinerja2020/view/about_page.dart';
 
 class AboutFragment extends StatelessWidget {
   DateTime sekarang = new DateTime.now();
@@ -35,7 +36,7 @@ class AboutFragment extends StatelessWidget {
                     width: 250,
                     fit: BoxFit.fitWidth,
                   ),
-                  new Text(ApiService.versionBuildSekarang),
+                  // new Text(ApiService.versionBuildSekarang),
                   new Center(
                     child: new ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -56,12 +57,18 @@ class AboutFragment extends StatelessWidget {
               ),
             ),
           ),
-          // new Positioned(
-          //   child: new Align(
-          //       alignment: FractionalOffset.bottomCenter,
-          //       child: new Text("Pemerintah Kabupaten Kebumen"),
-          //   ),
-          // )
+          new InkWell(
+            onTap: () {
+              // Ketika teks atau elemen ini diklik, buka halaman "AboutPage"
+              Navigator.push(context, MaterialPageRoute(builder: (context) => AboutPage()));
+            },
+            child: new Positioned(
+              child: new Align(
+                alignment: FractionalOffset.bottomCenter,
+                child: new Text(ApiService.versionBuildSekarang),
+              ),
+            ),
+          )
         ],
       ),
     );
@@ -92,4 +99,18 @@ class AboutFragment extends StatelessWidget {
     }
   }
 
+}
+class VersionItem extends StatelessWidget {
+  final String version;
+  final String changes;
+
+  VersionItem({required this.version, required this.changes});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text("Versi $version"),
+      subtitle: Text(changes),
+    );
+  }
 }

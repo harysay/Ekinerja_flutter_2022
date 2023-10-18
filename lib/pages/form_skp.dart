@@ -5,7 +5,8 @@ import 'package:ekinerja2020/model/daftar_skp.dart';
 import 'package:flutter/material.dart';
 import 'package:ekinerja2020/model/daftar_aktivitas.dart';
 import 'package:ekinerja2020/service/ApiService.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+// import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:http/http.dart' as http;
 import 'package:ekinerja2020/model/localization_dropdown_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,8 +19,8 @@ import 'customTimePicker.dart';
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
 class FormSkp extends StatefulWidget {
-  List<DaftarSkp> daftarSudahAda;
-  DaftarSkp daftaraktivitas;
+  List<DaftarSkp>? daftarSudahAda;
+  DaftarSkp? daftaraktivitas;
   FormSkp({this.daftarSudahAda, this.daftaraktivitas});
 
   @override
@@ -34,7 +35,7 @@ class _FormSkpState extends State<FormSkp> {
   String _timeMulai = "Belum diset";
   String _timeSelesai = "Belum diset";
 
-  String tokenlistaktivitas,tanggalAkSebelum,jamMulaiSebelum;
+  late String tokenlistaktivitas,tanggalAkSebelum,jamMulaiSebelum;
   TimeOfDay timeLimit = TimeOfDay(hour: 15, minute: 30);
   TimeOfDay startTime = TimeOfDay(hour: 7, minute: 30);
   TimeOfDay endTime = TimeOfDay(hour: 23, minute: 59);
@@ -43,12 +44,12 @@ class _FormSkpState extends State<FormSkp> {
   //List<String> _subPekerjaan;
   //String _selectedState = "Choose a state";
   //String _selectedLGA = "Choose ..";
-  String rkAtasan,rencanaKinerja,aspekKuantitas,aspekKuantTarget,aspekKuantSatuan,aspekKual,aspekKualTarget,aspekWaktu,aspekWaktuTarget,aspekWaktuSatuan;
-  List statesList = List();
-  List provincesList = List();
-  List tempList = List();
-  String _state;
-  String getIdSubPekerjaanValue;
+  late String rkAtasan,rencanaKinerja,aspekKuantitas,aspekKuantTarget,aspekKuantSatuan,aspekKual,aspekKualTarget,aspekWaktu,aspekWaktuTarget,aspekWaktuSatuan;
+  late List statesList;
+  late List provincesList;
+  late List tempList;
+  late String _state;
+  late String getIdSubPekerjaanValue;
   ApiService api = new ApiService();
 //  ApiService_pekerjaan api_pekerjaan = new ApiService_pekerjaan();
   //TextEditingController ctrlTanggalAktivitas = new TextEditingController();
@@ -88,7 +89,7 @@ class _FormSkpState extends State<FormSkp> {
 //      });
 //    }
 //  }
-  Future<String> _populateDropdown() async {
+  Future<void> _populateDropdown() async {
     await getPref();
     setState(() {
       loading = true;
@@ -100,8 +101,8 @@ class _FormSkpState extends State<FormSkp> {
       Localization places = new Localization.fromJson(jsonResponse);
 
       setState(() {
-        statesList = places.pekerjaan;
-        provincesList = places.subpekerjaan;
+        statesList = places.pekerjaan!;
+        provincesList = places.subpekerjaan!;
         if (this.widget.daftaraktivitas != null) {
           tempList = provincesList;
         }
@@ -122,19 +123,19 @@ class _FormSkpState extends State<FormSkp> {
     //Jika ada lemparan dari second_fragment (Edit) maka dilakukan berikut
     if (this.widget.daftaraktivitas != null) { //ngecek ada isinya nggak klo ada isinya berarti edit
       //rkAtasan,rencanaKinerja,aspekKuantitas,aspekKuantTarget,aspekKuantSatuan,aspekKual,aspekKualTarget,aspekWaktu,aspekWaktuTarget,aspekWaktuSatuan
-      rkAtasan = this.widget.daftaraktivitas.rkAtasan;
-      rencanaKinerja = this.widget.daftaraktivitas.rk;
+      rkAtasan = this.widget.daftaraktivitas!.rkAtasan!;
+      rencanaKinerja = this.widget.daftaraktivitas!.rk!;
 
-      aspekKuantitas = this.widget.daftaraktivitas.aspekSIkiKuant;
-      aspekKuantTarget = this.widget.daftaraktivitas.aspekSIkiKuantTarget;
-      aspekKuantSatuan = this.widget.daftaraktivitas.aspekSIkiKuantSatuanOutput;
+      aspekKuantitas = this.widget.daftaraktivitas!.aspekSIkiKuant!;
+      aspekKuantTarget = this.widget.daftaraktivitas!.aspekSIkiKuantTarget!;
+      aspekKuantSatuan = this.widget.daftaraktivitas!.aspekSIkiKuantSatuanOutput!;
 
-      aspekKual = this.widget.daftaraktivitas.aspekSIkiKual;
-      aspekKualTarget = this.widget.daftaraktivitas.aspekSIkiKualTarget;
+      aspekKual = this.widget.daftaraktivitas!.aspekSIkiKual!;
+      aspekKualTarget = this.widget.daftaraktivitas!.aspekSIkiKualTarget!;
 
-      aspekWaktu = this.widget.daftaraktivitas.aspekSIkiWaktu;
-      aspekWaktuTarget = this.widget.daftaraktivitas.aspekSIkiWaktuTarget;
-      aspekWaktuSatuan = this.widget.daftaraktivitas.aspekSIkiWaktuSatuanOutput;
+      aspekWaktu = this.widget.daftaraktivitas!.aspekSIkiWaktu!;
+      aspekWaktuTarget = this.widget.daftaraktivitas!.aspekSIkiWaktuTarget!;
+      aspekWaktuSatuan = this.widget.daftaraktivitas!.aspekSIkiWaktuSatuanOutput!;
     }
 
 
@@ -146,7 +147,7 @@ class _FormSkpState extends State<FormSkp> {
     });
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
-      tokenlistaktivitas = preferences.getString("tokenlogin");
+      tokenlistaktivitas = preferences.getString("tokenlogin")!;
 
     });
 //     final response = await http.get(api.getAllKontak(tokenlistaktivitas));
@@ -170,7 +171,7 @@ class _FormSkpState extends State<FormSkp> {
   Future<Null> getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
-      tokenlistaktivitas = preferences.getString("tokenlogin");
+      tokenlistaktivitas = preferences.getString("tokenlogin")!;
     });
   }
 
@@ -209,9 +210,9 @@ class _FormSkpState extends State<FormSkp> {
 
                           onPressed: () {
                             DatePicker.showDatePicker(context,
-                                theme: DatePickerTheme(
-                                  containerHeight: 210.0,
-                                ),
+                                // theme: DatePickerTheme(
+                                //   containerHeight: 210.0,
+                                // ),
                                 showTitleActions: true,
                                 minTime: DateTime(2019, 1, 1),
                                 maxTime: DateTime(2025, 12, 31), onConfirm: (date) {
@@ -287,8 +288,8 @@ class _FormSkpState extends State<FormSkp> {
                       }).toList(),
                       onChanged: (newVal) {//newVal adalah idPekerjaan yang dipilih (nilai dari value)
                         setState(() {
-                          getIdSubPekerjaanValue = null;
-                          _state = newVal;
+                          getIdSubPekerjaanValue = "";
+                          _state = newVal!;
                           tempList = provincesList
                               .where((x) =>
                           x.idPekerjaan.toString() == (_state.toString()))
@@ -320,7 +321,7 @@ class _FormSkpState extends State<FormSkp> {
                       }).toList(),
                       onChanged: (newVal) {
                         setState(() {
-                          getIdSubPekerjaanValue = newVal;
+                          getIdSubPekerjaanValue = newVal!;
                         });
                       },
 //                      validator: (newVal) {
@@ -345,7 +346,7 @@ class _FormSkpState extends State<FormSkp> {
                     ),
                     onPressed: () {
                       DatePicker.showTimePicker(context,
-                          theme: DatePickerTheme(containerHeight: 210.0,),
+                          // theme: DatePickerTheme(containerHeight: 210.0,),
                           showTitleActions: true, onConfirm: (time) {
                             print('confirm $time');
                             String jam = DateFormat('HH').format(time);
@@ -418,7 +419,7 @@ class _FormSkpState extends State<FormSkp> {
                     ),
                     onPressed: (){
                       DatePicker.showTimePicker(context,
-                          theme: DatePickerTheme(containerHeight: 210.0,),
+                          // theme: DatePickerTheme(containerHeight: 210.0,),
                           showTitleActions: true, onConfirm: (time) {
                             print('confirm $time');
                             String jam = DateFormat('HH').format(time);
@@ -707,7 +708,7 @@ class _FormSkpState extends State<FormSkp> {
                               if (validateInput()) {
                                 DaftarAktivitas dataIn = new DaftarAktivitas(
                                     idDataKinerja: this.widget.daftaraktivitas != null
-                                        ? this.widget.daftaraktivitas.idDataSkp
+                                        ? this.widget.daftaraktivitas!.idDataSkp
                                         : "",
                                     tglKinerja: _date,
                                     idSubPekerjaan: getIdSubPekerjaanValue,
@@ -735,7 +736,7 @@ class _FormSkpState extends State<FormSkp> {
                                             .then((result) {
                                           if (result=="true") {
                                             Navigator.pop(
-                                                _scaffoldState.currentState
+                                                _scaffoldState.currentState!
                                                     .context, true);
                                           } else {
                                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result),));
@@ -746,7 +747,7 @@ class _FormSkpState extends State<FormSkp> {
                                             .then((result) {
                                           if (result=="true") {
                                             Navigator.pop(
-                                                _scaffoldState.currentState
+                                                _scaffoldState.currentState!
                                                     .context, true);
                                           } else {
                                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result),));
@@ -819,7 +820,7 @@ class _FormSkpState extends State<FormSkp> {
         ctrlUraianPekerjaan.text == "" ||
         _timeMulai == ""||
         _timeSelesai == "" ||
-        getIdSubPekerjaanValue == null) {
+        getIdSubPekerjaanValue == "") {
       return false;
     } else {
       return true;

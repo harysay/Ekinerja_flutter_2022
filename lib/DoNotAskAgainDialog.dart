@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class DoNotAskAgainDialog extends StatefulWidget {
   final String title, subTitle, positiveButtonText, negativeButtonText;
-  final Function onPositiveButtonClicked;
+  final VoidCallback ? onPositiveButtonClicked;
   final String doNotAskAgainText;
   final String dialogKeyName;
 
@@ -28,11 +28,11 @@ class DoNotAskAgainDialog extends StatefulWidget {
 
 class _DoNotAskAgainDialogState extends State<DoNotAskAgainDialog> {
   bool doNotAskAgain = false;
-  String kUpdateDialogKeyName;
+  String? kUpdateDialogKeyName;
 
   _updateDoNotShowAgain() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    await sharedPreferences.setBool(kUpdateDialogKeyName, false);
+    await sharedPreferences.setBool(kUpdateDialogKeyName!, false);
   }
 
   @override
@@ -86,7 +86,7 @@ class _DoNotAskAgainDialogState extends State<DoNotAskAgainDialog> {
                     value: doNotAskAgain,
                     onChanged: (val) {
                       setState(() {
-                        doNotAskAgain = val;
+                        doNotAskAgain = val!;
                       });
                     },
                   ),

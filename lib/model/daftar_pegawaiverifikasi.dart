@@ -1,15 +1,15 @@
 import 'dart:convert';
 
 class DaftarPegawaiVerifikasi{
-  int numb;
-  String idPns;
-  String idNipBaru;
-  String idNipLama;
-  String foto;
-  String namaPgawai;
-  String belumVerBlnLalu;
-  String belumVerBlnIni;
-  String menitSudah;
+  int? numb;
+  String? idPns;
+  String? idNipBaru;
+  String? idNipLama;
+  String? foto;
+  String? namaPgawai;
+  String? belumVerBlnLalu;
+  String? belumVerBlnIni;
+  String? menitSudah;
 
   DaftarPegawaiVerifikasi({this.numb,this.idPns,this.idNipBaru,this.idNipLama,this.foto,this.namaPgawai,this.belumVerBlnIni,this.belumVerBlnLalu,this.menitSudah});
   

@@ -17,7 +17,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'DoNotAskAgainDialog.dart';
 
 class UpdateApp extends StatefulWidget {
-  final Widget child;
+  final Widget? child;
 
   UpdateApp({this.child});
 
@@ -26,8 +26,8 @@ class UpdateApp extends StatefulWidget {
 }
 
 class _UpdateAppState extends State<UpdateApp> {
-  String statusRun,getVersionLastServer;
-  String kUpdateDialogKeyName;
+  String? statusRun,getVersionLastServer;
+  String? kUpdateDialogKeyName;
 //  int getVersionLastServer;
   @override
   void initState() {
@@ -50,7 +50,7 @@ class _UpdateAppState extends State<UpdateApp> {
       //Change
       //Parse the result here to get the info
       //AppVersion appVersion = response.results[0] as AppVersion;
-      String minAppVersion = getVersionLastServer;
+      String minAppVersion = getVersionLastServer!;
       String latestAppVersion = ApiService.versionCodeSekarang;
 
 
@@ -64,7 +64,7 @@ class _UpdateAppState extends State<UpdateApp> {
         SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
         bool showUpdates = false;
-        showUpdates = sharedPreferences.getBool("updateAplikasi");
+        showUpdates = sharedPreferences.getBool("updateAplikasi")!;
         if (showUpdates != null && showUpdates == false) {
           return;
         }
@@ -90,7 +90,7 @@ class _UpdateAppState extends State<UpdateApp> {
         String btnLabelCancel = "Later";
         String btnLabelDontAskAgain = "Don't ask me again";
         return DoNotAskAgainDialog(
-          kUpdateDialogKeyName,
+          kUpdateDialogKeyName!,
           title,
           message,
           btnLabel,
@@ -152,6 +152,6 @@ class _UpdateAppState extends State<UpdateApp> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.child;
+    return widget.child!;
   }
 }

@@ -18,11 +18,11 @@ class SecondFragment extends StatefulWidget{
   _SecondFragmentState createState() => _SecondFragmentState();
 }
 class _SecondFragmentState extends State<SecondFragment> with TickerProviderStateMixin {
-  SelectionController selectionController;
-  TabController _tabController;
-  DaftarAktivitas data;
-  List<DaftarAktivitas> semuaAktivitas;
-  String tokenlistaktivitas;
+  SelectionController? selectionController;
+  TabController? _tabController;
+  DaftarAktivitas? data;
+  List<DaftarAktivitas>? semuaAktivitas;
+  String tokenlistaktivitas="";
   _getRequests()async{
     setState(() {});
   }
@@ -74,7 +74,7 @@ class _SecondFragmentState extends State<SecondFragment> with TickerProviderStat
   Future<Null> getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
-      tokenlistaktivitas = preferences.getString("tokenlogin");
+      tokenlistaktivitas = preferences.getString("tokenlogin")!;
     });
   }
 
@@ -84,9 +84,9 @@ class _SecondFragmentState extends State<SecondFragment> with TickerProviderStat
         acceptButton: DialogRaisedButton(
           text: "Tolak",
           onPressed: () {
-            selectionController.close();
-            selectionController.loadedAktivitas.forEach((element)async{
-              api.delete(element.idDataKinerja,tokenlistaktivitas);
+            selectionController!.close();
+            selectionController!.loadedAktivitas.forEach((element)async{
+              api.delete(element.idDataKinerja!,tokenlistaktivitas);
             });
             Navigator.pop(context, true);
             Navigator.pop(context, true);
@@ -96,7 +96,7 @@ class _SecondFragmentState extends State<SecondFragment> with TickerProviderStat
         declineButton: DialogRaisedButton.decline(
           text: "Batal",
           onPressed: () {
-            selectionController.close();
+            selectionController!.close();
 //          selectionController.loadedAktivitas.forEach((element)async{
 //            setujui(element.idDataKinerja,element.waktuDiakui,element.tglKinerja);
 //          });
@@ -118,8 +118,8 @@ class _SecondFragmentState extends State<SecondFragment> with TickerProviderStat
     if (Scaffold.of(context).isDrawerOpen) {
       Navigator.of(context).pop();
       return Future.value(false);
-    } else if (selectionController.inSelection) {
-      selectionController.close();
+    } else if (selectionController!.inSelection) {
+      selectionController!.close();
       return Future.value(false);
     }
     return Future.value(true);
@@ -131,7 +131,7 @@ class _SecondFragmentState extends State<SecondFragment> with TickerProviderStat
     final baseAnimation = CurvedAnimation(
       curve: Curves.easeOutCubic,
       reverseCurve: Curves.easeInCubic,
-      parent: selectionController.animationController,
+      parent: selectionController!.animationController,
     );
     return Scaffold(
       key: _scaffoldState,
@@ -146,26 +146,34 @@ class _SecondFragmentState extends State<SecondFragment> with TickerProviderStat
                   child: TabBarView(
                     controller: _tabController,
                     // Don't let user to switch tab  by the swipe gesture when in selection
-                    physics: selectionController.inSelection
+                    physics: selectionController!.inSelection
                         ? const NeverScrollableScrollPhysics()
                         : null,
                     children: <Widget>[
                       //AktivitasListTab(selectionController: selectionController,listAktivitas: semuaAktivitas),
-                      AktivitasListTab(selectionController: selectionController,tokenlog: tokenlistaktivitas),
-                      AktivitasListTabVerifikasi(selectionController: selectionController,tokenlog: tokenlistaktivitas)
+                      AktivitasListTab(selectionController: selectionController!,tokenlog: tokenlistaktivitas),
+                      AktivitasListTabVerifikasi(selectionController: selectionController!,tokenlog: tokenlistaktivitas)
 //                      Center(child: Text("Aktivitas yang sudah diverifikasi")),
                     ],
                   ),
-                  builder: (BuildContext context, Widget child) => Padding(
-                    padding: EdgeInsets.only(
-                      // Offsetting the list back to top
-                        top: 44.0 * (1 - baseAnimation.value)),
-                    child: child,
-                  ),
+                  builder: (context,child){
+                    return Padding(
+                      padding: EdgeInsets.only(
+                          top: 44.0 * (1 - baseAnimation.value)
+                      ),
+                      child: child,
+                    );
+                  }
+                  // builder: (BuildContext context, Widget child) => Padding(
+                  //   padding: EdgeInsets.only(
+                  //     // Offsetting the list back to top
+                  //       top: 44.0 * (1 - baseAnimation.value)),
+                  //   child: child,
+                  // ),
                 ),
               ),
               IgnorePointer(
-                ignoring: selectionController.inSelection,
+                ignoring: selectionController!.inSelection,
                 child: FadeTransition(
                   opacity: ReverseAnimation(baseAnimation),
                   child: Theme(
@@ -174,7 +182,7 @@ class _SecondFragmentState extends State<SecondFragment> with TickerProviderStat
                     ),
                     child: Material(
                       elevation: 2.0,
-                      color: Theme.of(context).appBarTheme.color,
+                      color: Theme.of(context).appBarTheme.shadowColor,
                       child: SMMTabBar(
                         controller: _tabController,
                         indicatorWeight: 5.0,
@@ -186,7 +194,7 @@ class _SecondFragmentState extends State<SecondFragment> with TickerProviderStat
                             topRight: const Radius.circular(3.0),
                           ),
                         ),
-                        labelColor: Theme.of(context).textTheme.headline6.color,
+                        labelColor: (Colors.blue[300])!,
                         indicatorSize: TabBarIndicatorSize.label,
                         unselectedLabelColor: Theme.of(context)
                             .colorScheme
@@ -194,7 +202,7 @@ class _SecondFragmentState extends State<SecondFragment> with TickerProviderStat
                             .withOpacity(0.6),
                         labelStyle: Theme.of(context)
                             .textTheme
-                            .headline6
+                            .headline6!
                             .copyWith(
                             fontSize: 15.0, fontWeight: FontWeight.w900),
                         tabs: _tabsAktivitas,
@@ -252,8 +260,14 @@ class _SecondFragmentState extends State<SecondFragment> with TickerProviderStat
       floatingActionButton: FloatingActionButton(
 
         onPressed: ()=>
-            Navigator.of(context).push(new MaterialPageRoute(builder: (_)=>new FormScreen(daftarSudahAda: semuaAktivitas)),)
-                .then((val)=>val?_getRequests():null),
+            // Navigator.of(context).push(new MaterialPageRoute(builder: (_)=>new FormScreen()),)
+            //     .then((val)=>val?_getRequests():null),
+        Navigator.of(context).push(new MaterialPageRoute(builder: (_) => new FormScreen()))
+            .then((val) {
+          if (val != null && val) {
+            _getRequests();
+          }
+        }),
         tooltip: 'Tambah Aktivitas',
         child: Icon(Icons.add_circle_outline),
       ),
@@ -420,11 +434,11 @@ class _SecondFragmentState extends State<SecondFragment> with TickerProviderStat
 
 class AktivitasListTab extends StatefulWidget {
   AktivitasListTab({
-    Key key,
-    @required this.selectionController,this.idpnsget,this.tokenlog
+    Key? key,
+    required this.selectionController,required this.tokenlog
   }) : super(key: key);
   final SelectionController selectionController;
-  String idpnsget,tokenlog;
+  String tokenlog;
 
   @override
   _AktivitasListTabState createState() => _AktivitasListTabState();
@@ -436,21 +450,21 @@ class _AktivitasListTabState extends State<AktivitasListTab>
 
   @override
   bool get wantKeepAlive => true;
-  ScrollController _scrollController;
+  late ScrollController _scrollController;
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
 //    final songs = ContentControl.songs;
     ApiService api = ApiService();
-    List<DaftarAktivitas> semuaAktivitas;
+    List<DaftarAktivitas>? semuaAktivitas;
 
     return FutureBuilder(
       future: api.getAllKontak(widget.tokenlog),
-      builder: (BuildContext context, AsyncSnapshot<List<DaftarAktivitas>> snapshot){
+      builder: (BuildContext context, AsyncSnapshot<List<DaftarAktivitas>?> snapshot){
         semuaAktivitas = snapshot.data;
         if((snapshot.hasData)){
-          if (semuaAktivitas.length == 0){
+          if (semuaAktivitas!.length == 0){
             return Center(
               child: Text(
                 "Tidak Ada Data",
@@ -460,7 +474,7 @@ class _AktivitasListTabState extends State<AktivitasListTab>
           }else{
             return ListView.builder(
               itemBuilder: (context, index) {
-                DaftarAktivitas aktivitas = semuaAktivitas[index];
+                DaftarAktivitas aktivitas = semuaAktivitas![index];
                 return Card(
                   child: Padding(
                     padding: const EdgeInsets.all(5.0),
@@ -471,20 +485,20 @@ class _AktivitasListTabState extends State<AktivitasListTab>
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Text(aktivitas.tglKinerja,style: TextStyle(fontSize: 14, color: Colors.black))
+                            Text(aktivitas.tglKinerja!,style: TextStyle(fontSize: 14, color: Colors.black))
                           ],
                         ),
                         title: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Flexible(child: new Text(aktivitas.namaPekerjaan+" ("+aktivitas.standarWaktu+")",style: TextStyle(fontSize: 18, color: Colors.black)))
+                              Flexible(child: new Text(aktivitas.namaPekerjaan!+" ("+aktivitas.standarWaktu!+")",style: TextStyle(fontSize: 18, color: Colors.black)))
 //                  Text(aktivitas.namaPekerjaan),Text(" ("+aktivitas.standarWaktu+")",style: TextStyle(fontSize: 11, color: Colors.black))
                             ]
                         ),
                         subtitle: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Flexible(child: new Text(aktivitas.uraianPekerjaan+" ("+aktivitas.waktuMengerjakan+")",style: TextStyle(fontSize: 14, color: Colors.black)))
+                              Flexible(child: new Text(aktivitas.uraianPekerjaan!+" ("+aktivitas.waktuMengerjakan!+")",style: TextStyle(fontSize: 14, color: Colors.black)))
                               //Text(aktivitas.uraianPekerjaan)
                             ]
                         ),
@@ -510,7 +524,7 @@ class _AktivitasListTabState extends State<AktivitasListTab>
                                 //Masukan navigator di sini
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
-                                      return FormScreen(daftaraktivitas: aktivitas,daftarSudahAda: semuaAktivitas,);
+                                      return FormScreen(daftaraktivitas: aktivitas);
                                     }));
                               },
 
@@ -554,7 +568,7 @@ class _AktivitasListTabState extends State<AktivitasListTab>
                                             child: Text('Yes'),
                                             onPressed: () {
                                               //_deleteTask(aktivitas.idSubPekerjaan);
-                                              api.delete(aktivitas.idDataKinerja,widget.tokenlog).then((result) {
+                                              api.delete(aktivitas.idDataKinerja!,widget.tokenlog).then((result) {
                                                 if (result != null) {
                                                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Hapus data sukses"),));
                                                   // _scaffoldState.currentState
@@ -629,7 +643,7 @@ class _AktivitasListTabState extends State<AktivitasListTab>
                   ),
                 );
               },
-              itemCount: semuaAktivitas.length,
+              itemCount: semuaAktivitas!.length,
             );
           }
         }
@@ -643,8 +657,8 @@ class _AktivitasListTabState extends State<AktivitasListTab>
 
 class AktivitasListTabVerifikasi extends StatefulWidget {
   AktivitasListTabVerifikasi({
-    Key key,
-    @required this.selectionController,this.tokenlog
+    Key? key,
+    required this.selectionController,required this.tokenlog
   }) : super(key: key);
   final SelectionController selectionController;
   String tokenlog;
@@ -659,21 +673,21 @@ class _AktivitasListTabVerifikasi extends State<AktivitasListTabVerifikasi>
 
   @override
   bool get wantKeepAlive => true;
-  ScrollController _scrollController;
+  late ScrollController _scrollController;
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
 //    final songs = ContentControl.songs;
     ApiService api = ApiService();
-    List<DaftarAktivitas> semuaAktivitas;
+    List<DaftarAktivitas>? semuaAktivitas;
 
     return FutureBuilder(
       future: api.getSudahverfiPribadi(widget.tokenlog),
-      builder: (BuildContext context, AsyncSnapshot<List<DaftarAktivitas>> snapshot){
+      builder: (BuildContext context, AsyncSnapshot<List<DaftarAktivitas>?> snapshot){
         semuaAktivitas = snapshot.data;
         if((snapshot.hasData)){
-          if (semuaAktivitas.length == 0){
+          if (semuaAktivitas!.length == 0){
             return Center(
               child: Text(
                 "Tidak Ada Data",
@@ -683,7 +697,7 @@ class _AktivitasListTabVerifikasi extends State<AktivitasListTabVerifikasi>
           }else{
             return ListView.builder(
               itemBuilder: (context, index) {
-                DaftarAktivitas aktivitas = semuaAktivitas[index];
+                DaftarAktivitas aktivitas = semuaAktivitas![index];
                 return Card(
                   child: Padding(
                     padding: const EdgeInsets.all(5.0),
@@ -693,20 +707,20 @@ class _AktivitasListTabVerifikasi extends State<AktivitasListTabVerifikasi>
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Text(aktivitas.tglKinerja,style: TextStyle(fontSize: 14, color: Colors.black))
+                            Text(aktivitas.tglKinerja!,style: TextStyle(fontSize: 14, color: Colors.black))
                           ],
                         ),
                         title: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Flexible(child: new Text(aktivitas.namaSubPekerjaan+" ("+aktivitas.standarWaktu+")",style: TextStyle(fontSize: 18, color: Colors.black)))
+                              Flexible(child: new Text(aktivitas.namaSubPekerjaan!+" ("+aktivitas.standarWaktu!+")",style: TextStyle(fontSize: 18, color: Colors.black)))
 //                  Text(aktivitas.namaPekerjaan),Text(" ("+aktivitas.standarWaktu+")",style: TextStyle(fontSize: 11, color: Colors.black))
                             ]
                         ),
                         subtitle: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Flexible(child: new Text(aktivitas.uraianPekerjaan+" ("+aktivitas.waktuMengerjakan+")",style: TextStyle(fontSize: 14, color: Colors.black)))
+                              Flexible(child: new Text(aktivitas.uraianPekerjaan!+" ("+aktivitas.waktuMengerjakan!+")",style: TextStyle(fontSize: 14, color: Colors.black)))
                               //Text(aktivitas.uraianPekerjaan)
                             ]
                         ),
@@ -715,7 +729,7 @@ class _AktivitasListTabVerifikasi extends State<AktivitasListTabVerifikasi>
                   ),
                 );
               },
-              itemCount: semuaAktivitas.length,
+              itemCount: semuaAktivitas!.length,
             );
           }
         }

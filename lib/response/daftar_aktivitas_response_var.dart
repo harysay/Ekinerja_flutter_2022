@@ -1,7 +1,7 @@
 import 'package:ekinerja2020/model/daftar_aktivitas.dart';
 
 class DaftarAktivitasResponseVar{
-  String status;
+  String? status;
   //String msg;
   var data;
 

@@ -50,7 +50,7 @@ void main() async {
 
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 class App extends StatefulWidget {
-  static GlobalKey<NavigatorState> get navigatorKey => Catcher.navigatorKey;
+  static GlobalKey<NavigatorState>? get navigatorKey => Catcher.navigatorKey;
   @override
   _AppState createState() => _AppState();
 }
@@ -58,23 +58,23 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
-    return HalVerif(idpns: "",);
+    return HalVerif(idpns: "", tokenver: '',);
   }
 }
 
 /// Main app route with song and album list tabs
 class HalVerif extends StatefulWidget {
   final String idpns,tokenver;
-  HalVerif({Key key, @required this.idpns,@required this.tokenver}) : super(key: key);
+  HalVerif({Key? key, required this.idpns,required this.tokenver}) : super(key: key);
 
   @override
   _HalVerifState createState() => _HalVerifState();
 }
 
 class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
-  SelectionController selectionController;
-  TabController _tabController;
-  List<DaftarAktivitas> semuaAktivitas;
+  SelectionController? selectionController;
+  TabController? _tabController;
+  List<DaftarAktivitas>? semuaAktivitas;
   var loading = false;
   String tokenlogin="";
   ApiService api = new ApiService();
@@ -126,12 +126,12 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
   Future<Null> getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
-      tokenlogin = preferences.getString("tokenlogin");
+      tokenlogin = preferences.getString("tokenlogin")!;
     });
   }
 
   DaftarAktivitas getAktivitasById(String idKinerja){
-    return semuaAktivitas.firstWhere((element) => element.idDataKinerja==idKinerja);
+    return semuaAktivitas!.firstWhere((element) => element.idDataKinerja==idKinerja);
   }
 
   void _handleSetuju() {
@@ -144,13 +144,13 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
           children: [
             TextSpan(text: "Anda yakin ingin menyetujui"),
             TextSpan(
-              text: selectionController.loadedAktivitas.length == 1
+              text: selectionController!.loadedAktivitas.length == 1
                   ? " 1 saja?"
 //              ContentControl.state
 //                  .getPlaylist(PlaylistType.global)
 //                  .getAktivitasById(selectionController.loadedAktivitas.first.toString())
 //                  .namaPekerjaan
-                  : " ${selectionController.loadedAktivitas.length} aktivitas",
+                  : " ${selectionController!.loadedAktivitas.length} aktivitas",
               style: const TextStyle(fontWeight: FontWeight.w700),
             ),
             TextSpan(text: " ?"),
@@ -160,9 +160,9 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
       acceptButton: DialogRaisedButton(
         text: "Setujui",
         onPressed: ()  {
-          selectionController.close();
-          selectionController.loadedAktivitas.forEach((element)async{
-           await api.setujuiAktivitas(tokenlogin, element.idDataKinerja,element.waktuDiakui,element.tglKinerja);
+          selectionController!.close();
+          selectionController!.loadedAktivitas.forEach((element)async{
+           await api.setujuiAktivitas(tokenlogin, element.idDataKinerja!,element.waktuDiakui!,element.tglKinerja!);
            setState(() {
 
            });
@@ -180,7 +180,7 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
       declineButton: DialogRaisedButton.decline(
         text: "Batal",
         onPressed: () {
-          selectionController.close();
+          selectionController!.close();
 //          selectionController.loadedAktivitas.forEach((element)async{
 //            setujui(element.idDataKinerja,element.waktuDiakui,element.tglKinerja);
 //          });
@@ -213,9 +213,9 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
         acceptButton: DialogRaisedButton(
           text: "Tolak",
           onPressed: () {
-            selectionController.close();
-            selectionController.loadedAktivitas.forEach((element)async{
-              await api.kembalikanAktivitas(tokenlogin, element.idDataKinerja,"Ditolak",alasanKembaliCont.text);
+            selectionController!.close();
+            selectionController!.loadedAktivitas.forEach((element)async{
+              await api.kembalikanAktivitas(tokenlogin, element.idDataKinerja!,"Ditolak",alasanKembaliCont.text);
               setState(() {
 
               });
@@ -233,7 +233,7 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
         declineButton: DialogRaisedButton.decline(
           text: "Batal",
           onPressed: () {
-            selectionController.close();
+            selectionController!.close();
 //          selectionController.loadedAktivitas.forEach((element)async{
 //            setujui(element.idDataKinerja,element.waktuDiakui,element.tglKinerja);
 //          });
@@ -283,9 +283,9 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
         acceptButton: DialogRaisedButton(
           text: "Kembalikan",
           onPressed: () {
-            selectionController.close();
-            selectionController.loadedAktivitas.forEach((element)async{
-              await api.kembalikanAktivitas(tokenlogin, element.idDataKinerja,"Dikembalikan",alasanKembaliCont.text);
+            selectionController!.close();
+            selectionController!.loadedAktivitas.forEach((element)async{
+              await api.kembalikanAktivitas(tokenlogin, element.idDataKinerja!,"Dikembalikan",alasanKembaliCont.text);
               setState(() {
 
               });
@@ -303,7 +303,7 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
         declineButton: DialogRaisedButton.decline(
           text: "Batal",
           onPressed: () {
-            selectionController.close();
+            selectionController!.close();
 //          selectionController.loadedAktivitas.forEach((element)async{
 //            setujui(element.idDataKinerja,element.waktuDiakui,element.tglKinerja);
 //          });
@@ -326,7 +326,7 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    selectionController.dispose();
+    selectionController!.dispose();
     super.dispose();
   }
 
@@ -334,8 +334,8 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
     if (Scaffold.of(context).isDrawerOpen) {
       Navigator.of(context).pop();
       return Future.value(false);
-    } else if (selectionController.inSelection) {
-      selectionController.close();
+    } else if (selectionController!.inSelection) {
+      selectionController!.close();
       return Future.value(false);
     }
     return Future.value(true);
@@ -346,7 +346,7 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
     final baseAnimation = CurvedAnimation(
       curve: Curves.easeOutCubic,
       reverseCurve: Curves.easeInCubic,
-      parent: selectionController.animationController,
+      parent: selectionController!.animationController,
     );
     return Scaffold(
       appBar: PreferredSize(
@@ -357,7 +357,7 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
           titleSpacing: 0.0,
           elevation: 0.0,
           elevationSelection: 2.0,
-          selectionController: selectionController,
+          selectionController: selectionController!,
           actions: [
 //            IconButton(
 //              icon: const Icon(Icons.search),
@@ -403,15 +403,15 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
               padding: const EdgeInsets.only(left: 10.0, top: 4.1),
               child: CountSwitcher(
                 // Not letting to go less 1 to not play animation from 1 to 0
-                childKey: ValueKey(selectionController.loadedAktivitas.length > 0
-                    ? selectionController.loadedAktivitas.length
+                childKey: ValueKey(selectionController!.loadedAktivitas.length > 0
+                    ? selectionController!.loadedAktivitas.length
                     :1),
-                valueIncreased: selectionController.lengthIncreased,
+                valueIncreased: selectionController!.lengthIncreased,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 5.0),
                   child: Text(
-                    (selectionController.loadedAktivitas.length > 0
-                        ? selectionController.loadedAktivitas.length
+                    (selectionController!.loadedAktivitas.length > 0
+                        ? selectionController!.loadedAktivitas.length
                         : 1)
                         .toString(),
                     style: TextStyle(
@@ -435,16 +435,16 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
                   child: TabBarView(
                     controller: _tabController,
                     // Don't let user to switch tab  by the swipe gesture when in selection
-                    physics: selectionController.inSelection
+                    physics: selectionController!.inSelection
                         ? const NeverScrollableScrollPhysics()
                         : null,
                     children: <Widget>[
                       //AktivitasListTab(selectionController: selectionController,listAktivitas: semuaAktivitas),
-                      AktivitasListTab(selectionController: selectionController,idpnsget: widget.idpns,tokenlog: widget.tokenver),
+                      AktivitasListTab(selectionController: selectionController!,idpnsget: widget.idpns,tokenlog: widget.tokenver),
 //                      Center(child: Text("Aktivitas yang sudah diverifikasi")),
                     ],
                   ),
-                  builder: (BuildContext context, Widget child) => Padding(
+                  builder: (BuildContext context, Widget? child) => Padding(
                     padding: EdgeInsets.only(
                       // Offsetting the list back to top
                         top: 44.0 * (1 - baseAnimation.value)),
@@ -453,7 +453,7 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
                 ),
               ),
               IgnorePointer(
-                ignoring: selectionController.inSelection,
+                ignoring: selectionController!.inSelection,
                 child: FadeTransition(
                   opacity: ReverseAnimation(baseAnimation),
                   child: Theme(
@@ -462,7 +462,7 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
                     ),
                     child: Material(
                       elevation: 2.0,
-                      color: Theme.of(context).appBarTheme.color,
+                      color: AppBarTheme.of(context).backgroundColor,
                       child: SMMTabBar(
                         controller: _tabController,
                         indicatorWeight: 5.0,
@@ -474,7 +474,7 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
                             topRight: const Radius.circular(3.0),
                           ),
                         ),
-                        labelColor: Theme.of(context).textTheme.headline6.color,
+                        labelColor: Theme.of(context).textTheme.headline6!.color,
                         indicatorSize: TabBarIndicatorSize.label,
                         unselectedLabelColor: Theme.of(context)
                             .colorScheme
@@ -482,7 +482,7 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
                             .withOpacity(0.6),
                         labelStyle: Theme.of(context)
                             .textTheme
-                            .headline6
+                            .headline6!
                             .copyWith(
                             fontSize: 15.0, fontWeight: FontWeight.w900),
                         tabs: _tabs,
@@ -501,12 +501,12 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
 
 class AktivitasListTab extends StatefulWidget {
   AktivitasListTab({
-    Key key,
-    @required this.selectionController,this.idpnsget,this.tokenlog
+    Key? key,
+    required this.selectionController,this.idpnsget,this.tokenlog
   }) : super(key: key);
 
   final SelectionController selectionController;
-  String idpnsget,tokenlog;
+  String? idpnsget,tokenlog;
 
   @override
   _AktivitasListTabState createState() => _AktivitasListTabState();
@@ -518,7 +518,7 @@ class _AktivitasListTabState extends State<AktivitasListTab>
 
   @override
   bool get wantKeepAlive => true;
-  ScrollController _scrollController;
+  ScrollController? _scrollController;
 
   @override
   Widget build(BuildContext context) {
@@ -528,9 +528,9 @@ class _AktivitasListTabState extends State<AktivitasListTab>
     List<DaftarAktivitas> semuaAktivitas;
 
     return FutureBuilder(
-      future: api.getAllActivityVer(widget.tokenlog, widget.idpnsget),
-      builder: (BuildContext context, AsyncSnapshot<List<DaftarAktivitas>> snapshot){
-        semuaAktivitas = snapshot.data;
+      future: api.getAllActivityVer(widget.tokenlog!, widget.idpnsget!),
+      builder: (BuildContext context, AsyncSnapshot<List<DaftarAktivitas>?> snapshot){
+        semuaAktivitas = snapshot.data!;
         if((snapshot.hasData)){
           if (semuaAktivitas.length == 0){
             return Center(

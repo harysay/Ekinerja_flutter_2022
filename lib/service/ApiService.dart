@@ -1,8 +1,6 @@
 import 'dart:convert';
-import 'package:ekinerja2020/fragments/verifikasi_fragment.dart';
 import 'package:ekinerja2020/model/daftar_pegawaiverifikasi.dart';
 import 'package:ekinerja2020/model/daftar_skp.dart';
-import 'package:ekinerja2020/response/daftar_aktivitas_response_var.dart';
 import 'package:ekinerja2020/response/daftar_skp_response.dart';
 import 'package:http/http.dart' as http;
 import 'package:ekinerja2020/model/daftar_aktivitas.dart';
@@ -12,7 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
   String username="", nama="",tokenlogin="";
-  List jsonku;
+  List? jsonku;
 
   //Development
   // String urlGetdataPribadi = "https://development.kebumenkab.go.id/siltapkin/2020/index.php/api/rekam/dataDiri?token=";
@@ -69,12 +67,12 @@ class ApiService {
 
   getPrefFromApi() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    tokenlogin = preferences.getString("tokenlogin");
+    tokenlogin = preferences.getString("tokenlogin")!;
   }
 
 
   DaftarPegawaiVerifikasiResponse pegawairesponse = new DaftarPegawaiVerifikasiResponse();
-  Future<List<DaftarPegawaiVerifikasi>> getAllPegawaiVer(String tokenDafAktiv) async {
+  Future<List<DaftarPegawaiVerifikasi>?> getAllPegawaiVer(String tokenDafAktiv) async {
     //Map<String, dynamic> inputMap = {'DEMO-API-KEY': '$key'};
     getPrefFromApi();
     final response = await http.post(Uri.parse(
@@ -89,7 +87,7 @@ class ApiService {
 
     pegawairesponse = DaftarPegawaiVerifikasiResponse.fromJson(json.decode(response.body));
     if (response.statusCode == 200) {
-      List<DaftarPegawaiVerifikasi> data = pegawairesponse.data;
+      List<DaftarPegawaiVerifikasi> data = pegawairesponse.data!;
       return data;
     } else {
       return null;
@@ -109,12 +107,12 @@ class ApiService {
   }
 
   DaftarSkpResponse allSkp = new DaftarSkpResponse();
-  Future<List<DaftarSkp>> getSemuaSkp()async{
+  Future<List<DaftarSkp>?> getSemuaSkp()async{
     await getPrefFromApi();
     final response = await http.get(Uri.parse(ApiService.urlUtama+"skp/daftar_skp?token="+tokenlogin));
     allSkp = DaftarSkpResponse.fromJson(json.decode(response.body));
     if (response.statusCode == 200) {
-      List<DaftarSkp> data = allSkp.data;
+      List<DaftarSkp> data = allSkp.data!;
       return data;
     } else {
       return null;
@@ -122,7 +120,7 @@ class ApiService {
   }
 
   DaftarAktivitasResponse rSudahverfiPribadi = new DaftarAktivitasResponse();
-  Future<List<DaftarAktivitas>> getSudahverfiPribadi(String tokenverfi)async{
+  Future<List<DaftarAktivitas>?> getSudahverfiPribadi(String tokenverfi)async{
     DateTime now = new DateTime.now();
     var bulan;
     if(now.day<2){
@@ -141,7 +139,7 @@ class ApiService {
 
     rSudahverfiPribadi = DaftarAktivitasResponse.fromJson(json.decode(response.body));
     if (response.statusCode == 200) {
-      List<DaftarAktivitas> data = rSudahverfiPribadi.data;
+      List<DaftarAktivitas> data = rSudahverfiPribadi.data!;
       return data;
     } else {
       return null;
@@ -149,7 +147,7 @@ class ApiService {
   }
 
   DaftarAktivitasResponse rverfi = new DaftarAktivitasResponse();
-  Future<List<DaftarAktivitas>> getAllActivityVer(String tokenverfi, String idPns) async {
+  Future<List<DaftarAktivitas>?> getAllActivityVer(String tokenverfi, String idPns) async {
     //Map<String, dynamic> inputMap = {'DEMO-API-KEY': '$key'};
     final response = await http.get(Uri.parse(ApiService.urlUtama+"verifikasi/tampilpegawaidetail?token="+tokenverfi+"&id_pns="+idPns),
 //      headers: {
@@ -162,7 +160,7 @@ class ApiService {
 
     rverfi = DaftarAktivitasResponse.fromJson(json.decode(response.body));
     if (response.statusCode == 200) {
-      List<DaftarAktivitas> dat = rverfi.data;
+      List<DaftarAktivitas> dat = rverfi.data!;
       return dat;
     } else {
       return null;
@@ -174,7 +172,7 @@ class ApiService {
 //  final String basicAuth =
 //      'Basic ' + base64Encode(utf8.encode('$username:$password'));
   DaftarAktivitasResponse aktivitasBelum = new DaftarAktivitasResponse();
-  Future<List<DaftarAktivitas>> getAllKontak(String tokenListAktivitas) async {
+  Future<List<DaftarAktivitas>?> getAllKontak(String tokenListAktivitas) async {
     //Map<String, dynamic> inputMap = {'DEMO-API-KEY': '$key'};
     //getPrefFromApi();
     final response = await http.get(Uri.parse(ApiService.urlUtama+"rekam/tampildaftar?token="+tokenListAktivitas)//      headers: {
@@ -187,7 +185,7 @@ class ApiService {
 
     aktivitasBelum = DaftarAktivitasResponse.fromJson(json.decode(response.body));
     if (response.statusCode == 200) {
-      List<DaftarAktivitas> data = aktivitasBelum.data;
+      List<DaftarAktivitas> data = aktivitasBelum.data!;
       return data;
     } else {
       return null;
@@ -195,7 +193,7 @@ class ApiService {
   }
 
   DaftarAktivitasResponse aktivitasByID = new DaftarAktivitasResponse();
-  Future<List<DaftarAktivitas>> aktivitasById(String tokenByID, String idDataKinerja) async {
+  Future<List<DaftarAktivitas>?> aktivitasById(String tokenByID, String idDataKinerja) async {
     //getPrefFromApi();
     Map<String, dynamic> inputMap = {
 //      'DEMO-API-KEY': '$key',
@@ -213,7 +211,7 @@ class ApiService {
 
     aktivitasByID = DaftarAktivitasResponse.fromJson(json.decode(response.body));
     if (aktivitasByID.status == "true") {
-      List<DaftarAktivitas> data = aktivitasByID.data;
+      List<DaftarAktivitas> data = aktivitasByID.data!;
       return data;
     } else {
       return null;
@@ -251,9 +249,9 @@ class ApiService {
     aktivitasCreate = DaftarAktivitasResponse.fromJson(json.decode(response.body));
     //if (response.statusCode == 200) {
     if (aktivitasCreate.status == "true") {
-      return aktivitasCreate.status;
+      return aktivitasCreate.status!;
     } else {
-      return aktivitasCreate.info;
+      return aktivitasCreate.info!;
     }
   }
 
@@ -269,7 +267,7 @@ class ApiService {
       'jam_mulai': aktivitas.jamMulai,
       'jam_selesai': aktivitas.jamSelesai,
     };
-    final response = await http.post(Uri.parse(ApiService.urlUtama+"rekam/update?token="+tokenUpdate+"&id_data_kinerja="+aktivitas.idDataKinerja),
+    final response = await http.post(Uri.parse(ApiService.urlUtama+"rekam/update?token="+tokenUpdate+"&id_data_kinerja="+aktivitas.idDataKinerja!),
 //      headers: {
 //        "Accept": "application/json",
 //        "Content-Type": "application/x-www-form-urlencoded",
@@ -280,9 +278,9 @@ class ApiService {
 
     aktivitasUpdate = DaftarAktivitasResponse.fromJson(json.decode(response.body));
     if (aktivitasUpdate.status == "true") {
-      return aktivitasUpdate.status;
+      return aktivitasUpdate.status!;
     } else {
-      return aktivitasUpdate.info;
+      return aktivitasUpdate.info!;
     }
   }
 
@@ -314,7 +312,7 @@ class ApiService {
   setujuiAktivitas(String token, String idDataKinerja, String waktuDiakui, String tglKinerja)async{
     final response = await http.get(Uri.parse(ApiService.urlUtama+"verifikasi/verifikasisatu?token="+token+"&id_kinerja="+idDataKinerja+"&status_verifikasi=Diterima&waktu_diakui="+waktuDiakui+"&tgl_kinerja="+tglKinerja),);
     if (response.statusCode == 200) {
-      List<DaftarAktivitas> data = rfi.data;
+      List<DaftarAktivitas> data = rfi.data!;
       return data;
     } else {
       return null;
@@ -341,7 +339,7 @@ class ApiService {
     );
     rfiKembalikan = DaftarAktivitasResponse.fromJson(json.decode(response.body));
     if (response.statusCode == 200) {
-      List<DaftarAktivitas> data = rfiKembalikan.data;
+      List<DaftarAktivitas> data = rfiKembalikan.data!;
       return data;
     } else {
       return null;
@@ -367,7 +365,7 @@ class ApiService {
     );
     rfiTolak = DaftarAktivitasResponse.fromJson(json.decode(response.body));
     if (response.statusCode == 200) {
-      List<DaftarAktivitas> data = rfiTolak.data;
+      List<DaftarAktivitas> data = rfiTolak.data!;
       return data;
     } else {
       return null;
@@ -443,9 +441,9 @@ class ApiService {
   }
 
 
-  kirimStatusLogout(String id_pns) async {
+  kirimStatusLogout(String idPns) async {
     Map<String, dynamic> inputMap = {
-      'id_pns': id_pns,
+      'id_pns': idPns,
     };
     final response = await http.post(Uri.parse(ApiService.urlUtama+"Login/proses_logout"),
       body: inputMap,

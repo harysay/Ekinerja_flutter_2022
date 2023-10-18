@@ -14,16 +14,16 @@ class Setahun extends StatefulWidget {
 
 class _SetahunState extends State<Setahun> {
   ApiService api = new ApiService();
-  String tokenlogin;
+  late String tokenlogin;
   var json;
   bool toggle = true;
-  List<JsonTableColumn> columns;
-  String getData;
+  late List<JsonTableColumn> columns;
+  late String getData;
 
   void setJson() async{
     //await getPref();
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    tokenlogin = preferences.getString("tokenlogin");
+    tokenlogin = preferences.getString("tokenlogin")!;
     DateTime now = new DateTime.now();
     api.laporanInividuTahunan(tokenlogin, now.year.toString()).then((data){
       setState(() {
@@ -48,7 +48,7 @@ class _SetahunState extends State<Setahun> {
   Future<Null> getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
-      tokenlogin = preferences.getString("tokenlogin");
+      tokenlogin = preferences.getString("tokenlogin")!;
     });
   }
 
@@ -74,21 +74,21 @@ class _SetahunState extends State<Setahun> {
               columns: columns,
               showColumnToggle: true,
               allowRowHighlight: true,
-              rowHighlightColor: Colors.yellow[500].withOpacity(0.7),
+              rowHighlightColor: Colors.yellow[500]!.withOpacity(0.7),
               onRowSelect: (index, map) {
                 ShowFunctions.showToast(msg: map.toString()+"Telah diklik");
               },
-              tableHeaderBuilder: (String header) {
-                return Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                  decoration: BoxDecoration(border: Border.all(width: 0.5),color: Colors.grey[300]),
-                  child: Text(
-                    header,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14.0,color: Colors.black87),
-                  ),
-                );
-              },
+              // tableHeaderBuilder: (String header) {
+              //   return Container(
+              //     padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+              //     decoration: BoxDecoration(border: Border.all(width: 0.5),color: Colors.grey[300]),
+              //     child: Text(
+              //       header,
+              //       textAlign: TextAlign.center,
+              //       style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14.0,color: Colors.black87),
+              //     ),
+              //   );
+              // },
               tableCellBuilder: (value) {
                 return Container(
                   padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),

@@ -14,14 +14,14 @@ import 'package:fluttertoast/fluttertoast.dart';
 /// TODO: add code to prevent stacking alert dialogs
 abstract class ShowFunctions {
   /// Shows toast from [Fluttertoast] with already set [backgroundColor] to `Color.fromRGBO(18, 18, 18, 1)`
-  static Future<bool> showToast({
-    @required String msg,
-    Toast toastLength,
+  static Future<Future<bool?>> showToast({
+    required String msg,
+    Toast? toastLength,
     int timeInSecForIos = 1,
     double fontSize = 14.0,
-    ToastGravity gravity,
-    Color textColor,
-    Color backgroundColor,
+    ToastGravity? gravity,
+    Color? textColor,
+    Color? backgroundColor,
   }) async {
     backgroundColor ??= Color.fromRGBO(18, 18, 18, 1);
 
@@ -39,12 +39,12 @@ abstract class ShowFunctions {
   /// Calls [showGeneralDialog] function from flutter material library to show a message to user (only accept button)
   static Future<dynamic> showAlert(
     BuildContext context, {
-    Widget title: const Text("Peringatan"),
-    @required Widget content,
-    EdgeInsets titlePadding: const EdgeInsets.fromLTRB(24.0, 8.0, 24.0, 6.0),
-    EdgeInsets contentPadding: const EdgeInsets.fromLTRB(24.0, 10.0, 24.0, 10.0),
-    Widget acceptButton,
-    List<Widget> additionalActions,
+    Widget title = const Text("Peringatan"),
+    required Widget content,
+    EdgeInsets titlePadding = const EdgeInsets.fromLTRB(24.0, 8.0, 24.0, 6.0),
+    EdgeInsets contentPadding = const EdgeInsets.fromLTRB(24.0, 10.0, 24.0, 10.0),
+    DialogRaisedButton? acceptButton,
+    List<Widget>? additionalActions,
   }) async {
     assert(title != null);
     assert(content != null);
@@ -58,7 +58,7 @@ abstract class ShowFunctions {
       titlePadding: titlePadding,
       contentPadding: contentPadding,
       acceptButton: acceptButton,
-      additionalActions: additionalActions,
+      additionalActions: additionalActions!,
       hideDeclineButton: true,
     );
   }
@@ -66,14 +66,14 @@ abstract class ShowFunctions {
   /// Calls [showGeneralDialog] function from flutter material library to show a dialog to user (accept and decline buttons)
   static Future<dynamic> showDialog(
     BuildContext context, {
-    @required Widget title,
-    @required Widget content,
-    EdgeInsets titlePadding: const EdgeInsets.fromLTRB(24.0, 24.0, 24.0, 10.0),
-    EdgeInsets contentPadding: const EdgeInsets.fromLTRB(24.0, 10.0, 24.0, 10.0),
-    DialogRaisedButton acceptButton,
-    DialogRaisedButton declineButton,
+    required Widget title,
+    Widget? content,
+    EdgeInsets titlePadding = const EdgeInsets.fromLTRB(24.0, 24.0, 24.0, 10.0),
+    EdgeInsets contentPadding = const EdgeInsets.fromLTRB(24.0, 10.0, 24.0, 10.0),
+    DialogRaisedButton? acceptButton,
+    DialogRaisedButton? declineButton,
     bool hideDeclineButton = false,
-    List<Widget> additionalActions,
+    List<Widget>? additionalActions,
   }) async {
     assert(title != null);
     assert(content != null);
@@ -171,8 +171,8 @@ abstract class ShowFunctions {
                           mainAxisSize: MainAxisSize.min,
                           alignment: MainAxisAlignment.end,
                           children: <Widget>[
-                            acceptButton,
-                            if(!hideDeclineButton) declineButton
+                            acceptButton!,
+                            if(!hideDeclineButton) declineButton!
                           ],
                         ),
                       ],
@@ -182,7 +182,7 @@ abstract class ShowFunctions {
               ],
             ),
             contentPadding: EdgeInsets.zero,
-            contentTextStyle: Theme.of(context).textTheme.subtitle1.copyWith(
+            contentTextStyle: Theme.of(context).textTheme.subtitle1!.copyWith(
                   fontWeight: FontWeight.w500,
                   fontSize: 15.0,
                 ),

@@ -50,7 +50,6 @@ class CustomCupertinoTimerPicker extends StatefulWidget {
   final TimeOfDay endRestriction;
   // ####################
   CustomCupertinoTimerPicker({
-    Key key,
     this.mode = CupertinoTimerPickerMode.hms,
     this.initialTimerDuration = Duration.zero,
     this.minuteInterval = 1,
@@ -61,7 +60,7 @@ class CustomCupertinoTimerPicker extends StatefulWidget {
     this.startRestriction = _startRestriction,
     this.endRestriction = _endRestriction,
     // ####################
-    @required this.onTimerDurationChanged,
+    required this.onTimerDurationChanged,
   }) : assert(mode != null),
         assert(onTimerDurationChanged != null),
         assert(initialTimerDuration >= Duration.zero),
@@ -72,7 +71,7 @@ class CustomCupertinoTimerPicker extends StatefulWidget {
         assert(initialTimerDuration.inSeconds % secondInterval == 0),
         assert(backgroundColor != null),
         assert(alignment != null),
-        super(key: key);
+        super();
 
   /// The mode of the timer picker.
   final CupertinoTimerPickerMode mode;
@@ -106,8 +105,8 @@ class CustomCupertinoTimerPicker extends StatefulWidget {
 }
 
 class _CustomCupertinoTimerPickerState extends State<CustomCupertinoTimerPicker> {
-  TextDirection textDirection;
-  CupertinoLocalizations localizations;
+  late TextDirection textDirection;
+  late CupertinoLocalizations localizations;
   int get textDirectionFactor {
     switch (textDirection) {
       case TextDirection.ltr:
@@ -119,21 +118,21 @@ class _CustomCupertinoTimerPickerState extends State<CustomCupertinoTimerPicker>
   }
 
   // The currently selected values of the picker.
-  int selectedHour;
-  int selectedMinute;
-  int selectedSecond;
+  late int selectedHour;
+  late int selectedMinute;
+  late int selectedSecond;
 
   // On iOS the selected values won't be reported until the scrolling fully stops.
   // The values below are the latest selected values when the picker comes to a full stop.
-  int lastSelectedHour;
-  int lastSelectedMinute;
-  int lastSelectedSecond;
+  late int lastSelectedHour;
+  late int lastSelectedMinute;
+  late int lastSelectedSecond;
 
   final TextPainter textPainter = TextPainter();
   final List<String> numbers = List<String>.generate(10, (int i) => '${9 - i}');
-  double numberLabelWidth;
-  double numberLabelHeight;
-  double numberLabelBaseline;
+  late double numberLabelWidth;
+  late double numberLabelHeight;
+  late double numberLabelBaseline;
   // fix ###############
   int startRestrictionMinute = 0;
   int endRestrictionMinute = 60;
@@ -231,7 +230,7 @@ class _CustomCupertinoTimerPickerState extends State<CustomCupertinoTimerPicker>
     }
 
     textPainter.text = TextSpan(
-      text: '$widestNumber$widestNumber',
+      text: '',
       style: textStyle,
     );
 
@@ -324,8 +323,8 @@ class _CustomCupertinoTimerPickerState extends State<CustomCupertinoTimerPicker>
 
     for (var index = startHour; index <= endHour; index++) {
       final String semanticsLabel = textDirectionFactor == 1
-          ? localizations.timerPickerHour(index) + localizations.timerPickerHourLabel(index)
-          : localizations.timerPickerHourLabel(index) + localizations.timerPickerHour(index);
+          ? localizations.timerPickerHour(index) + localizations.timerPickerHourLabel(index)!
+          : localizations.timerPickerHourLabel(index)! + localizations.timerPickerHour(index);
       widgets.add(
           Semantics(
             label: semanticsLabel,
@@ -349,7 +348,7 @@ class _CustomCupertinoTimerPickerState extends State<CustomCupertinoTimerPicker>
           child: _buildHourPicker(additionalPadding),
         ),
         _buildLabel(
-          localizations.timerPickerHourLabel(lastSelectedHour ?? selectedHour),
+          localizations.timerPickerHourLabel(lastSelectedHour ?? selectedHour)!,
           additionalPadding,
         ),
       ],
@@ -401,8 +400,8 @@ class _CustomCupertinoTimerPickerState extends State<CustomCupertinoTimerPicker>
     for (var index = 0; index < iterations; index++) {
       final int minute = index * widget.minuteInterval + startRestrictionMinute;
       final String semanticsLabel = textDirectionFactor == 1
-          ? localizations.timerPickerMinute(minute) + localizations.timerPickerMinuteLabel(minute)
-          : localizations.timerPickerMinuteLabel(minute) + localizations.timerPickerMinute(minute);
+          ? localizations.timerPickerMinute(minute) + localizations.timerPickerMinuteLabel(minute)!
+          : localizations.timerPickerMinuteLabel(minute)! + localizations.timerPickerMinute(minute);
 
       widgets.add(
           Semantics(
@@ -428,7 +427,7 @@ class _CustomCupertinoTimerPickerState extends State<CustomCupertinoTimerPicker>
           child: _buildMinutePicker(additionalPadding),
         ),
         _buildLabel(
-          localizations.timerPickerMinuteLabel(lastSelectedMinute ?? selectedMinute),
+          localizations.timerPickerMinuteLabel(lastSelectedMinute ?? selectedMinute)!,
           additionalPadding,
         ),
       ],
@@ -461,8 +460,8 @@ class _CustomCupertinoTimerPickerState extends State<CustomCupertinoTimerPicker>
         final int second = index * widget.secondInterval;
 
         final String semanticsLabel = textDirectionFactor == 1
-            ? localizations.timerPickerSecond(second) + localizations.timerPickerSecondLabel(second)
-            : localizations.timerPickerSecondLabel(second) + localizations.timerPickerSecond(second);
+            ? localizations.timerPickerSecond(second) + localizations.timerPickerSecondLabel(second)!
+            : localizations.timerPickerSecondLabel(second)! + localizations.timerPickerSecond(second);
 
         return Semantics(
           label: semanticsLabel,
@@ -484,7 +483,7 @@ class _CustomCupertinoTimerPickerState extends State<CustomCupertinoTimerPicker>
           child: _buildSecondPicker(additionalPadding),
         ),
         _buildLabel(
-          localizations.timerPickerSecondLabel(lastSelectedSecond ?? selectedSecond),
+          localizations.timerPickerSecondLabel(lastSelectedSecond ?? selectedSecond)!,
           additionalPadding,
         ),
       ],

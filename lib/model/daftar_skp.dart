@@ -2,20 +2,20 @@ import 'dart:convert';
 import 'package:ekinerja2020/model/daftar_pegawaiverifikasi.dart';
 
 class DaftarSkp{
-  int numb;
-  String idDataSkp;
-  String rkAtasan;
-  String rk;
-  String jenisKinerja;
-  String aspekSAk;
-  String aspekSIkiKuant;
-  String aspekSIkiKuantTarget;
-  String aspekSIkiKuantSatuanOutput;
-  String aspekSIkiKual;
-  String aspekSIkiKualTarget;
-  String aspekSIkiWaktu;
-  String aspekSIkiWaktuTarget;
-  String aspekSIkiWaktuSatuanOutput;
+  int? numb;
+  String? idDataSkp;
+  String? rkAtasan;
+  String? rk;
+  String? jenisKinerja;
+  String? aspekSAk;
+  String? aspekSIkiKuant;
+  String? aspekSIkiKuantTarget;
+  String? aspekSIkiKuantSatuanOutput;
+  String? aspekSIkiKual;
+  String? aspekSIkiKualTarget;
+  String? aspekSIkiWaktu;
+  String? aspekSIkiWaktuTarget;
+  String? aspekSIkiWaktuSatuanOutput;
   bool selected = false;
 
   DaftarSkp({this.numb,this.idDataSkp,this.rkAtasan,this.rk,this.jenisKinerja,this.aspekSAk,this.aspekSIkiKuant,this.aspekSIkiKuantTarget,this.aspekSIkiKuantSatuanOutput,this.aspekSIkiKual,this.aspekSIkiKualTarget,this.aspekSIkiWaktu,this.aspekSIkiWaktuTarget,this.aspekSIkiWaktuSatuanOutput});

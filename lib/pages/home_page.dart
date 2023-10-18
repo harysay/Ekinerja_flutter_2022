@@ -18,14 +18,14 @@ class DrawerItem {
 }
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  var tarikanToken,tarikanLamaAktivitas,tarikanGrade;
+  String tarikanToken="",tarikanLamaAktivitas="",tarikanGrade="";
   ApiService api = new ApiService();
   int _selectedDrawerIndex = 0;
   String username = "", nama = "", linkfoto = "", ideselon="",jabat="";
@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       loading = true;
-      tarikanToken = preferences.getString("tokenlogin");
+      tarikanToken = preferences.getString("tokenlogin")!;
     });
     final response = await http.get(Uri.parse(ApiService.urlUtama+"rekam/dataDiri?token="+tarikanToken));
     if(response.statusCode == 200){
@@ -87,11 +87,11 @@ class _HomePageState extends State<HomePage> {
     if (islogin != null && islogin == true) {
       await _getLamaAktivitas();
       setState(() {
-        username = pref.getString("niplogin");
-        nama = pref.getString("namalogin");
-        linkfoto = pref.getString("fotoLogin");
-        ideselon = pref.getString("ideselon");
-        jabat = pref.getString("jabatan");
+        username = pref.getString("niplogin")!;
+        nama = pref.getString("namalogin")!;
+        linkfoto = pref.getString("fotoLogin")!;
+        ideselon = pref.getString("ideselon")!;
+        jabat = pref.getString("jabatan")!;
         if(ideselon=="21"||ideselon=="22"||ideselon=="31"||jabat.contains('Camat')||ideselon=="32"||ideselon=="41"||ideselon=="42"){
         }else{
           drawerItems.removeAt(2);
@@ -237,7 +237,7 @@ class _HomePageState extends State<HomePage> {
                         child: Row(
                           children: <Widget>[
                             Text('Telah bekerja: ',style: TextStyle(fontSize: 11, fontFamily: 'Nunito')),
-                            Text(tarikanLamaAktivitas,style: TextStyle(fontSize: 11, fontFamily: 'Nunito') ?? 'tidak terdefinisi',),
+                            Text(tarikanLamaAktivitas,style: TextStyle(fontSize: 11, fontFamily: 'Nunito')),
                             Text(' jam',style: TextStyle(fontSize: 11, fontFamily: 'Nunito')),
                           ],
                         ),
@@ -246,7 +246,7 @@ class _HomePageState extends State<HomePage> {
                         child: Row(
                           children: <Widget>[
                             Text('Grade: ',style: TextStyle(fontSize: 11, fontFamily: 'Nunito')),
-                            Text(tarikanGrade,style: TextStyle(fontSize: 11, fontFamily: 'Nunito') ?? 'tidak terdefinisi'),
+                            Text(tarikanGrade,style: TextStyle(fontSize: 11, fontFamily: 'Nunito')),
                           ],
                         ),
                       ),

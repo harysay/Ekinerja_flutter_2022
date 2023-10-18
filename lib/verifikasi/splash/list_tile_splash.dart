@@ -9,8 +9,8 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
+// import 'package:flutter/rendering.dart';
+// import 'package:flutter/widgets.dart';
 
 const Duration _kUnconfirmedRippleDuration = Duration(milliseconds: 275);
 const Duration _kFadeInDuration = Duration(milliseconds: 120);
@@ -21,18 +21,18 @@ const Duration _kCancelDuration = Duration(milliseconds: 250);
 // The fade out start interval, when the cancel wasn't called
 const double _kFadeOutIntervalStart = 0.4;
 
-RectCallback _getClipCallback(
-    RenderBox referenceBox, bool containedInkWell, RectCallback rectCallback) {
+RectCallback? _getClipCallback(
+    RenderBox? referenceBox, bool containedInkWell, RectCallback? rectCallback) {
   if (rectCallback != null) {
     assert(containedInkWell);
     return rectCallback;
   }
-  if (containedInkWell) return () => Offset.zero & referenceBox.size;
+  if (containedInkWell) return () => Offset.zero & referenceBox!.size;
   return null;
 }
 
 double _getTargetRadius(RenderBox referenceBox, bool containedInkWell,
-    RectCallback rectCallback, Offset position) {
+    RectCallback? rectCallback, Offset position) {
   final Size size =
       rectCallback != null ? rectCallback().size : referenceBox.size;
   final double d1 = size.bottomRight(Offset.zero).distance;
@@ -46,17 +46,17 @@ class _ListTileInkRippleFactory extends InteractiveInkFeatureFactory {
 
   @override
   InteractiveInkFeature create({
-    @required MaterialInkController controller,
-    @required RenderBox referenceBox,
-    @required Offset position,
-    @required Color color,
-    @required TextDirection textDirection,
+    required MaterialInkController controller,
+    required RenderBox referenceBox,
+    required Offset position,
+    required Color color,
+    required TextDirection textDirection,
     bool containedInkWell = false,
-    RectCallback rectCallback,
-    BorderRadius borderRadius,
-    ShapeBorder customBorder,
-    double radius,
-    VoidCallback onRemoved,
+    RectCallback? rectCallback,
+    BorderRadius? borderRadius,
+    ShapeBorder? customBorder,
+    double? radius,
+    VoidCallback? onRemoved,
   }) {
     return ListTileInkRipple(
       controller: controller,
@@ -113,33 +113,30 @@ class ListTileInkRipple extends InteractiveInkFeature {
   ///
   /// When the ripple is removed, [onRemoved] will be called.
   ListTileInkRipple({
-    @required MaterialInkController controller,
-    @required RenderBox referenceBox,
-    @required Offset position,
-    @required Color color,
-    @required TextDirection textDirection,
+    required MaterialInkController? controller,
+    required RenderBox? referenceBox,
+    required Offset? position,
+    required Color? color,
+    required TextDirection? textDirection,
     bool containedInkWell = false,
-    RectCallback rectCallback,
-    BorderRadius borderRadius,
-    ShapeBorder customBorder,
-    double radius,
-    VoidCallback onRemoved,
+    RectCallback? rectCallback,
+    BorderRadius? borderRadius,
+    ShapeBorder? customBorder,
+    double? radius,
+    VoidCallback? onRemoved,
   })  : assert(color != null),
         assert(position != null),
         assert(textDirection != null),
-        _position = position,
+        _position = position!,
         _borderRadius = borderRadius ?? BorderRadius.zero,
-        _customBorder = customBorder,
-        _textDirection = textDirection,
-        _targetRadius = radius ??
-            _getTargetRadius(
-                referenceBox, containedInkWell, rectCallback, position),
-        _clipCallback =
-            _getClipCallback(referenceBox, containedInkWell, rectCallback),
+        _customBorder = customBorder!,
+        _textDirection = textDirection!,
+        _targetRadius = radius ?? _getTargetRadius(referenceBox!, containedInkWell, rectCallback!, position),
+        _clipCallback =_getClipCallback(referenceBox!, containedInkWell, rectCallback),
         super(
-            controller: controller,
+            controller: controller!,
             referenceBox: referenceBox,
-            color: color,
+            color: color!,
             onRemoved: onRemoved) {
     assert(_borderRadius != null);
 
@@ -148,7 +145,7 @@ class ListTileInkRipple extends InteractiveInkFeature {
         AnimationController(duration: _kFadeInDuration, vsync: controller.vsync)
           ..addListener(controller.markNeedsPaint)
           ..forward();
-    _fadeIn = _fadeInController.drive(IntTween(
+    _fadeIn = _fadeInController!.drive(IntTween(
       begin: 0,
       end: color.alpha,
     ));
@@ -160,10 +157,10 @@ class ListTileInkRipple extends InteractiveInkFeature {
       ..forward();
     // Initial splash diameter is 60% of the target diameter, final
     // diameter is 10dps larger than the target diameter.
-    _radius = _radiusController.drive(
+    _radius = _radiusController!.drive(
       Tween<double>(
-        begin: _targetRadius * 0.20,
-        end: _targetRadius + 5.0,
+        begin: _targetRadius! * 0.20,
+        end: _targetRadius! + 5.0,
       ).chain(_easeCurveTween),
     );
 
@@ -177,24 +174,24 @@ class ListTileInkRipple extends InteractiveInkFeature {
     controller.addInkFeature(this);
   }
 
-  final Offset _position;
-  final BorderRadius _borderRadius;
-  final ShapeBorder _customBorder;
-  final double _targetRadius;
-  final RectCallback _clipCallback;
-  final TextDirection _textDirection;
+  final Offset? _position;
+  final BorderRadius? _borderRadius;
+  final ShapeBorder? _customBorder;
+  final double? _targetRadius;
+  final RectCallback? _clipCallback;
+  final TextDirection? _textDirection;
 
 
   bool isCancelled = false;
 
-  Animation<double> _radius;
-  AnimationController _radiusController;
+  Animation<double>? _radius;
+  AnimationController? _radiusController;
 
-  Animation<int> _fadeIn;
-  AnimationController _fadeInController;
+  Animation<int>? _fadeIn;
+  AnimationController? _fadeInController;
 
   // Animation<int> _fadeOut;
-  AnimationController _fadeOutController;
+  AnimationController? _fadeOutController;
 
   /// Used to specify this type of ink splash for an [InkWell], [InkResponse]
   /// or material [Theme].
@@ -210,19 +207,19 @@ class ListTileInkRipple extends InteractiveInkFeature {
 
   @override
   void confirm() {
-    _radiusController
+    _radiusController!
       ..duration = _kRadiusDuration
       ..forward();
     // This confirm may have been preceded by a cancel.
-    _fadeInController.forward();
-    _fadeOutController.animateTo(1.0, duration: _kFadeOutDuration);
+    _fadeInController!.forward();
+    _fadeOutController!.animateTo(1.0, duration: _kFadeOutDuration);
   }
 
   @override
   void cancel() {
     isCancelled = true;
-    if (_radiusController.isAnimating) {
-      _radiusController.addStatusListener((status) {
+    if (_radiusController!.isAnimating) {
+      _radiusController!.addStatusListener((status) {
         if (status == AnimationStatus.completed) {
           _startFadeOut();
         }
@@ -233,14 +230,14 @@ class ListTileInkRipple extends InteractiveInkFeature {
   }
 
   void _startFadeOut() {
-    _fadeInController.stop();
+    _fadeInController!.stop();
     // Watch out: setting _fadeOutController's value to 1.0 will
     // trigger a call to _handleAlphaStatusChanged() which will
     // dispose _fadeOutController.
-    final double fadeOutValue = 1.0 - _fadeInController.value;
-    _fadeOutController.value = fadeOutValue;
+    final double fadeOutValue = 1.0 - _fadeInController!.value;
+    _fadeOutController!.value = fadeOutValue;
     if (fadeOutValue < 1.0)
-      _fadeOutController.animateTo(1.0, duration: _kCancelDuration);
+      _fadeOutController!.animateTo(1.0, duration: _kCancelDuration);
   }
 
   void _handleAlphaStatusChanged(AnimationStatus status) {
@@ -249,24 +246,24 @@ class ListTileInkRipple extends InteractiveInkFeature {
 
   @override
   void dispose() {
-    _radiusController.dispose();
-    _fadeInController.dispose();
-    _fadeOutController.dispose();
+    _radiusController!.dispose();
+    _fadeInController!.dispose();
+    _fadeOutController!.dispose();
     super.dispose();
   }
 
   @override
   void paintFeature(Canvas canvas, Matrix4 transform) {
-    final int alpha = _fadeInController.isAnimating
-        ? _fadeIn.value
+    final int alpha = _fadeInController!.isAnimating
+        ? _fadeIn!.value
         : !isCancelled
-            ? _fadeOutController
+            ? _fadeOutController!
                 .drive(IntTween(
                   begin: color.alpha,
                   end: 0,
                 ).chain(_fadeOutIntervalTween))
                 .value
-            : _fadeOutController
+            : _fadeOutController!
                 .drive(
                   IntTween(
                     begin: color.alpha,
@@ -279,20 +276,20 @@ class ListTileInkRipple extends InteractiveInkFeature {
 
     final Paint paint = Paint()..color = color.withAlpha(alpha);
     // Splash moves to the center of the reference box.
-    final Offset center = Offset.lerp(
+    final Offset? center = Offset.lerp(
       _position,
       referenceBox.size.center(Offset.zero),
-      Curves.ease.transform(_radiusController.value),
+      Curves.ease.transform(_radiusController!.value),
     );
     paintInkCircle(
       canvas: canvas,
       transform: transform,
       paint: paint,
-      center: center,
+      center: center!,
       textDirection: _textDirection,
-      radius: _radius.value,
+      radius: _radius!.value,
       customBorder: _customBorder,
-      borderRadius: _borderRadius,
+      borderRadius: _borderRadius!,
       clipCallback: _clipCallback,
     );
   }

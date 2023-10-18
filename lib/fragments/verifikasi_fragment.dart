@@ -41,7 +41,7 @@ class VerifikasiFragment extends StatefulWidget {
 }
 
 class JsonImageListWidget extends State<VerifikasiFragment> {
-  String tokenlistaktivitas;
+  late String tokenlistaktivitas;
 
   @override
   void initState() {
@@ -52,7 +52,7 @@ class JsonImageListWidget extends State<VerifikasiFragment> {
   Future<Null> getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
-      tokenlistaktivitas = preferences.getString("tokenlogin");
+      tokenlistaktivitas = preferences.getString("tokenlogin")!;
     });
   }
   selectedItem(BuildContext context, String holder) {
@@ -76,7 +76,7 @@ class JsonImageListWidget extends State<VerifikasiFragment> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<DaftarPegawaiVerifikasi>>(
+    return FutureBuilder<List<DaftarPegawaiVerifikasi>?>(
       future: api.getAllPegawaiVer(tokenlistaktivitas),
       builder: (context, snapshot) {
 
@@ -86,7 +86,7 @@ class JsonImageListWidget extends State<VerifikasiFragment> {
 
         return ListView(
           padding: EdgeInsets.only(top: 15.0),
-          children: snapshot.data
+          children: snapshot.data!
               .map((data) => Column(children: <Widget>[
             GestureDetector(
               onTap: (){Navigator.push(
@@ -94,7 +94,7 @@ class JsonImageListWidget extends State<VerifikasiFragment> {
                 context,
                 MaterialPageRoute(
 //                  builder: (context) => HalamanVerifikasi(todo: data.idPns),
-                    builder: (context) => HalVerif(idpns: data.idPns,tokenver: tokenlistaktivitas,),
+                    builder: (context) => HalVerif(idpns: data.idPns!,tokenver: tokenlistaktivitas,),
                 ),
               );},
               child: Container(
@@ -107,7 +107,7 @@ class JsonImageListWidget extends State<VerifikasiFragment> {
                       CircleAvatar(
                         radius: 30.0,
                         backgroundImage:
-                        NetworkImage(data.foto),
+                        NetworkImage(data.foto!),
                         backgroundColor: Colors.transparent,
                       ),
 //                leading: Column(
@@ -120,16 +120,16 @@ class JsonImageListWidget extends State<VerifikasiFragment> {
                       title: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Flexible(child: new Text(data.namaPgawai,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)))
+                            Flexible(child: new Text(data.namaPgawai!,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)))
                           ]
                       ),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text(" "+data.idNipBaru,style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
-                          Text(" Sudah diakui: "+data.menitSudah+" jam",style: TextStyle(fontSize: 16)),
-                          Text(" Bulan ini belum: "+data.belumVerBlnIni,style: TextStyle(fontSize: 16)),
-                          Text(" Bulan kemarin belum: "+data.belumVerBlnLalu,style: TextStyle(fontSize: 16)),
+                          Text(" "+data.idNipBaru!,style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
+                          Text(" Sudah diakui: "+data.menitSudah!+" jam",style: TextStyle(fontSize: 16)),
+                          Text(" Bulan ini belum: "+data.belumVerBlnIni!,style: TextStyle(fontSize: 16)),
+                          Text(" Bulan kemarin belum: "+data.belumVerBlnLalu!,style: TextStyle(fontSize: 16)),
 
                         ],
                       ),
