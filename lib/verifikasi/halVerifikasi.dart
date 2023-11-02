@@ -530,8 +530,9 @@ class _AktivitasListTabState extends State<AktivitasListTab>
     return FutureBuilder(
       future: api.getAllActivityVer(widget.tokenlog!, widget.idpnsget!),
       builder: (BuildContext context, AsyncSnapshot<List<DaftarAktivitas>?> snapshot){
-        semuaAktivitas = snapshot.data!;
+
         if((snapshot.hasData)){
+          semuaAktivitas = snapshot.data!;
           if (semuaAktivitas.length == 0){
             return Center(
               child: Text(
@@ -558,6 +559,7 @@ class _AktivitasListTabState extends State<AktivitasListTab>
             );
           }
         }
+
         return Center(
                 child: CircularProgressIndicator(),
               );

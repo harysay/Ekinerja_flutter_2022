@@ -41,7 +41,7 @@ class VerifikasiFragment extends StatefulWidget {
 }
 
 class JsonImageListWidget extends State<VerifikasiFragment> {
-  late String tokenlistaktivitas;
+  String tokenlistaktivitas="";
 
   @override
   void initState() {
