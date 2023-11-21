@@ -1,116 +1,112 @@
 import 'package:ekinerja2020/service/ApiService.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:ekinerja2020/view/about_page.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'dart:io';
 
 class AboutFragment extends StatelessWidget {
-  DateTime sekarang = new DateTime.now();
-  // ApiService getapi = new ApiService();
-
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return new Container(
-      color: Colors.black12,
-      height: double.maxFinite,
-      child: new Stack(
-        //alignment:new Alignment(x, y)
+    return Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          new Positioned(
-            child: new Center(
-              child: new Column(
-                children: <Widget>[
-                  new Text(" \u00a9 Dinas Kominfo Kabupaten Kebumen "+ApiService.tahunSekarang),
-                  new Text("All rights reserved"),
-                ],
-              ),
-            )
+          // Bagian Atas
+          Container(
+            padding: EdgeInsets.all(20.0),
+            alignment: Alignment.center,
+            child: Column(
+              children: <Widget>[
+                new Text(" \u00a9 Dinas Kominfo Kabupaten Kebumen "+ApiService.tahunSekarang),
+                new Text("All rights reserved"),
+                // Tambahan teks lainnya di bagian atas jika diperlukan
+              ],
+            ),
           ),
-          new Positioned(
-            child: new Center(
-              child: new Column(
+          // Bagian Tengah
+          Expanded(
+            child: Container(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  new Image.asset(
+                  Image.asset(
                     'assets/kominfo.png',
-                    height: 300,
-                    width: 250,
-                    fit: BoxFit.fitWidth,
+                    height: 200, // Sesuaikan tinggi gambar
+                    width: 200, // Sesuaikan lebar gambar
+                    fit: BoxFit.contain,
                   ),
-                  // new Text(ApiService.versionBuildSekarang),
-                  new Center(
-                    child: new ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        onPrimary: Colors.white,
-                        animationDuration: Duration(milliseconds: 1000),
-                        primary: Colors.orangeAccent,
-                        shadowColor: Colors.redAccent,
-                        elevation: 10,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                      ),
-                      onPressed: _launchURL,
-                      child: new Text('Manual E-Kinerja Android'),
-                    ),
+                  ElevatedButton(
+                    onPressed: () {
+                      _launchPDF(context);
+                    },
+                    child: Text('Manual E-Kinerja Android'),
                   ),
                 ],
               ),
             ),
           ),
-          new InkWell(
+          // Bagian Bawah
+          GestureDetector(
             onTap: () {
-              // Ketika teks atau elemen ini diklik, buka halaman "AboutPage"
               Navigator.push(context, MaterialPageRoute(builder: (context) => AboutPage()));
             },
-            child: new Positioned(
-              child: new Align(
-                alignment: FractionalOffset.bottomCenter,
-                child: new Text(ApiService.versionBuildSekarang),
+            child: Container(
+              padding: EdgeInsets.all(20.0),
+              alignment: Alignment.center,
+              child: Text(ApiService.versionBuildSekarang,
+                style: TextStyle(decoration: TextDecoration.underline),
               ),
             ),
-          )
+          ),
         ],
       ),
     );
-//    return new Center(
-//      child: new Column(
-//        children: <Widget>[
-//          new Text("Develop by Imanaji Hari Sayekti"),
-//          new Text("Copyright 2020 Dinas Kominfo Kabupaten Kebumen"),
-//          new Text("All rights reserved"),
-//          new Positioned(
-//            child: new Align(
-//                alignment: FractionalOffset.bottomCenter,
-//              child: new Text("Version 1.0.b.04082020"),
-//            ),
-//          )
-//        ],
-//      ),
-////      child: new Text("Develop by Imanaji Hari Sayekti \nCopyright 2020 Dinas Kominfo Kabupaten Kebumen \nAll rights reserved \nVersion 1.0.b.04082020"),
-//    );
   }
 
-  _launchURL() async {
-    const url = 'https://tukin.kebumenkab.go.id/assets/manualBook/ManualBookE-KinerjaAndroid.pdf';
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
+  _launchPDF(BuildContext context) async {
+    const pdfUrl =
+        'https://tukin.kebumenkab.go.id/assets/manualBook/manualekinerja.pdf';
+
+    try {
+      // Get the default CacheManager
+      var cacheManager = DefaultCacheManager();
+
+      // Download the PDF file and store it in the cache
+      File file = await cacheManager.getSingleFile(pdfUrl);
+
+      // Navigate to PdfViewerPage with the downloaded file
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PdfViewerPage(filePath: file.path),
+        ),
+      );
+    } catch (e) {
+      print('Error: $e');
+      // Handle errors as needed
     }
   }
-
 }
-class VersionItem extends StatelessWidget {
-  final String version;
-  final String changes;
 
-  VersionItem({required this.version, required this.changes});
+class PdfViewerPage extends StatelessWidget {
+  final String filePath;
+
+  PdfViewerPage({required this.filePath});
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text("Versi $version"),
-      subtitle: Text(changes),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('PDF Viewer'),
+      ),
+      body: PDFView(
+        filePath: filePath,
+        enableSwipe: true,
+        swipeHorizontal: false,
+      ),
     );
   }
 }

@@ -215,47 +215,6 @@ class _SecondFragmentState extends State<SecondFragment> with TickerProviderStat
           ),
         ),
       ),
-//      SafeArea(
-//        child: FutureBuilder(
-//          future: api.getAllKontak(tokenlistaktivitas),
-//          builder: (BuildContext context, AsyncSnapshot<List<DaftarAktivitas>> snapshot) {
-//            semuaAktivitas = snapshot.data;
-//            if((snapshot.hasData)){
-//              if (semuaAktivitas.length == 0) {
-//                return Center(
-//                  child: Text("Belum Ada Data",
-//                    style: Theme.of(context).textTheme.title,
-//                  ),
-//                );
-//              }else {
-//                return buildKontakListView(context, semuaAktivitas);
-//              }
-//            }
-//            return Center(
-//              child: CircularProgressIndicator(),
-//            );
-//            //gunakan script di bawah jika terjadi error
-////            if (snapshot.hasError) {
-////              return Center(
-////                child: Text(
-////                    "Something wrong with message: ${snapshot.error.toString()}"),
-////              );
-////            }else if (snapshot.connectionState == ConnectionState.done) {
-////              if (semuaAktivitas == null) {
-////                return Center(
-////                  child: Text("Data not found"),
-////                );
-////              } else {
-////                return buildKontakListView(context, semuaAktivitas);
-////              }
-////            } else {
-////              return Center(
-////                child: CircularProgressIndicator(),
-////              );
-////            }
-//          },
-//        ),
-//      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       floatingActionButton: FloatingActionButton(
 
@@ -273,163 +232,6 @@ class _SecondFragmentState extends State<SecondFragment> with TickerProviderStat
       ),
     );
   }
-
-//  Widget buildKontakListView(BuildContext context, List<DaftarAktivitas> allActivity) {
-//    return Padding(
-//      padding: const EdgeInsets.all(5.0),
-//      child: allActivity.isEmpty
-//          ? Column(
-//        children: <Widget>[
-//          Text(
-//            "Belum Ada Data",
-//            style: Theme.of(context).textTheme.title,
-//          ),
-//        ],
-//      )
-//          : ListView.builder(
-//        itemBuilder: (context, index) {
-//          DaftarAktivitas aktivitas = allActivity[index];
-//          return Card(
-//            child: Padding(
-//              padding: const EdgeInsets.all(5.0),
-//              child: Container(
-//                child: ListTile(
-//                  leading: Column(
-//                    crossAxisAlignment: CrossAxisAlignment.center,
-//                    mainAxisAlignment: MainAxisAlignment.center,
-//                    children: <Widget>[
-//                      Text(aktivitas.tglKinerja,style: TextStyle(fontSize: 14, color: Colors.black))
-//                    ],
-//                  ),
-//                  title: Row(
-//                      crossAxisAlignment: CrossAxisAlignment.start,
-//                      children: <Widget>[
-//                        Flexible(child: new Text(aktivitas.namaPekerjaan+" ("+aktivitas.standarWaktu+")",style: TextStyle(fontSize: 18, color: Colors.black)))
-////                  Text(aktivitas.namaPekerjaan),Text(" ("+aktivitas.standarWaktu+")",style: TextStyle(fontSize: 11, color: Colors.black))
-//                      ]
-//                  ),
-//                  subtitle: Row(
-//                      crossAxisAlignment: CrossAxisAlignment.start,
-//                      children: <Widget>[
-//                        Flexible(child: new Text(aktivitas.uraianPekerjaan+" ("+aktivitas.waktuMengerjakan+")",style: TextStyle(fontSize: 14, color: Colors.black)))
-//                        //Text(aktivitas.uraianPekerjaan)
-//                      ]
-//                  ),
-//                  trailing: Column(
-//                    children: <Widget>[
-//                      InkWell(
-//                        child:  Icon(Icons.edit, size: 20,),
-//                        onTap: (){
-//                          //Masukan navigator di sini
-//                          Navigator.push(context,
-//                              MaterialPageRoute(builder: (context) {
-//                                return FormScreen(daftaraktivitas: aktivitas,daftarSudahAda: allActivity,);
-//                              }));
-//                        },
-//                      ),
-//                      Padding(padding: EdgeInsets.only(bottom: 10)),
-//                      InkWell(
-//                        child: Icon(Icons.delete, size: 20),
-//                        onTap: (){
-////                          _showModalAlert(
-////                              'Peringatan',
-////                              'Apakah task ini akan di hapus?',
-////                              aktivitas.idSubPekerjaan
-////                          );
-//                          showDialog(
-//                              context: context,
-//                              builder: (BuildContext context) {
-//                                return AlertDialog(
-//                                  title: Text('Peringatan'),
-//                                  content: Text('Apakah Anda yakin akan menghapus?'),
-//                                  actions: <Widget>[
-//                                    FlatButton(
-//                                      child: Text('No'),
-//                                      onPressed: () {
-//                                        Navigator.of(context).pop();
-//                                      },
-//                                    ),
-//                                    FlatButton(
-//                                      child: Text('Yes'),
-//                                      onPressed: () {
-//                                        //_deleteTask(aktivitas.idSubPekerjaan);
-//                                        api.delete(aktivitas.idDataKinerja,tokenlistaktivitas).then((result) {
-//                                          if (result != null) {
-//                                            _scaffoldState.currentState
-//                                                .showSnackBar(SnackBar(
-//                                              content: Text("Hapus data sukses"),
-//                                            ));
-//                                            setState(() {});
-//                                          } else {
-//                                            _scaffoldState.currentState
-//                                                .showSnackBar(SnackBar(
-//                                              content: Text("Hapus data gagal"),
-//                                            ));
-//                                          }
-//                                        });
-//                                        Navigator.of(context).pop();
-//                                      },
-//                                    )
-//                                  ],
-//                                );
-//                              }
-//                          );
-//                        },
-//                      ),
-//                    ],
-//                  ),
-//                ),
-////                child: Column(
-////                  crossAxisAlignment: CrossAxisAlignment.center,
-////                  mainAxisAlignment: MainAxisAlignment.center,
-////                  children: <Widget>[
-////                    Row(
-////                      children: <Widget>[
-////                        Text(aktivitas. tglKinerja),
-////
-////                        Text(
-////                            aktivitas.namaPekerjaan + " " + aktivitas.waktuMengerjakan),
-////                        Spacer(),
-////                        Text(aktivitas.uraianPekerjaan),
-////                      ],
-////                    ),
-////                    SizedBox(
-////                      height: 10,
-////                    ),
-////                    Row(
-////                      children: <Widget>[
-////                        Spacer(),
-////                        RaisedButton(
-////                          child: Text("Ubah",
-////                              style: TextStyle(color: Colors.white)),
-////                          color: Colors.orange[400],
-////                          onPressed: () {
-////                            // panggil FormScreen dengan parameter
-////                          },
-////                        ),
-////                        SizedBox(
-////                          width: 5,
-////                        ),
-////                        RaisedButton(
-////                          child: Text("Hapus",
-////                              style: TextStyle(color: Colors.white)),
-////                          color: Colors.orange[400],
-////                          onPressed: () {
-////                            // panggil endpoint hapus
-////                          },
-////                        ),
-////                      ],
-////                    ),
-////                  ],
-////                ),
-//              ),
-//            ),
-//          );
-//        },
-//        itemCount: allActivity.length,
-//      ),
-//    );
-//  }
 }
 
 class AktivitasListTab extends StatefulWidget {
@@ -485,20 +287,20 @@ class _AktivitasListTabState extends State<AktivitasListTab>
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Text(aktivitas.tglKinerja!,style: TextStyle(fontSize: 14, color: Colors.black))
+                            Text(aktivitas.tglKinerja!,style: TextStyle(fontSize: 14))
                           ],
                         ),
                         title: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Flexible(child: new Text(aktivitas.namaPekerjaan!+" ("+aktivitas.standarWaktu!+")",style: TextStyle(fontSize: 18, color: Colors.black)))
+                              Flexible(child: new Text(aktivitas.namaPekerjaan!+" ("+aktivitas.standarWaktu!+")",style: TextStyle(fontSize: 18)))
 //                  Text(aktivitas.namaPekerjaan),Text(" ("+aktivitas.standarWaktu+")",style: TextStyle(fontSize: 11, color: Colors.black))
                             ]
                         ),
                         subtitle: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Flexible(child: new Text(aktivitas.uraianPekerjaan!+" ("+aktivitas.waktuMengerjakan!+")",style: TextStyle(fontSize: 14, color: Colors.black)))
+                              Flexible(child: new Text(aktivitas.uraianPekerjaan!+" ("+aktivitas.waktuMengerjakan!+")",style: TextStyle(fontSize: 14)))
                               //Text(aktivitas.uraianPekerjaan)
                             ]
                         ),
@@ -511,7 +313,6 @@ class _AktivitasListTabState extends State<AktivitasListTab>
 //                                color: Colors.orange[100],
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  color: Colors.grey[100],
                                   boxShadow: [
                                     BoxShadow(color: Colors.lightBlue, spreadRadius: 1),
                                   ],
@@ -536,7 +337,6 @@ class _AktivitasListTabState extends State<AktivitasListTab>
 //                                color: Colors.orange[100],
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  color: Colors.grey[100],
                                   boxShadow: [
                                     BoxShadow(color: Colors.red, spreadRadius: 1),
                                   ],
@@ -707,20 +507,20 @@ class _AktivitasListTabVerifikasi extends State<AktivitasListTabVerifikasi>
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Text(aktivitas.tglKinerja!,style: TextStyle(fontSize: 14, color: Colors.black))
+                            Text(aktivitas.tglKinerja!,style: TextStyle(fontSize: 14))
                           ],
                         ),
                         title: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Flexible(child: new Text(aktivitas.namaSubPekerjaan!+" ("+aktivitas.standarWaktu!+")",style: TextStyle(fontSize: 18, color: Colors.black)))
+                              Flexible(child: new Text(aktivitas.namaSubPekerjaan!+" ("+aktivitas.standarWaktu!+")",style: TextStyle(fontSize: 18)))
 //                  Text(aktivitas.namaPekerjaan),Text(" ("+aktivitas.standarWaktu+")",style: TextStyle(fontSize: 11, color: Colors.black))
                             ]
                         ),
                         subtitle: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Flexible(child: new Text(aktivitas.uraianPekerjaan!+" ("+aktivitas.waktuMengerjakan!+")",style: TextStyle(fontSize: 14, color: Colors.black)))
+                              Flexible(child: new Text(aktivitas.uraianPekerjaan!+" ("+aktivitas.waktuMengerjakan!+")",style: TextStyle(fontSize: 14)))
                               //Text(aktivitas.uraianPekerjaan)
                             ]
                         ),
@@ -743,7 +543,7 @@ class _AktivitasListTabVerifikasi extends State<AktivitasListTabVerifikasi>
                   CircularProgressIndicator(),
                   SizedBox(height: 22),
                   Text('Mungkin membutuhkan waktu lebih untuk ini..'),
-                  Text("Data yang tampil hanya data kinerja bulan ini yang sudah terverifikasi, namun khusus jika sekarang tanggal 1 data kinerja pada bulan sebelumnya masih bisa ditampilkan (jika sudah masuk tanggal 2 data tidak ditampilkan)",style: TextStyle(color: Colors.black.withOpacity(0.6),fontSize: 10)),
+                  Text("Data yang tampil hanya data kinerja bulan ini yang sudah terverifikasi, namun khusus jika sekarang tanggal 1 data kinerja pada bulan sebelumnya masih bisa ditampilkan (jika sudah masuk tanggal 2 data tidak ditampilkan)",style: TextStyle(fontSize: 10)),
 //              Text('Data yang tampil hanya data kinerja bulan ini yang sudah terverifikasi, namun khusus jika sekarang tanggal 1 data kinerja pada bulan sebelumnya masih bisa ditampilkan (jika sudah masuk tanggal 2 data tidak ditampilkan'+')',style: TextStyle(color: Colors.black.withOpacity(0.6),fontSize: 10))
                 ],
               ),

@@ -1,6 +1,6 @@
-import 'package:ekinerja2020/fragments/first_fragment.dart';
-import 'package:ekinerja2020/fragments/second_fragment.dart';
-import 'package:ekinerja2020/fragments/third_fragment.dart';
+import 'package:ekinerja2020/fragments/dashboard_fragment.dart';
+import 'package:ekinerja2020/fragments/rekamaktivitas_fragment.dart';
+import 'package:ekinerja2020/fragments/laporan_fragment.dart';
 import 'package:ekinerja2020/fragments/about_fragment.dart';
 import 'package:ekinerja2020/fragments/skp_fragment.dart';
 import 'package:ekinerja2020/fragments/verifikasi_fragment.dart';

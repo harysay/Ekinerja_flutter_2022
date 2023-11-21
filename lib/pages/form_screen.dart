@@ -151,19 +151,19 @@ class _FormScreenState extends State<FormScreen> {
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: <Widget>[
-                                        Text("Tanggal aktivitas",style: Theme.of(context).textTheme.caption),
+                                        Text("Tanggal aktivitas",style: TextStyle(color: Colors.black87)),
                                         Container(
                                           child: Row(
                                             children: <Widget>[
                                               Icon(
                                                 Icons.date_range,
                                                 size: 18.0,
-                                                color: widget.daftaraktivitas == null ? Colors.teal : Colors.black12,
+                                                color: widget.daftaraktivitas == null ? Colors.white70 : Colors.black12,
                                               ),
                                               Text(
                                                 " $_date",
                                                 style: TextStyle(
-                                                    color: widget.daftaraktivitas == null ? Colors.teal : Colors.black12,
+                                                    color: widget.daftaraktivitas == null ? Colors.white70 : Colors.black12,
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 18.0),
                                               ),
@@ -177,7 +177,7 @@ class _FormScreenState extends State<FormScreen> {
                                 ),
                                 Text(widget.daftaraktivitas == null ? "  Ubah" : "",
                                   style: TextStyle(
-                                      color: Colors.teal,
+                                      color: Colors.white70,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18.0),
                                 ),
@@ -273,19 +273,19 @@ class _FormScreenState extends State<FormScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,//membuat isi kolom rata kiri
                                 children: <Widget>[
-                                  Text("Jam mulai",style: Theme.of(context).textTheme.caption),
+                                  Text("Jam mulai",style: TextStyle(color: Colors.black87)),
                                   Container(
                                     child: Row(
                                       children: <Widget>[
                                         Icon(
                                           Icons.access_time,
                                           size: 18.0,
-                                          color: Colors.teal,
+                                          color: Colors.white70,
                                         ),
                                         Text(
                                           " $_timeMulai",
                                           style: TextStyle(
-                                              color: Colors.teal,
+                                              color: Colors.white70,
                                               fontWeight: FontWeight.bold,
                                               fontSize: 18.0),
                                         ),
@@ -299,7 +299,7 @@ class _FormScreenState extends State<FormScreen> {
                           Text(
                             "  Ubah",
                             style: TextStyle(
-                                color: Colors.teal,
+                                color: Colors.white70,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18.0),
                           ),
@@ -345,19 +345,19 @@ class _FormScreenState extends State<FormScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,//membuat isi kolom rata kiri
                                 children: <Widget>[
-                                  Text("Jam Selesai",style: Theme.of(context).textTheme.caption),
+                                  Text("Jam Selesai",style: TextStyle(color: Colors.black87)),
                                   Container(
                                     child: Row(
                                       children: <Widget>[
                                         Icon(
                                           Icons.access_time,
                                           size: 18.0,
-                                          color: Colors.teal,
+                                          color: Colors.white70,
                                         ),
                                         Text(
                                           " $_timeSelesai",
                                           style: TextStyle(
-                                              color: Colors.teal,
+                                              color: Colors.white70,
                                               fontWeight: FontWeight.bold,
                                               fontSize: 18.0),
                                         ),
@@ -372,7 +372,7 @@ class _FormScreenState extends State<FormScreen> {
                           Text(
                             "  Ubah",
                             style: TextStyle(
-                                color: Colors.teal,
+                                color: Colors.white70,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18.0),
                           ),
@@ -384,15 +384,16 @@ class _FormScreenState extends State<FormScreen> {
                     height: 10,
                   ),
                   Container(
-                      margin: EdgeInsets.only(left: 18.0, right: 18.0),
-                      child: TextFormField(
-                        controller: ctrlUraianPekerjaan,
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                          labelText: 'Uraian Pekerjaan',
-                          hintText: 'Uraian Pekerjaan',
-                        ),
-                      )
+                    margin: EdgeInsets.only(left: 18.0, right: 18.0),
+                    child: TextField(
+                      controller: ctrlUraianPekerjaan,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null, // Set maxLines ke null untuk membuat textarea dengan ruang input yang lebih luas
+                      decoration: InputDecoration(
+                        labelText: 'Uraian Pekerjaan',
+                        hintText: 'Uraian Pekerjaan',
+                      ),
+                    ),
                   ),
                   SizedBox(
                     height: 10,

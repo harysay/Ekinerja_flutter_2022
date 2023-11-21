@@ -102,10 +102,10 @@ class _FirstFragmentState extends State<FirstFragment>{
           children: <Widget>[
             Container(
               width: jarakTitik, //untuk mengatur jarak setelah titik dua
-              child: Text(label, style: TextStyle(fontWeight: FontWeight.bold,)),
+              child: Text(label, style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black87)),
             ),
             Flexible(
-              child: Text(": $value", overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.bold,),),
+              child: Text(": $value", overflow: TextOverflow.ellipsis, style: TextStyle(color: Colors.black87),),
             ),
           ],
         );
@@ -380,7 +380,7 @@ class _FirstFragmentState extends State<FirstFragment>{
                                               child: Column(
                                                 children: <Widget>[
                                                   Center(
-                                                    child: Text("Info Tamsil", style: styleTitle),
+                                                    child: Text("Info Tamsil", style:TextStyle(fontWeight: FontWeight.bold,color: Colors.black87)),
                                                   ),
                                                   // buildDataRow("Unit Kerja", datatamsil.data['unit_kerja_tpp'],160.0),
                                                   // buildDataRow("Jabatan/Kelas", datatamsil.data['jabatan_tpp'],160.0),

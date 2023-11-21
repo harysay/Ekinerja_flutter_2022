@@ -9,31 +9,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 ApiService api = new ApiService();
 //void main() => runApp(VerifikasiFragment());
 
-//class VerifikasiFragment extends StatelessWidget {
-//
-////  final String title;
-////  final String description;
-//
-//  //VerifikasiFragment(this.title, this.description);
-//  //VerifikasiFragment({Key key, @required this.todos}) : super(key: key);
-//
-//
-//
-//  @override
-//  Widget build(BuildContext context) {
-//
-//    return JsonImageList();
-////    return MaterialApp(
-//  //    debugShowCheckedModeBanner: false,
-////      home: Scaffold(
-////        body: JsonImageList(),
-////      ),
-////    );
-//
-//  }
-//}
-
-
 class VerifikasiFragment extends StatefulWidget {
 
   JsonImageListWidget createState() => JsonImageListWidget();

@@ -349,9 +349,9 @@ class _SelectableActivityTileState extends State<SelectableActivityTile>
                   child: ScaleTransition(
                     scale: _animationScale!,
                     child: Container(
-                      width: 60.0,
+                      width: 71.0,
                       height: 48.0,
-                      child: Text(widget.listAktivitas.tglKinerja!,style: TextStyle(fontSize: 14, color: Colors.black)),
+                      child: Text(widget.listAktivitas.tglKinerja!,style: TextStyle(fontSize: 14)),
                     ),
                   ),
                 ),
