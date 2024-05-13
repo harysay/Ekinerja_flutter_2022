@@ -270,7 +270,7 @@ class _PageLoginState extends State<PageLogin> {
                   decoration: const BoxDecoration(
                     color: Colors.amber,
                     image: DecorationImage(
-                      image: AssetImage('assets/ekinerja2020.png'),
+                      image: AssetImage('assets/ekinerja2024.png'),
                     ),
                   ),
                 ),

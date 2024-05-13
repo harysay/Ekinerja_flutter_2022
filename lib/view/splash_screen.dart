@@ -43,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
               transitionBuilder: (Widget child, Animation<double> animation) {
                 return ScaleTransition(scale: animation, child: child);
               },
-              child: Image.asset('assets/ekinerja2020.png'),
+              child: Image.asset('assets/ekinerja2024.png'),
             ),
             const SizedBox(height: 25),
             const Text(

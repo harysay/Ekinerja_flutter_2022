@@ -1,6 +1,6 @@
 import 'package:ekinerja2020/service/ApiService.dart';
 import 'package:flutter/material.dart';
-import 'package:ekinerja2020/view/about_page.dart';
+import 'package:ekinerja2020/pages/about_page.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'dart:io';

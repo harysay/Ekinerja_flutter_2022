@@ -28,9 +28,9 @@ class ApiService {
   // static String urlUtama = "https://development.kebumenkab.go.id/siltapkin/index.php/api/";
   static String urlUtama = "https://tukin.kebumenkab.go.id/api/";
   // static String urlUtama = "https://tukin.kebumenkab.go.id/2020/index.php/api/";
-  static String versionCodeSekarang = "12"; //harus sama dengan version di buildernya
-  static String tahunSekarang = "2023";
-  static String versionBuildSekarang = "Version 5.2.pb.21112023";
+  static String versionCodeSekarang = "14"; //harus sama dengan version di buildernya
+  static String tahunSekarang = "2024";
+  static String versionBuildSekarang = "Version 6.2.pb.13052024";
 
   // String urlGetdataPribadi = "https://development.kebumenkab.go.id/siltapkin/index.php/api/rekam/dataDiri?token=";
   // static String baseUrl = "https://development.kebumenkab.go.id/siltapkin/index.php/api/rekam/";
@@ -172,7 +172,7 @@ class ApiService {
 //  final String basicAuth =
 //      'Basic ' + base64Encode(utf8.encode('$username:$password'));
   DaftarAktivitasResponse aktivitasBelum = new DaftarAktivitasResponse();
-  Future<List<DaftarAktivitas>?> getAllKontak(String tokenListAktivitas) async {
+  Future<List<DaftarAktivitas>?> getAllAktivitas(String tokenListAktivitas) async {
     //Map<String, dynamic> inputMap = {'DEMO-API-KEY': '$key'};
     //getPrefFromApi();
     final response = await http.get(Uri.parse(ApiService.urlUtama+"rekam/tampildaftar?token="+tokenListAktivitas)//      headers: {
@@ -286,17 +286,16 @@ class ApiService {
 
   Future<bool> delete(String idDataKinerja, String tokenDelete) async {
     getPrefFromApi();
-    Map<String, dynamic> inputMap = {
-      //'DEMO-API-KEY': '$key',
-      'id_data_kinerja': idDataKinerja
-    };
-    final response = await http.post(Uri.parse(ApiService.urlUtama+"rekam/hapuspekerjaan?token="+tokenDelete),
-//      headers: {
-//        "Accept": "application/json",
-//        "Content-Type": "application/x-www-form-urlencoded",
-//        "authorization": basicAuth
-//      },
-     body: inputMap,
+    // Map<String, dynamic> inputMap = {
+    //   //'DEMO-API-KEY': '$key',
+    //   'id_data_kinerja': idDataKinerja
+    // };
+    final response = await http.get(Uri.parse(ApiService.urlUtama+"rekam/hapuspekerjaan?token="+tokenDelete+"&id_data_kinerja="+idDataKinerja),
+     // headers: {
+     //   "Accept": "application/json",
+     //   "Content-Type": "application/x-www-form-urlencoded",
+     // },
+     // body: inputMap,
     );
 
     aktivitasBelum = DaftarAktivitasResponse.fromJson(json.decode(response.body));
