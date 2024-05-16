@@ -90,14 +90,6 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
         ),
       ),
     ),
-//    Tab(
-//      child: Text(
-//        "Sudah Verifikasi",
-//        style: TextStyle(
-//          fontWeight: FontWeight.w600,
-//        ),
-//      ),
-//    ),
   ];
 
   @override
@@ -121,6 +113,18 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
 
     _tabController =
         _tabController = TabController(vsync: this, length: _tabs.length);
+    _loadAllActivities(); // Load activities here
+  }
+
+  Future<void> _loadAllActivities() async {
+    setState(() {
+      loading = true;
+    });
+    semuaAktivitas = await api.getAllActivityVer(widget.tokenver, widget.idpns);
+    selectionController!.loadedAktivitas = semuaAktivitas!;
+    setState(() {
+      loading = false;
+    });
   }
 
   Future<Null> getPref() async {
@@ -267,19 +271,6 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
               hintStyle: TextStyle(color: Colors.grey),
             ),
           ),
-//        content: Text.rich(
-//          TextSpan(
-//            style: const TextStyle(fontSize: 15.0),
-//            children: [
-//              TextSpan(text: "Anda yakin ingin mengembalikan aktivitas sebanyak"),
-//              TextSpan(
-//                text: " ${selectionController.loadedAktivitas.length}",
-//                style: const TextStyle(fontWeight: FontWeight.w700),
-//              ),
-//              TextSpan(text: " ?"),
-//            ],
-//          ),
-//        ),
         acceptButton: DialogRaisedButton(
           text: "Kembalikan",
           onPressed: () {
@@ -318,10 +309,56 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
     this.setState(() {
 
     });
-    //ContentControl.deleteSongs(selectionController.selectionSet);
-//    Scaffold.of(context).showSnackBar(SnackBar(content: Text(selectionController.loadedAktivitas.first.toString())));
-    //semuaAktivitas.add(selectionController.selectionSet)
 
+  }
+
+  void _handleSetujuiSemua() {
+    ShowFunctions.showDialog(context,
+        title: const Text("Menyetujui Semua"),
+        content: Text.rich(
+          TextSpan(
+            style: const TextStyle(fontSize: 15.0),
+            children: [
+              TextSpan(text: "Anda yakin ingin menyetujui semua "),
+              TextSpan(
+                text: "${selectionController!.loadedAktivitas.length} aktivitas",
+                style: const TextStyle(fontWeight: FontWeight.w700),
+              ),
+              TextSpan(text: " ?"),
+            ],
+          ),
+        ),
+        acceptButton: DialogRaisedButton(
+          text: "Setujui Semua",
+          onPressed: () async {
+            selectionController!.close();
+            semuaAktivitas?.forEach((element)async{
+              await api.setujuiAktivitas(tokenlogin, element.idDataKinerja!,element.waktuDiakui!,element.tglKinerja!);
+              setState(() {
+
+              });
+              //setujui(element.idDataKinerja,element.waktuDiakui,element.tglKinerja);
+            });
+            // for (var element in selectionController!.loadedAktivitas) {
+            //   print('Menyetujui aktivitas: ${element.idDataKinerja}');
+            //   await api.setujuiAktivitas(tokenlogin, element.idDataKinerja!, element.waktuDiakui!, element.tglKinerja!);
+            // }
+            setState(() {});
+            ShowFunctions.showToast(msg: "Semua aktivitas berhasil disetujui!");
+            Navigator.of(context, rootNavigator: true).pop(true);
+            // Navigator.pop(_scaffoldState.currentState!.context, true);
+            // Navigator.pop(_scaffoldState.currentState!.context, true);
+          },
+        ),
+        declineButton: DialogRaisedButton.decline(
+          text: "Batal",
+          onPressed: () {
+            selectionController!.close();
+            Navigator.of(context, rootNavigator: true).pop(true);
+          },
+        )
+    );
+    setState(() {});
   }
 
   @override
@@ -353,39 +390,37 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
         preferredSize: Size.fromHeight(52.0),
         child: SelectionAppBar(
           // Creating our selection AppBar
-          //automaticallyImplyLeading: true,
           titleSpacing: 0.0,
           elevation: 0.0,
           elevationSelection: 2.0,
           selectionController: selectionController!,
           actions: [
-//            IconButton(
-//              icon: const Icon(Icons.search),
-//              onPressed: () {},
-//            ),
-//            IconButton(
-//              icon: const Icon(Icons.sort),
-//              onPressed: () {},
-//            ),
+            if (!selectionController!.inSelection)
+              IconButton(
+                icon: const Icon(Icons.check),
+                onPressed: _handleSetujuiSemua,
+              ),
           ],
           actionsSelection: [
-            SizedBox.fromSize(
-                size: const Size(kSMMIconButtonSize, kSMMIconButtonSize)),
-            SMMIconButton(
-              color: Theme.of(context).colorScheme.onSurface,
-              icon: const Icon(Icons.backspace,color: Colors.red,size: 27),
-              onPressed: _handleTolak,
-            ),
-            SMMIconButton(
-              color: Theme.of(context).colorScheme.onSurface,
-              icon: const Icon(Icons.replay,size: 27),
-              onPressed: _handleKembalikan,
-            ),
-            SMMIconButton(
-              color: Theme.of(context).colorScheme.onSurface,
-              icon: const Icon(Icons.playlist_add_check,color: Colors.lightGreenAccent,size: 34,),
-              onPressed: _handleSetuju,
-            )
+            if (selectionController!.inSelection) ...[
+              SizedBox.fromSize(
+                  size: const Size(kSMMIconButtonSize, kSMMIconButtonSize)),
+              SMMIconButton(
+                color: Theme.of(context).colorScheme.onSurface,
+                icon: const Icon(Icons.backspace,color: Colors.red,size: 27),
+                onPressed: _handleTolak,
+              ),
+              SMMIconButton(
+                color: Theme.of(context).colorScheme.onSurface,
+                icon: const Icon(Icons.replay,size: 27),
+                onPressed: _handleKembalikan,
+              ),
+              SMMIconButton(
+                color: Theme.of(context).colorScheme.onSurface,
+                icon: const Icon(Icons.playlist_add_check,color: Colors.lightGreenAccent,size: 34,),
+                onPressed: _handleSetuju,
+              )
+            ],
           ],
           title: Padding(
             padding: const EdgeInsets.only(left: 15.0),
@@ -519,6 +554,17 @@ class _AktivitasListTabState extends State<AktivitasListTab>
   @override
   bool get wantKeepAlive => true;
   ScrollController? _scrollController;
+  List<DaftarAktivitas> semuaAktivitas = [];
+
+  Future<void> _refreshData() async {
+    ApiService api = ApiService();
+    List<DaftarAktivitas>? newAktivitas = await api.getAllActivityVer(widget.tokenlog!, widget.idpnsget!);
+    if (newAktivitas != null) {
+      setState(() {
+        semuaAktivitas = newAktivitas;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -541,21 +587,24 @@ class _AktivitasListTabState extends State<AktivitasListTab>
               ),
             );
           }else{
-            return ListView.builder(
-              controller: _scrollController,
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.only(bottom: 34.0, top: 4.0),
-              itemCount: semuaAktivitas.length,
-              itemBuilder: (context, index) {
-                return SelectableActivityTile(
-                  listAktivitas: semuaAktivitas[index],
-                  selectionController: widget.selectionController,
-                  // Specify object key that can be changed to re-render song tile
-                  key: ValueKey(index + widget.selectionController.switcher.value),
-                  selected: widget.selectionController.loadedAktivitas.contains(semuaAktivitas[index].idDataKinerja),
-                  onTap: () {},
-                );
-              },
+            return RefreshIndicator(
+              onRefresh: _refreshData,
+              child: ListView.builder(
+                controller: _scrollController,
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.only(bottom: 34.0, top: 4.0),
+                itemCount: semuaAktivitas.length,
+                itemBuilder: (context, index) {
+                  return SelectableActivityTile(
+                    listAktivitas: semuaAktivitas[index],
+                    selectionController: widget.selectionController,
+                    // Specify object key that can be changed to re-render song tile
+                    key: ValueKey(index + widget.selectionController.switcher.value),
+                    selected: widget.selectionController.loadedAktivitas.contains(semuaAktivitas[index].idDataKinerja),
+                    onTap: () {},
+                  );
+                },
+              ),
             );
           }
         }

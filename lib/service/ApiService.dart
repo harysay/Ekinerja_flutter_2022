@@ -30,7 +30,7 @@ class ApiService {
   // static String urlUtama = "https://tukin.kebumenkab.go.id/2020/index.php/api/";
   static String versionCodeSekarang = "14"; //harus sama dengan version di buildernya
   static String tahunSekarang = "2024";
-  static String versionBuildSekarang = "Version 6.2.pb.13052024";
+  static String versionBuildSekarang = "Version 6.2.pb.14052024";
 
   // String urlGetdataPribadi = "https://development.kebumenkab.go.id/siltapkin/index.php/api/rekam/dataDiri?token=";
   // static String baseUrl = "https://development.kebumenkab.go.id/siltapkin/index.php/api/rekam/";
