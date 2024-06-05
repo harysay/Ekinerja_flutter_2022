@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:ekinerja2020/pages/about_page.dart';
 import 'package:ekinerja2020/pages/home_page.dart';
 import 'package:ekinerja2020/service/ApiService.dart';
 import 'package:ekinerja2020/widgets/dialogs.dart';
@@ -215,14 +216,35 @@ class _PageLoginState extends State<PageLogin> {
     });
   }
 
+  // void ceckLogin() async {
+  //   SharedPreferences pref = await SharedPreferences.getInstance();
+  //   var islogin = pref.getBool("is_login");
+  //   if (pref.getString("niploginterakhir")!=""){
+  //     getNipTerakhir = pref.getString("niploginterakhir")!;
+  //     txtEditUsername.text = getNipTerakhir;
+  //   }
+  //
+  //   if (islogin != null && islogin) {
+  //     Navigator.pushAndRemoveUntil(
+  //       context,
+  //       MaterialPageRoute(
+  //         builder: (BuildContext context) => const HomePage(),
+  //       ),
+  //           (route) => false,
+  //     );
+  //   }
+  // }
   void ceckLogin() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     var islogin = pref.getBool("is_login");
-    if (pref.getString("niploginterakhir")!=""){
-      getNipTerakhir = pref.getString("niploginterakhir")!;
+    // Mendapatkan nilai dari SharedPreferences dan memberikan nilai default jika null
+    var nipTerakhir = pref.getString("niploginterakhir") ?? "";
+    // Hanya mengisi getNipTerakhir dan txtEditUsername.text jika nipTerakhir tidak kosong
+    if (nipTerakhir.isNotEmpty) {
+      getNipTerakhir = nipTerakhir;
       txtEditUsername.text = getNipTerakhir;
     }
-
+    // Memeriksa apakah pengguna sudah login
     if (islogin != null && islogin) {
       Navigator.pushAndRemoveUntil(
         context,
@@ -252,72 +274,95 @@ class _PageLoginState extends State<PageLogin> {
       body: Container(
         margin: const EdgeInsets.all(0),
         decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Colors.blueAccent, Color.fromARGB(255, 21, 236, 229)],
-            )),
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.blueAccent, Color.fromARGB(255, 21, 236, 229)],
+          ),
+        ),
         child: Form(
           key: _formKey,
-          child: ListView(
+          child: Column(
             children: [
-              ClipPath(
-                clipper: HeadClipper(),
-                child: Container(
-                  margin: const EdgeInsets.all(0),
-                  width: double.infinity,
-                  height: 180,
-                  decoration: const BoxDecoration(
-                    color: Colors.amber,
-                    image: DecorationImage(
-                      image: AssetImage('assets/ekinerja2024.png'),
+              Expanded(
+                child: ListView(
+                  children: [
+                    ClipPath(
+                      clipper: HeadClipper(),
+                      child: Container(
+                        margin: const EdgeInsets.all(0),
+                        width: double.infinity,
+                        height: 180,
+                        decoration: const BoxDecoration(
+                          color: Colors.amber,
+                          image: DecorationImage(
+                            image: AssetImage('assets/ekinerja2024.png'),
+                          ),
+                        ),
+                      ),
                     ),
+                    const SizedBox(height: 20),
+                    Container(
+                      padding: const EdgeInsets.all(8.0),
+                      alignment: Alignment.center,
+                      child: const Text(
+                        "LOGIN E-Kinerja",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
+                      child: Column(
+                        children: <Widget>[
+                          inputUsername(),
+                          const SizedBox(height: 20.0),
+                          inputPassword(),
+                          const SizedBox(height: 5.0),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
+                      child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.amber,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            side: const BorderSide(color: Colors.blue),
+                          ),
+                          elevation: 10,
+                          minimumSize: const Size(200, 58),
+                        ),
+                        onPressed: () => _validateInputs(),
+                        icon: const Icon(Icons.arrow_right_alt),
+                        label: const Text(
+                          "LOG IN",
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AboutPage()),
+                  );
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(20.0),
+                  alignment: Alignment.center,
+                  child: Text(
+                    ApiService.versionBuildSekarang,
+                    style: const TextStyle(decoration: TextDecoration.underline),
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
-              Container(
-                padding: const EdgeInsets.all(8.0),
-                alignment: Alignment.center,
-                child: const Text(
-                  "LOGIN E-Kinerja",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-              Container(
-                  padding:
-                  const EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
-                  child: Column(
-                    children: <Widget>[
-                      inputUsername(),
-                      const SizedBox(height: 20.0),
-                      inputPassword(),
-                      const SizedBox(height: 5.0),
-                    ],
-                  )),
-              Container(
-                padding:
-                const EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
-                child: ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                        primary: Colors.amber,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                          side: const BorderSide(color: Colors.blue),
-                        ),
-                        elevation: 10,
-                        minimumSize: const Size(200, 58)),
-                    onPressed: () => _validateInputs(),
-                    icon: const Icon(Icons.arrow_right_alt),
-                    label: const Text(
-                      "LOG IN",
-                      style:
-                      TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    )),
-              )
             ],
           ),
         ),

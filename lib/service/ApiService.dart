@@ -1,6 +1,10 @@
 import 'dart:convert';
+import 'package:ekinerja2020/model/daftar_bulansemuaverifikasi.dart';
+import 'package:ekinerja2020/model/daftar_listpegawaiverifikasi.dart';
 import 'package:ekinerja2020/model/daftar_pegawaiverifikasi.dart';
 import 'package:ekinerja2020/model/daftar_skp.dart';
+import 'package:ekinerja2020/response/daftar_bulansemuaverifikasi_response.dart';
+import 'package:ekinerja2020/response/daftar_listpegawaiverifikasi_response.dart';
 import 'package:ekinerja2020/response/daftar_skp_response.dart';
 import 'package:http/http.dart' as http;
 import 'package:ekinerja2020/model/daftar_aktivitas.dart';
@@ -30,7 +34,7 @@ class ApiService {
   // static String urlUtama = "https://tukin.kebumenkab.go.id/2020/index.php/api/";
   static String versionCodeSekarang = "14"; //harus sama dengan version di buildernya
   static String tahunSekarang = "2024";
-  static String versionBuildSekarang = "Version 6.2.pb.14052024";
+  static String versionBuildSekarang = "Version 6.2.pb.22052024";
 
   // String urlGetdataPribadi = "https://development.kebumenkab.go.id/siltapkin/index.php/api/rekam/dataDiri?token=";
   // static String baseUrl = "https://development.kebumenkab.go.id/siltapkin/index.php/api/rekam/";
@@ -88,6 +92,38 @@ class ApiService {
     pegawairesponse = DaftarPegawaiVerifikasiResponse.fromJson(json.decode(response.body));
     if (response.statusCode == 200) {
       List<DaftarPegawaiVerifikasi> data = pegawairesponse.data!;
+      return data;
+    } else {
+      return null;
+    }
+  }
+
+  //get data detail pegawai yang mau diverifikasi oleh verifikator saja
+  DaftarListPegawaiVerifikasiResponse listpegawairesponse = new DaftarListPegawaiVerifikasiResponse();
+  Future<List<DaftarListPegawaiVerifikasi>?> getDetailPegawaiDiVer(String tokenDafAktiv) async {
+    getPrefFromApi();
+    final response = await http.post(Uri.parse(
+        ApiService.urlUtama+"verifikasi/list_Pegawai_staf?token="+tokenDafAktiv),
+    );
+    listpegawairesponse = DaftarListPegawaiVerifikasiResponse.fromJson(json.decode(response.body));
+    if (response.statusCode == 200) {
+      List<DaftarListPegawaiVerifikasi> data = listpegawairesponse.data!;
+      return data;
+    } else {
+      return null;
+    }
+  }
+
+  //get data bulan ini bulan lalu menit sudah dari pegawai yang mau diverifikasi oleh verifikator by id pns
+  DaftarBulanSemuaVerifikasiResponse listBulanMenitresponse = new DaftarBulanSemuaVerifikasiResponse();
+  Future<List<DaftarBulanSemuaVerifikasi>?> getBulanMenitPegawaiDiVer(String tokenDafAktiv,String idPns) async {
+    getPrefFromApi();
+    final response = await http.post(Uri.parse(
+        ApiService.urlUtama+"verifikasi/bulan_semua?token="+tokenDafAktiv+"&id_pns="+idPns),
+    );
+    listBulanMenitresponse = DaftarBulanSemuaVerifikasiResponse.fromJson(json.decode(response.body));
+    if (response.statusCode == 200) {
+      List<DaftarBulanSemuaVerifikasi> data = listBulanMenitresponse.data!;
       return data;
     } else {
       return null;
@@ -406,38 +442,81 @@ class ApiService {
     }
   }
 
-  getDataPresensiBlnLalu(String tokenByID,String bulan) async {
-    final response = await http.get(Uri.parse(ApiService.urlUtama+"Login/data_diri?token="+tokenByID));
+  // getDataPresensiBlnLalu(String tokenByID,String bulan) async {
+  //   final response = await http.get(Uri.parse(ApiService.urlUtama+"Login/data_diri?token="+tokenByID));
+  //   if (response.statusCode == 200) {
+  //     var bulanLaluData;
+  //     if(bulan=="0"){
+  //       bulanLaluData = jsonDecode(response.body)['berjalan'] as List<dynamic>;
+  //     }else if(bulan=="1"){
+  //       bulanLaluData = jsonDecode(response.body)['bulan_lalu'] as List<dynamic>;
+  //     }else if(bulan=="2"){
+  //       bulanLaluData = jsonDecode(response.body)['bulan_lusa'] as List<dynamic>;
+  //     }
+  //     // var presensiBulanLalu = jsonDecode(response.body)['bulan_lalu'] as List;
+  //     return bulanLaluData;
+  //   } else{
+  //     return null;
+  //   }
+  // }
+
+  getAbsenBerjalan(String tokenByID) async {
+    final response = await http.get(Uri.parse(ApiService.urlUtama+"Login/absen_berjalan?token="+tokenByID));
     if (response.statusCode == 200) {
-      var bulanLaluData;
-      if(bulan=="0"){
-        bulanLaluData = jsonDecode(response.body)['berjalan'] as List<dynamic>;
-      }else if(bulan=="1"){
-        bulanLaluData = jsonDecode(response.body)['bulan_lalu'] as List<dynamic>;
-      }else if(bulan=="2"){
-        bulanLaluData = jsonDecode(response.body)['bulan_lusa'] as List<dynamic>;
-      }
-      // var presensiBulanLalu = jsonDecode(response.body)['bulan_lalu'] as List;
+      var bulanLaluData = jsonDecode(response.body)['berjalan'] as List<dynamic>;
+      return bulanLaluData;
+    } else{
+      return null;
+    }
+  }
+  getAbsenLalu(String tokenByID) async {
+    final response = await http.get(Uri.parse(ApiService.urlUtama+"Login/absen_lalu?token="+tokenByID));
+    if (response.statusCode == 200) {
+      var bulanLaluData = jsonDecode(response.body)['bulan_lalu'] as List<dynamic>;
+      return bulanLaluData;
+    } else{
+      return null;
+    }
+  }
+  getAbsenLusa(String tokenByID) async {
+    final response = await http.get(Uri.parse(ApiService.urlUtama+"Login/absen_lusa?token="+tokenByID));
+    if (response.statusCode == 200) {
+      var bulanLaluData = jsonDecode(response.body)['bulan_lusa'] as List<dynamic>;
       return bulanLaluData;
     } else{
       return null;
     }
   }
 
-  getDataTamsil(String tokenByID,String bulan) async {
+  getDataPaguCapaianLalu(String tokenByID) async {
     final response = await http.get(Uri.parse(ApiService.urlUtama+"Login/data_pagu?token="+tokenByID));
     if (response.statusCode == 200) {
       var decodedData = jsonDecode(response.body);
-
-      if (bulan == "0") {
-        return decodedData['berjalan'][0];
-      } else if (bulan == "1") {
-        return decodedData['bulan_lalu'][0];
-      } else if (bulan == "2") {
-        return decodedData['bulan_lusa'][0];
-      }
+      return decodedData['bulan_lalu'][0];
     }
   }
+  getDataPaguCapaianLusa(String tokenByID) async {
+    final response = await http.get(Uri.parse(ApiService.urlUtama+"Login/data_pagu?token="+tokenByID));
+    if (response.statusCode == 200) {
+      var decodedData = jsonDecode(response.body);
+      return decodedData['bulan_lusa'][0];
+    }
+  }
+
+  // getDataTamsil(String tokenByID,String bulan) async {
+  //   final response = await http.get(Uri.parse(ApiService.urlUtama+"Login/data_pagu?token="+tokenByID));
+  //   if (response.statusCode == 200) {
+  //     var decodedData = jsonDecode(response.body);
+  //
+  //     if (bulan == "0") {
+  //       return decodedData['berjalan'][0];
+  //     } else if (bulan == "1") {
+  //       return decodedData['bulan_lalu'][0];
+  //     } else if (bulan == "2") {
+  //       return decodedData['bulan_lusa'][0];
+  //     }
+  //   }
+  // }
 
 
   kirimStatusLogout(String idPns) async {

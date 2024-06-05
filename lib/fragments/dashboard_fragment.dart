@@ -14,8 +14,8 @@ class FirstFragment extends StatefulWidget {
 
 }
 class _FirstFragmentState extends State<FirstFragment>{
-  var tarikanNamaUser,tarikanNIPUser, tarikanPangkatUser, tarikanJabatanUser, tarikanInstansiUser;
-  var tarikanNamaAtasan, tarikanNipAtasan, tarikanJabatanAtasan, tarikanInstansiAtasan;
+  String? tarikanNamaUser="",tarikanNIPUser="", tarikanPangkatUser="", tarikanJabatanUser="", tarikanInstansiUser="";
+  String? tarikanNamaAtasan, tarikanNipAtasan, tarikanJabatanAtasan, tarikanInstansiAtasan, tarikanPanggolAtasan;
   String username="", nama="",tokenlogin="";
   var loading = false;
   String? dataJson;
@@ -113,57 +113,56 @@ class _FirstFragmentState extends State<FirstFragment>{
     );
   }
 
-  Future<Null> getPref() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    setState(() {
-      tokenlogin = preferences.getString("tokenlogin")!;
-    });
-  }
+  // Future<Null> getPref() async {
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   setState(() {
+  //     tokenlogin = preferences.getString("tokenlogin")!;
+  //   });
+  // }
 
-  Future<Null> _fetchData()async{
-    setState(() {
-      loading = true;
-    });
-    SharedPreferences pref = await SharedPreferences.getInstance();
-
-    if(pref.getString("tarikNamaUser")!=null) {
-      tarikanNamaUser = pref.getString("tarikNamaUser");
-      tarikanNIPUser = pref.getString("niploginterakhir");
-      tarikanPangkatUser = pref.getString("tarikPangkatUser");
-      tarikanJabatanUser = pref.getString("tarikJabatanUser");
-      tarikanInstansiUser = pref.getString("tarikInstansiUser");
-
-      tarikanNamaAtasan = pref.getString("tarikNamaAtasan");
-      tarikanNipAtasan = pref.getString("tarikNipAtasan");
-      tarikanJabatanAtasan = pref.getString("tarikJabatanAtasan");
-      tarikanInstansiAtasan = pref.getString("tarikInstansiAtasan");
-      loading = false;
-    }else{
-      setState(() {
-        tokenlogin = pref.getString("tokenlogin")!;
-      });
-      final response = await http.get(Uri.parse(
-          ApiService.urlUtama + "rekam/dataDiri?token=" + tokenlogin));
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        //final _daftarPekerjaan = data['data'];
-        setState(() {
-          tarikanNamaUser = data["data"]["nama_gelar"];
-          tarikanPangkatUser = data["data"]["panggol"];
-          tarikanJabatanUser = data["data"]["jabatan"];
-          tarikanInstansiUser = data["data"]["unit_kerja"];
-
-          tarikanNamaAtasan = data["data"]["nama_gelar_atasan"];
-          tarikanNipAtasan = data["data"]["nip_atasan"];
-          tarikanJabatanAtasan = data["data"]["jabatan_atasan"];
-          tarikanInstansiAtasan = data["data"]["instansi_atas"];
-          loading = false;
-        });
-      } else {
-        Text("error bro");
-      }
-    }
-  }
+  // Future<Null> _fetchData()async{
+  //   setState(() {
+  //     loading = true;
+  //   });
+  //   SharedPreferences pref = await SharedPreferences.getInstance();
+  //
+  //   if(pref.getString("tarikNamaUser")!=null) {
+  //     tarikanNamaUser = pref.getString("tarikNamaUser");
+  //     tarikanNIPUser = pref.getString("niploginterakhir");
+  //     tarikanPangkatUser = pref.getString("tarikPangkatUser");
+  //     tarikanJabatanUser = pref.getString("tarikJabatanUser");
+  //     tarikanInstansiUser = pref.getString("tarikInstansiUser");
+  //
+  //     tarikanNamaAtasan = pref.getString("tarikNamaAtasan");
+  //     tarikanNipAtasan = pref.getString("tarikNipAtasan");
+  //     tarikanJabatanAtasan = pref.getString("tarikJabatanAtasan");
+  //     tarikanInstansiAtasan = pref.getString("tarikInstansiAtasan");
+  //     loading = false;
+  //   }else{
+  //     setState(() {
+  //       tokenlogin = pref.getString("tokenlogin")!;
+  //     });
+  //     final response = await http.get(Uri.parse(ApiService.urlUtama + "rekam/dataDiri?token=" + tokenlogin));
+  //     if (response.statusCode == 200) {
+  //       final data = jsonDecode(response.body);
+  //       //final _daftarPekerjaan = data['data'];
+  //       setState(() {
+  //         tarikanNamaUser = data["data"]["nama_gelar"];
+  //         tarikanPangkatUser = data["data"]["panggol"];
+  //         tarikanJabatanUser = data["data"]["jabatan"];
+  //         tarikanInstansiUser = data["data"]["unit_kerja"];
+  //
+  //         tarikanNamaAtasan = data["data"]["nama_gelar_atasan"];
+  //         tarikanNipAtasan = data["data"]["nip_atasan"];
+  //         tarikanJabatanAtasan = data["data"]["jabatan_atasan"];
+  //         tarikanInstansiAtasan = data["data"]["instansi_atas"];
+  //         loading = false;
+  //       });
+  //     } else {
+  //       Text("error bro");
+  //     }
+  //   }
+  // }
 
 //  getPref() async {
 //    SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -173,11 +172,85 @@ class _FirstFragmentState extends State<FirstFragment>{
 //    });
 //  }
 
+  _loadInitialData() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    if (pref.getString("tarikNamaUser") != null) {
+      setState(() {
+        tarikanNamaUser = pref.getString("tarikNamaUser");
+        tarikanNIPUser = pref.getString("niploginterakhir");
+        tarikanPangkatUser = pref.getString("tarikPangkatUser");
+        tarikanJabatanUser = pref.getString("tarikJabatanUser");
+        tarikanInstansiUser = pref.getString("tarikInstansiUser");
+
+        tarikanNamaAtasan = pref.getString("tarikNamaAtasan");
+        tarikanNipAtasan = pref.getString("tarikNipAtasan");
+        tarikanJabatanAtasan = pref.getString("tarikJabatanAtasan");
+        tarikanInstansiAtasan = pref.getString("tarikInstansiAtasan");
+        loading = false;
+      });
+
+      // Fetch the latest data while displaying the current data
+      tokenlogin = pref.getString("tokenlogin")!;
+      _fetchLatestData(tokenlogin);
+    } else {
+      // Directly fetch the latest data if SharedPreferences data is not available
+      tokenlogin = pref.getString("tokenlogin")!;
+      _fetchLatestData(tokenlogin);
+    }
+  }
+
+  _fetchLatestData(String token) async {
+    final response = await http.get(Uri.parse(ApiService.urlUtama + "rekam/dataDiri?token=" + token));
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      setState(() {
+        tarikanNamaUser = data["data"]["nama_gelar"];
+        tarikanNIPUser = data["data"]["nip_baru"];
+        tarikanPangkatUser = data["data"]["panggol"];
+        tarikanJabatanUser = data["data"]["jabatan"];
+        tarikanInstansiUser = data["data"]["unit_kerja"];
+
+        String? latestNamaAtasan = data["data"]["nama_gelar_atasan"]?? "Atasan tidak ditemukan";
+        String? latestNipAtasan = data["data"]["nip_atasan"]?? "Atasan tidak ditemukan";
+        String? latestJabatanAtasan = data["data"]["jabatan_atasan"]?? "Atasan tidak ditemukan";
+        String? latestInstansiAtasan = data["data"]["instansi_atas"]?? "Atasan tidak ditemukan";
+        String? pangkatAtasan = data["data"]["pangkat_atas"]?? "pangkat tidak ditemukan";
+        String? golonganAtasan = data["data"]["golongan_atas"]?? "golongan tidak ditemukan";
+        String? latestPanggolAtasan = pangkatAtasan! +" "+ golonganAtasan!;
+
+        // Check if the data is different and update if necessary
+        // if (tarikanNipAtasan != latestNipAtasan) {
+          tarikanNamaAtasan = latestNamaAtasan;
+          tarikanNipAtasan = latestNipAtasan;
+          tarikanJabatanAtasan = latestJabatanAtasan;
+          tarikanInstansiAtasan = latestInstansiAtasan;
+          tarikanPanggolAtasan = latestPanggolAtasan;
+
+          // Update SharedPreferences with the latest data
+
+          pref.setString("tarikNamaAtasan", tarikanNamaAtasan!);
+          pref.setString("tarikNipAtasan", tarikanNipAtasan!);
+          pref.setString("tarikJabatanAtasan", tarikanJabatanAtasan!);
+          pref.setString("tarikInstansiAtasan", tarikanInstansiAtasan!);
+          pref.setString("tarikPanggolAtasan", tarikanPanggolAtasan!);
+        // }
+      });
+    } else {
+      // Handle error
+      setState(() {
+        loading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Failed to fetch data")));
+    }
+  }
+
 @override
   void initState() {
     // TODO: implement initState
-  _fetchData();
-  getPref();
+  // _fetchData();
+  // getPref();
+  _loadInitialData();
   initializeDateFormatting('id_ID', null); // Initialize Indonesian locale
     super.initState();
   }
@@ -212,7 +285,8 @@ class _FirstFragmentState extends State<FirstFragment>{
   logOut() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
-      preferences.remove("is_login");
+      // preferences.remove("is_login");
+      preferences.setBool('is_login', false);
       // preferences.remove("email");
       // preferences.setString("niploginterakhir", tarikanNIPUser);
       preferences.remove("niplogin");
@@ -231,6 +305,7 @@ class _FirstFragmentState extends State<FirstFragment>{
       preferences.remove("tarikNipAtasan");
       preferences.remove("tarikJabatanAtasan");
       preferences.remove("tarikInstansiAtasan");
+      preferences.remove("tarikPanggolAtasan");
     });
 
     Navigator.pushAndRemoveUntil(
@@ -276,10 +351,11 @@ class _FirstFragmentState extends State<FirstFragment>{
                       Center(
                         child: Text("Data Pribadi", style: styleTitle),
                       ),
-                      buildDataRow("Nama", tarikanNamaUser,120.0),
-                      buildDataRow("Pangkat/Gol", tarikanPangkatUser,120.0),
-                      buildDataRow("Jabatan", tarikanJabatanUser,120.0),
-                      buildDataRow("Instansi", tarikanInstansiUser,120.0),
+                      buildDataRow("Nama", tarikanNamaUser ?? "Loading...",120.0),
+                      buildDataRow("NIP", tarikanNIPUser ?? "Loading...",120.0),
+                      buildDataRow("Pangkat/Gol", tarikanPangkatUser ?? "Loading...",120.0),
+                      buildDataRow("Jabatan", tarikanJabatanUser ?? "Loading...",120.0),
+                      buildDataRow("Instansi", tarikanInstansiUser ?? "Loading...",120.0),
                     ],
                   ),
                 ),
@@ -296,10 +372,11 @@ class _FirstFragmentState extends State<FirstFragment>{
                       Center(
                         child: Text("Verifikator Kinerja", style: styleTitle),
                       ),
-                      buildDataRow("Nama", tarikanNamaAtasan,120.0),
-                      buildDataRow("NIP", tarikanNipAtasan,120.0),
-                      buildDataRow("Jabatan", tarikanJabatanAtasan,120.0),
-                      buildDataRow("Instansi", tarikanInstansiAtasan,120.0),
+                      buildDataRow("Nama", tarikanNamaAtasan ?? "Loading...",120.0),
+                      buildDataRow("NIP", tarikanNipAtasan ?? "Loading...",120.0),
+                      buildDataRow("Jabatan", tarikanJabatanAtasan ?? "Loading...",120.0),
+                      buildDataRow("Pangkat/Gol", tarikanPanggolAtasan ?? "Loading...",120.0),
+                      buildDataRow("Instansi", tarikanInstansiAtasan ?? "Loading...",120.0),
                     ],
                   ),
                 ),
@@ -310,157 +387,258 @@ class _FirstFragmentState extends State<FirstFragment>{
                       child: new Column(
                         children: <Widget>[
                           FutureBuilder(
-                            future: ApiService().getDataPresensiBlnLalu(tokenlogin,"0"),
+                            future: ApiService().getAbsenBerjalan(tokenlogin),//ApiService().getDataPresensiBlnLalu(tokenlogin,"0"),
                             builder: (context, snapshot) {
-                              if (snapshot.connectionState == ConnectionState.waiting) {
-                                // Menampilkan indikator loading jika data masih diambil.
-                                return Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              } else if (snapshot.hasError) {
-                                // Menampilkan pesan error jika terjadi kesalahan saat mengambil data.
-                                return Center(
-                                  child: Text('Error: ${snapshot.error}'),
-                                );
-                              } else {
-                                // Menampilkan data dalam ExpansionTile.
-                                return ExpansionTile(
-                                  title: Text('Data Bulan '+getMonth(0)+" "+DateTime.now().year.toString()),
-                                  children: [
+                              return ExpansionTile(
+                                title: Text('Data Bulan ' + getMonth(0) + " " + DateTime.now().year.toString()),
+                                children: [
+                                  if (snapshot.connectionState == ConnectionState.waiting)
+                                    Center(child: CircularProgressIndicator()),
+                                  if (snapshot.hasError)
+                                    Center(child: Text('Error: ${snapshot.error}')),
+                                  if (snapshot.hasData)
                                     buildDataTable(snapshot.data as List),
-                                  ],
-                                );
-                              }
+                                ],
+                              );
+                              // if (snapshot.connectionState == ConnectionState.waiting) {
+                              //   // Menampilkan indikator loading jika data masih diambil.
+                              //   return Center(
+                              //     // child: CircularProgressIndicator(),
+                              //   );
+                              // } else if (snapshot.hasError) {
+                              //   // Menampilkan pesan error jika terjadi kesalahan saat mengambil data.
+                              //   return Center(
+                              //     child: Text('Error: ${snapshot.error}'),
+                              //   );
+                              // } else {
+                              //   // Menampilkan data dalam ExpansionTile.
+                              //   return ExpansionTile(
+                              //     title: Text('Data Bulan '+getMonth(0)+" "+DateTime.now().year.toString()),
+                              //     children: [
+                              //       buildDataTable(snapshot.data as List),
+                              //     ],
+                              //   );
+                              // }
                             },
                           ),
                           FutureBuilder(
-                            future: ApiService().getDataPresensiBlnLalu(tokenlogin,"1"),
+                            future: ApiService().getAbsenLalu(tokenlogin),//ApiService().getDataPresensiBlnLalu(tokenlogin,"1"),
                             builder: (context, snapshot) {
-                              if (snapshot.connectionState == ConnectionState.waiting) {
-                                // Menampilkan indikator loading jika data masih diambil.
-                                return Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              } else if (snapshot.hasError) {
-                                // Menampilkan pesan error jika terjadi kesalahan saat mengambil data.
-                                return Center(
-                                  child: Text('Error: ${snapshot.error}'),
-                                );
-                              } else {
-                                // Menampilkan data dalam ExpansionTile.
-                                return ExpansionTile(
-                                  title: Text('Data Bulan '+getMonth(1)+" "+DateTime.now().year.toString()),
-                                  children: [
-                                    new FutureBuilder(future: ApiService().getDataTamsil(tokenlogin,"1"),
-                                        builder: (context, datatamsil) {
+                              return ExpansionTile(
+                                title: Text('Data Bulan ' + getMonth(1) + " " + DateTime.now().year.toString()),
+                                children: [
+                                  if (snapshot.connectionState == ConnectionState.waiting)
+                                    Center(child: CircularProgressIndicator()),
+                                  if (snapshot.hasError)
+                                    Center(child: Text('Error: ${snapshot.error}')),
+                                  if (snapshot.hasData) ...[
+                                    FutureBuilder(
+                                      future: ApiService().getDataPaguCapaianLalu(tokenlogin),
+                                      builder: (context, datatamsil) {
+                                        if (datatamsil.connectionState == ConnectionState.waiting) {
+                                          return Center(child: CircularProgressIndicator());
+                                        } else if (datatamsil.hasError) {
+                                          return Center(child: Text('Error: ${datatamsil.error}'));
+                                        } else {
                                           Map<String, dynamic>? datatam = datatamsil.data as Map<String, dynamic>?;
-                                          if (datatamsil.connectionState == ConnectionState.waiting) {
-                                            // Menampilkan indikator loading jika data masih diambil.
-                                            return Center(
-                                              child: CircularProgressIndicator(),
-                                            );
-                                          } else if (datatamsil.hasError) {
-                                            // Menampilkan pesan error jika terjadi kesalahan saat mengambil data.
-                                            return Center(
-                                              child: Text('Error: ${datatamsil.error}'),
-                                            );
-                                          } else {
-                                            var kinerjaTpp = datatam!['kinerja_tpp'];
-                                            int totalWaktuDiakui = calculateTotalWaktuDiakui(kinerjaTpp);
-                                            // Menampilkan data pagu di atas ExpansionTile.
-                                            return Container(
-                                              padding: EdgeInsets.all(20.0),
-                                              decoration: BoxDecoration(
-                                                color: Colors.lime[200],
-                                                border: Border.all(
-                                                  color: Colors.yellow.shade100,
+                                          var kinerjaTpp = datatam!['kinerja_tpp'];
+                                          int totalWaktuDiakui = calculateTotalWaktuDiakui(kinerjaTpp);
+                                          return Container(
+                                            padding: EdgeInsets.all(20.0),
+                                            decoration: BoxDecoration(
+                                              color: Colors.lime[200],
+                                              border: Border.all(color: Colors.yellow.shade100),
+                                              borderRadius: BorderRadius.all(Radius.circular(20)),
+                                            ),
+                                            child: Column(
+                                              children: <Widget>[
+                                                Center(
+                                                  child: Text("Info Tamsil", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87)),
                                                 ),
-                                                borderRadius: BorderRadius.all(Radius.circular(20)),
-                                              ),
-                                              child: Column(
-                                                children: <Widget>[
-                                                  Center(
-                                                    child: Text("Info Tamsil", style:TextStyle(fontWeight: FontWeight.bold,color: Colors.black87)),
-                                                  ),
-                                                  // buildDataRow("Unit Kerja", datatamsil.data['unit_kerja_tpp'],160.0),
-                                                  // buildDataRow("Jabatan/Kelas", datatamsil.data['jabatan_tpp'],160.0),
-                                                  buildDataRowInfo("Pagu", formatCurrency(datatam!['pagu_tamsilpeg']),120.0),
-                                                  buildDataRowInfo("Realisasi", formatCurrency(datatam!['jumlah_tamsil_diterima']),120.0),
-                                                  buildDataRowInfo("Capaian", totalWaktuDiakui.toString()+"/6.751 menit",120.0), // Menampilkan total waktu diakui
-                                                ],
-                                              ),
-                                            );
-                                          }
-                                        }),
+                                                buildDataRowInfo("Pagu", formatCurrency(datatam!['pagu_tamsilpeg']), 120.0),
+                                                buildDataRowInfo("Realisasi", formatCurrency(datatam!['jumlah_tamsil_diterima']), 120.0),
+                                                buildDataRowInfo("Capaian", totalWaktuDiakui.toString() + "/6.751 menit", 120.0),
+                                              ],
+                                            ),
+                                          );
+                                        }
+                                      },
+                                    ),
                                     buildDataTable(snapshot.data as List),
                                   ],
-                                );
-                              }
+                                ],
+                              );
+
+                              // if (snapshot.connectionState == ConnectionState.waiting) {
+                              //   // Menampilkan indikator loading jika data masih diambil.
+                              //   return Center(
+                              //     // child: CircularProgressIndicator(),
+                              //   );
+                              // } else if (snapshot.hasError) {
+                              //   // Menampilkan pesan error jika terjadi kesalahan saat mengambil data.
+                              //   return Center(
+                              //     child: Text('Error: ${snapshot.error}'),
+                              //   );
+                              // } else {
+                              //   // Menampilkan data dalam ExpansionTile.
+                              //   return ExpansionTile(
+                              //     title: Text('Data Bulan '+getMonth(1)+" "+DateTime.now().year.toString()),
+                              //     children: [
+                              //       new FutureBuilder(future: ApiService().getDataTamsil(tokenlogin,"1"),
+                              //           builder: (context, datatamsil) {
+                              //             Map<String, dynamic>? datatam = datatamsil.data as Map<String, dynamic>?;
+                              //             if (datatamsil.connectionState == ConnectionState.waiting) {
+                              //               // Menampilkan indikator loading jika data masih diambil.
+                              //               return Center(
+                              //                 child: CircularProgressIndicator(),
+                              //               );
+                              //             } else if (datatamsil.hasError) {
+                              //               // Menampilkan pesan error jika terjadi kesalahan saat mengambil data.
+                              //               return Center(
+                              //                 child: Text('Error: ${datatamsil.error}'),
+                              //               );
+                              //             } else {
+                              //               var kinerjaTpp = datatam!['kinerja_tpp'];
+                              //               int totalWaktuDiakui = calculateTotalWaktuDiakui(kinerjaTpp);
+                              //               // Menampilkan data pagu di atas ExpansionTile.
+                              //               return Container(
+                              //                 padding: EdgeInsets.all(20.0),
+                              //                 decoration: BoxDecoration(
+                              //                   color: Colors.lime[200],
+                              //                   border: Border.all(
+                              //                     color: Colors.yellow.shade100,
+                              //                   ),
+                              //                   borderRadius: BorderRadius.all(Radius.circular(20)),
+                              //                 ),
+                              //                 child: Column(
+                              //                   children: <Widget>[
+                              //                     Center(
+                              //                       child: Text("Info Tamsil", style:TextStyle(fontWeight: FontWeight.bold,color: Colors.black87)),
+                              //                     ),
+                              //                     // buildDataRow("Unit Kerja", datatamsil.data['unit_kerja_tpp'],160.0),
+                              //                     // buildDataRow("Jabatan/Kelas", datatamsil.data['jabatan_tpp'],160.0),
+                              //                     buildDataRowInfo("Pagu", formatCurrency(datatam!['pagu_tamsilpeg']),120.0),
+                              //                     buildDataRowInfo("Realisasi", formatCurrency(datatam!['jumlah_tamsil_diterima']),120.0),
+                              //                     buildDataRowInfo("Capaian", totalWaktuDiakui.toString()+"/6.751 menit",120.0), // Menampilkan total waktu diakui
+                              //                   ],
+                              //                 ),
+                              //               );
+                              //             }
+                              //           }),
+                              //       buildDataTable(snapshot.data as List),
+                              //     ],
+                              //   );
+                              // }
                             },
                           ),
                           FutureBuilder(
-                            future: ApiService().getDataPresensiBlnLalu(tokenlogin,"2"),
+                            future: ApiService().getAbsenLusa(tokenlogin),//ApiService().getDataPresensiBlnLalu(tokenlogin,"2"),
                             builder: (context, snapshot) {
-                              if (snapshot.connectionState == ConnectionState.waiting) {
-                                // Menampilkan indikator loading jika data masih diambil.
-                                return Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              } else if (snapshot.hasError) {
-                                // Menampilkan pesan error jika terjadi kesalahan saat mengambil data.
-                                return Center(
-                                  child: Text('Error: ${snapshot.error}'),
-                                );
-                              } else {
-                                // Menampilkan data dalam ExpansionTile.
-                                return ExpansionTile(
-                                  title: Text('Data Bulan '+getMonth(2)+" "+DateTime.now().year.toString()),
-                                  children: [
-                                    new FutureBuilder(future: ApiService().getDataTamsil(tokenlogin,"2"),
-                                        builder: (context, datatamsil) {
+                              return ExpansionTile(
+                                title: Text('Data Bulan ' + getMonth(2) + " " + DateTime.now().year.toString()),
+                                children: [
+                                  if (snapshot.connectionState == ConnectionState.waiting)
+                                    Center(child: CircularProgressIndicator()),
+                                  if (snapshot.hasError)
+                                    Center(child: Text('Error: ${snapshot.error}')),
+                                  if (snapshot.hasData) ...[
+                                    FutureBuilder(
+                                      future: ApiService().getDataPaguCapaianLusa(tokenlogin),
+                                      builder: (context, datatamsil) {
+                                        if (datatamsil.connectionState == ConnectionState.waiting) {
+                                          return Center(child: CircularProgressIndicator());
+                                        } else if (datatamsil.hasError) {
+                                          return Center(child: Text('Error: ${datatamsil.error}'));
+                                        } else {
                                           Map<String, dynamic>? datatam = datatamsil.data as Map<String, dynamic>?;
-                                          if (datatamsil.connectionState == ConnectionState.waiting) {
-                                            // Menampilkan indikator loading jika data masih diambil.
-                                            return Center(
-                                              child: CircularProgressIndicator(),
-                                            );
-                                          } else if (datatamsil.hasError) {
-                                            // Menampilkan pesan error jika terjadi kesalahan saat mengambil data.
-                                            return Center(
-                                              child: Text('Error: ${datatamsil.error}'),
-                                            );
-                                          } else {
-                                            var kinerjaTpp = datatam!['kinerja_tpp'];
-                                            int totalWaktuDiakui = calculateTotalWaktuDiakui(kinerjaTpp);
-                                            // Menampilkan data pagu di atas ExpansionTile.
-                                            return Container(
-                                              padding: EdgeInsets.all(20.0),
-                                              decoration: BoxDecoration(
-                                                color: Colors.lime[200],
-                                                border: Border.all(
-                                                  color: Colors.yellow.shade100,
+                                          var kinerjaTpp = datatam!['kinerja_tpp'];
+                                          int totalWaktuDiakui = calculateTotalWaktuDiakui(kinerjaTpp);
+                                          return Container(
+                                            padding: EdgeInsets.all(20.0),
+                                            decoration: BoxDecoration(
+                                              color: Colors.lime[200],
+                                              border: Border.all(color: Colors.yellow.shade100),
+                                              borderRadius: BorderRadius.all(Radius.circular(20)),
+                                            ),
+                                            child: Column(
+                                              children: <Widget>[
+                                                Center(
+                                                  child: Text("Info Tamsil", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87)),
                                                 ),
-                                                borderRadius: BorderRadius.all(Radius.circular(20)),
-                                              ),
-                                              child: Column(
-                                                children: <Widget>[
-                                                  Center(
-                                                    child: Text("Info Tamsil", style: styleTitle),
-                                                  ),
-                                                  // buildDataRow("Unit Kerja", datatamsil.data['unit_kerja_tpp'],160.0),
-                                                  // buildDataRow("Jabatan/Kelas", datatamsil.data['jabatan_tpp'],160.0),
-                                                  buildDataRowInfo("Pagu", formatCurrency(datatam['pagu_tamsilpeg']),120.0),
-                                                  buildDataRowInfo("Realisasi", formatCurrency(datatam['jumlah_tamsil_diterima']),120.0),
-                                                  buildDataRowInfo("Capaian", totalWaktuDiakui.toString()+"/6.751 menit",120.0), // Menampilkan total waktu diakui
-                                                ],
-                                              ),
-                                            );
-                                          }
-                                        }),
+                                                buildDataRowInfo("Pagu", formatCurrency(datatam!['pagu_tamsilpeg']), 120.0),
+                                                buildDataRowInfo("Realisasi", formatCurrency(datatam!['jumlah_tamsil_diterima']), 120.0),
+                                                buildDataRowInfo("Capaian", totalWaktuDiakui.toString() + "/6.751 menit", 120.0),
+                                              ],
+                                            ),
+                                          );
+                                        }
+                                      },
+                                    ),
                                     buildDataTable(snapshot.data as List),
                                   ],
-                                );
-                              }
+                                ],
+                              );
+
+                              // if (snapshot.connectionState == ConnectionState.waiting) {
+                              //   // Menampilkan indikator loading jika data masih diambil.
+                              //   return Center(
+                              //     // child: CircularProgressIndicator(),
+                              //   );
+                              // } else if (snapshot.hasError) {
+                              //   // Menampilkan pesan error jika terjadi kesalahan saat mengambil data.
+                              //   return Center(
+                              //     child: Text('Error: ${snapshot.error}'),
+                              //   );
+                              // } else {
+                              //   // Menampilkan data dalam ExpansionTile.
+                              //   return ExpansionTile(
+                              //     title: Text('Data Bulan '+getMonth(2)+" "+DateTime.now().year.toString()),
+                              //     children: [
+                              //       new FutureBuilder(future: ApiService().getDataTamsil(tokenlogin,"2"),
+                              //           builder: (context, datatamsil) {
+                              //             Map<String, dynamic>? datatam = datatamsil.data as Map<String, dynamic>?;
+                              //             if (datatamsil.connectionState == ConnectionState.waiting) {
+                              //               // Menampilkan indikator loading jika data masih diambil.
+                              //               return Center(
+                              //                 child: CircularProgressIndicator(),
+                              //               );
+                              //             } else if (datatamsil.hasError) {
+                              //               // Menampilkan pesan error jika terjadi kesalahan saat mengambil data.
+                              //               return Center(
+                              //                 child: Text('Error: ${datatamsil.error}'),
+                              //               );
+                              //             } else {
+                              //               var kinerjaTpp = datatam!['kinerja_tpp'];
+                              //               int totalWaktuDiakui = calculateTotalWaktuDiakui(kinerjaTpp);
+                              //               // Menampilkan data pagu di atas ExpansionTile.
+                              //               return Container(
+                              //                 padding: EdgeInsets.all(20.0),
+                              //                 decoration: BoxDecoration(
+                              //                   color: Colors.lime[200],
+                              //                   border: Border.all(
+                              //                     color: Colors.yellow.shade100,
+                              //                   ),
+                              //                   borderRadius: BorderRadius.all(Radius.circular(20)),
+                              //                 ),
+                              //                 child: Column(
+                              //                   children: <Widget>[
+                              //                     Center(
+                              //                       child: Text("Info Tamsil", style: styleTitle),
+                              //                     ),
+                              //                     // buildDataRow("Unit Kerja", datatamsil.data['unit_kerja_tpp'],160.0),
+                              //                     // buildDataRow("Jabatan/Kelas", datatamsil.data['jabatan_tpp'],160.0),
+                              //                     buildDataRowInfo("Pagu", formatCurrency(datatam['pagu_tamsilpeg']),120.0),
+                              //                     buildDataRowInfo("Realisasi", formatCurrency(datatam['jumlah_tamsil_diterima']),120.0),
+                              //                     buildDataRowInfo("Capaian", totalWaktuDiakui.toString()+"/6.751 menit",120.0), // Menampilkan total waktu diakui
+                              //                   ],
+                              //                 ),
+                              //               );
+                              //             }
+                              //           }),
+                              //       buildDataTable(snapshot.data as List),
+                              //     ],
+                              //   );
+                              // }
                             },
                           ),
                         ],

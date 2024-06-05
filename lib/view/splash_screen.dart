@@ -16,15 +16,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-    Timer(const Duration(seconds: 2), () {
-      toHomePage();
-    });
-
+    toHomePage();
     super.initState();
   }
 
   toHomePage() {
-    Timer(const Duration(seconds: 3), () {
+    Timer(const Duration(seconds: 1), () {
       Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => const PageLogin()));
     });
@@ -39,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             AnimatedSwitcher(
-              duration: const Duration(seconds: 2),
+              duration: const Duration(milliseconds: 500),
               transitionBuilder: (Widget child, Animation<double> animation) {
                 return ScaleTransition(scale: animation, child: child);
               },

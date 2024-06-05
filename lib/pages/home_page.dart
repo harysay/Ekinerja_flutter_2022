@@ -3,6 +3,7 @@ import 'package:ekinerja2020/fragments/rekamaktivitas_fragment.dart';
 import 'package:ekinerja2020/fragments/laporan_fragment.dart';
 import 'package:ekinerja2020/fragments/about_fragment.dart';
 import 'package:ekinerja2020/fragments/skp_fragment.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:ekinerja2020/fragments/verifikasi_fragment.dart';
 import 'package:ekinerja2020/pages/page_login.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,9 @@ class _HomePageState extends State<HomePage> {
   ApiService api = new ApiService();
   int _selectedDrawerIndex = 0;
   String username = "", nama = "", linkfoto = "", ideselon="",jabat="";
+  // var loadingGrade = false;
   var loading = false;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Future<Null> _getLamaAktivitas()async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -45,15 +48,16 @@ class _HomePageState extends State<HomePage> {
         String tarikNamaUser, tarikPangkatUser, tarikJabatanUser, tarikInstansiUser,tarikNamaAtasan, tarikNipAtasan, tarikJabatanAtasan, tarikInstansiAtasan;
         tarikanLamaAktivitas = data["data"]["lama_aktivitas"];
         tarikanGrade = data["data"]["grade"];
+        // loadingGrade = false;
 
         tarikNamaUser = data["data"]["nama"];
         tarikPangkatUser = data["data"]["panggol"];
         tarikJabatanUser = data["data"]["jabatan"];
         tarikInstansiUser = data["data"]["unit_kerja"];
-        tarikNamaAtasan = data["data"]["nama_atasan"];
-        tarikNipAtasan = data["data"]["nip_atasan"];
-        tarikJabatanAtasan = data["data"]["jabatan_atasan"];
-        tarikInstansiAtasan = data["data"]["instansi_atas"];
+        tarikNamaAtasan = data["data"]["nama_atasan"]?? "Data atasan tidak ditemukan";
+        tarikNipAtasan = data["data"]["nip_atasan"]?? "Data atasan tidak ditemukan";
+        tarikJabatanAtasan = data["data"]["jabatan_atasan"]?? "Data atasan tidak ditemukan";
+        tarikInstansiAtasan = data["data"]["instansi_atas"]?? "Data atasan tidak ditemukan";
 
         preferences.setString("tarikNamaUser", tarikNamaUser);
         preferences.setString("tarikPangkatUser", tarikPangkatUser);
@@ -66,7 +70,12 @@ class _HomePageState extends State<HomePage> {
         loading = false;
       });
     }else{
-      Text("error bro");
+      setState(() {
+        loading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to fetch data')),
+      );
     }
   }
 
@@ -110,36 +119,46 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  // logOut() async {
-  //   SharedPreferences preferences = await SharedPreferences.getInstance();
-  //   setState(() {
-  //     preferences.remove("is_login");
-  //     // preferences.remove("email");
-  //     preferences.remove("niplogin");
-  //     preferences.remove("tokenlogin");
-  //     preferences.remove("namalogin");
-  //     preferences.remove("fotoLogin");
-  //     preferences.remove("ideselon");
-  //     preferences.remove("jabatan");
-  //     preferences.remove("id_pns");
-  //   });
-  //
-  //   Navigator.pushAndRemoveUntil(
-  //     context,
-  //     MaterialPageRoute(
-  //       builder: (BuildContext context) => const PageLogin(),
-  //     ),
-  //         (route) => false,
-  //   );
-  //
-  //   ScaffoldMessenger.of(context).showSnackBar(
-  //     const SnackBar(
-  //         content: Text(
-  //           "Berhasil logout",
-  //           style: TextStyle(fontSize: 16),
-  //         )),
-  //   );
-  // }
+  logOut() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    // setState(() {
+      preferences.remove("is_login");
+      // preferences.remove("email");
+      // preferences.setString("niploginterakhir", tarikanNIPUser);
+      preferences.remove("niplogin");
+      preferences.remove("tokenlogin");
+      preferences.remove("namalogin");
+      preferences.remove("fotoLogin");
+      preferences.remove("ideselon");
+      preferences.remove("jabatan");
+      preferences.remove("id_pns");
+
+      preferences.remove("tarikNamaUser");
+      preferences.remove("tarikPangkatUser");
+      preferences.remove("tarikJabatanUser");
+      preferences.remove("tarikInstansiUser");
+      preferences.remove("tarikNamaAtasan");
+      preferences.remove("tarikNipAtasan");
+      preferences.remove("tarikJabatanAtasan");
+      preferences.remove("tarikInstansiAtasan");
+      preferences.remove("tarikPanggolAtasan");
+    // });
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => const PageLogin(),
+      ),
+          (route) => false,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+          content: Text(
+            "Berhasil logout",
+            style: TextStyle(fontSize: 16),
+          )),
+    );
+  }
 
   @override
   void initState() {
@@ -160,16 +179,13 @@ class _HomePageState extends State<HomePage> {
         case 1:
           return new SecondFragment();
         case 2:
-          return new VerifikasiFragment();
+          return new VerifikasiFragment(tokenLogin: tarikanToken);
         case 3:
           return new ThirdFragment();
         // case 4:
         //   return new SkpFragment(); //aktifkan jika menu SKP siap
         case 4:
           return new AboutFragment();
-        // case 6:
-        //   return logOut();
-
         default:
           return new Text("Error");
       }
@@ -185,9 +201,6 @@ class _HomePageState extends State<HomePage> {
         //   return new SkpFragment(); //aktifkan jika menu SKP siap
         case 3:
           return new AboutFragment();
-        // case 5:
-        //   return logOut();
-
         default:
           return new Text("Error");
       }
@@ -212,16 +225,23 @@ class _HomePageState extends State<HomePage> {
         onTap: () => _onSelectItem(i),
       ));
     }
+    drawerOptions.add(Divider());
+    drawerOptions.add(ListTile(
+      leading: Icon(Icons.call_missed_outgoing),
+      title: Text("Keluar"),
+      onTap: () {
+        Navigator.of(context).pop();
+        logOut();
+      },
+    ));
 
     return new Scaffold(
+      key: _scaffoldKey,
       appBar: new AppBar(
-        // here we display the title corresponding to the fragment
-        // you can instead choose to have a static title
         title: new Text(drawerItems[_selectedDrawerIndex].title),
       ),
       drawer: new Drawer(
-        child: loading ? Center(child: CircularProgressIndicator())
-            : new Column(
+        child: new Column(
           children: <Widget>[
             new UserAccountsDrawerHeader(
               accountName: new Text(nama),
@@ -237,16 +257,26 @@ class _HomePageState extends State<HomePage> {
                         child: Row(
                           children: <Widget>[
                             Text('Telah bekerja: ',style: TextStyle(fontSize: 11, fontFamily: 'Nunito')),
+                            loading
+                                ? SpinKitThreeBounce(
+                              color: Colors.white,
+                              size: 10.0,
+                            ) :
                             Text(tarikanLamaAktivitas,style: TextStyle(fontSize: 11, fontFamily: 'Nunito')),
-                            Text(' jam',style: TextStyle(fontSize: 11, fontFamily: 'Nunito')),
+                            Text(' menit',style: TextStyle(fontSize: 11, fontFamily: 'Nunito')),
                           ],
                         ),
                       ),
                       Expanded(
                         child: Row(
                           children: <Widget>[
-                            Text('Grade: ',style: TextStyle(fontSize: 11, fontFamily: 'Nunito')),
-                            Text(tarikanGrade,style: TextStyle(fontSize: 11, fontFamily: 'Nunito')),
+                            Text('Grade: ', style: TextStyle(fontSize: 11, fontFamily: 'Nunito')),
+                            loading
+                                ? SpinKitThreeBounce(
+                              color: Colors.white,
+                              size: 10.0,
+                            )
+                                :  Text(tarikanGrade, style: TextStyle(fontSize: 11, fontFamily: 'Nunito')),
                           ],
                         ),
                       ),
@@ -272,6 +302,11 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       body: _getDrawerItemWidget(_selectedDrawerIndex),
+      onDrawerChanged: (isOpen) {
+        if (isOpen) {
+          _getLamaAktivitas();
+        }
+      },
     );
   }
 }

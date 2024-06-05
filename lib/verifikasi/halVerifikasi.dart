@@ -346,7 +346,7 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
             setState(() {});
             ShowFunctions.showToast(msg: "Semua aktivitas berhasil disetujui!");
             Navigator.of(context, rootNavigator: true).pop(true);
-            // Navigator.pop(_scaffoldState.currentState!.context, true);
+            Navigator.pop(context, true);
             // Navigator.pop(_scaffoldState.currentState!.context, true);
           },
         ),
@@ -395,9 +395,13 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
           elevationSelection: 2.0,
           selectionController: selectionController!,
           actions: [
-            if (!selectionController!.inSelection)
-              IconButton(
-                icon: const Icon(Icons.check),
+            if (!selectionController!.inSelection && selectionController!.loadedAktivitas.length!=0)
+              TextButton.icon(
+                icon: Icon(Icons.check, color: Colors.white),
+                label: Text(
+                  "Setujui Semua",
+                  style: TextStyle(color: Colors.white),
+                ),
                 onPressed: _handleSetujuiSemua,
               ),
           ],
@@ -576,7 +580,6 @@ class _AktivitasListTabState extends State<AktivitasListTab>
     return FutureBuilder(
       future: api.getAllActivityVer(widget.tokenlog!, widget.idpnsget!),
       builder: (BuildContext context, AsyncSnapshot<List<DaftarAktivitas>?> snapshot){
-
         if((snapshot.hasData)){
           semuaAktivitas = snapshot.data!;
           if (semuaAktivitas.length == 0){

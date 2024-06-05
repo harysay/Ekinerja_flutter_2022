@@ -43,7 +43,7 @@ android {
         targetSdkVersion 34
         //multiDexEnabled true
         versionCode 14//flutterVersionCode.toInteger()
-        versionName "Version 6.2.pb.14052024"//flutterVersionName
+        versionName "Version 6.2.pb.22052024"//flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
