@@ -28,10 +28,22 @@ class UpdateApp extends StatefulWidget {
 class _UpdateAppState extends State<UpdateApp> {
   String? statusRun,getVersionLastServer;
   String? kUpdateDialogKeyName;
+  String? versionName;
+  String? versionCode;
 //  int getVersionLastServer;
   @override
   void initState() {
     super.initState();
+    _initPackageInfo();
+
+  }
+
+  Future<void> _initPackageInfo() async {
+    final PackageInfo info = await PackageInfo.fromPlatform();
+    setState(() {
+      versionName = info.version;
+      versionCode = info.buildNumber;
+    });
     checkLatestVersion(context);
   }
 
@@ -51,7 +63,7 @@ class _UpdateAppState extends State<UpdateApp> {
       //Parse the result here to get the info
       //AppVersion appVersion = response.results[0] as AppVersion;
       String minAppVersion = getVersionLastServer!;
-      String latestAppVersion = ApiService.versionCodeSekarang;
+      String? latestAppVersion = versionCode;//ApiService.versionCodeSekarang;
 
 
 
@@ -60,7 +72,7 @@ class _UpdateAppState extends State<UpdateApp> {
           context,
           "Silahkan update/install ulang aplikasi Anda di playstore untuk melanjutkan",
         );
-      } else if (int.parse(latestAppVersion) > int.parse(currentVersion)) {
+      } else if (int.parse(latestAppVersion!) > int.parse(currentVersion)) {
         SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
         bool showUpdates = false;

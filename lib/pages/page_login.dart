@@ -6,6 +6,7 @@ import 'package:ekinerja2020/service/ApiService.dart';
 import 'package:ekinerja2020/widgets/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PageLogin extends StatefulWidget {
@@ -39,6 +40,8 @@ class _PageLoginState extends State<PageLogin> {
   var txtEditPwd = TextEditingController();
   String getNipTerakhir="";
   LoginStatus? _loginStatus;
+  String? versionName;
+  String? versionCode;
 
   // membuat show hide password
   bool _secureText = true;
@@ -216,25 +219,16 @@ class _PageLoginState extends State<PageLogin> {
     });
   }
 
-  // void ceckLogin() async {
-  //   SharedPreferences pref = await SharedPreferences.getInstance();
-  //   var islogin = pref.getBool("is_login");
-  //   if (pref.getString("niploginterakhir")!=""){
-  //     getNipTerakhir = pref.getString("niploginterakhir")!;
-  //     txtEditUsername.text = getNipTerakhir;
-  //   }
-  //
-  //   if (islogin != null && islogin) {
-  //     Navigator.pushAndRemoveUntil(
-  //       context,
-  //       MaterialPageRoute(
-  //         builder: (BuildContext context) => const HomePage(),
-  //       ),
-  //           (route) => false,
-  //     );
-  //   }
-  // }
+  Future<void> _initPackageInfo() async {
+    final PackageInfo info = await PackageInfo.fromPlatform();
+    setState(() {
+      versionName = info.version;
+      versionCode = info.buildNumber;
+    });
+  }
+
   void ceckLogin() async {
+    _initPackageInfo();
     SharedPreferences pref = await SharedPreferences.getInstance();
     var islogin = pref.getBool("is_login");
     // Mendapatkan nilai dari SharedPreferences dan memberikan nilai default jika null
@@ -357,8 +351,7 @@ class _PageLoginState extends State<PageLogin> {
                 child: Container(
                   padding: const EdgeInsets.all(20.0),
                   alignment: Alignment.center,
-                  child: Text(
-                    ApiService.versionBuildSekarang,
+                  child: Text('$versionName (Build $versionCode)',
                     style: const TextStyle(decoration: TextDecoration.underline),
                   ),
                 ),

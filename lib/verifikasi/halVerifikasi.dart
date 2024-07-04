@@ -172,10 +172,6 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
            });
             //setujui(element.idDataKinerja,element.waktuDiakui,element.tglKinerja);
           });
-//          Navigator.pop(context, "Berhasil Disetujui!");
-//          Navigator.pop(context);
-//          Navigator.pop(context, true);
-//          Navigator.pop(context, true);
           ShowFunctions.showToast(msg: "Berhasil Disetujui!");
           Navigator.of(context, rootNavigator: true).pop(true);
 //          Navigator.pop(_scaffoldState.currentState.context,true);
@@ -185,13 +181,6 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
         text: "Batal",
         onPressed: () {
           selectionController!.close();
-//          selectionController.loadedAktivitas.forEach((element)async{
-//            setujui(element.idDataKinerja,element.waktuDiakui,element.tglKinerja);
-//          });
-//          Navigator.pop(context);
-//          Navigator.pop(context, true);
-//          Navigator.pop(context, true);
-//          ShowFunctions.showToast(msg: "Berhasil Disetujui!");
           Navigator.of(context, rootNavigator: true).pop(true);
 //          Navigator.pop(_scaffoldState.currentState.context,true);
         },
@@ -225,10 +214,6 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
               });
               //setujui(element.idDataKinerja,element.waktuDiakui,element.tglKinerja);
             });
-//            Navigator.pop(context, "Berhasil Disetujui!");
-//            Navigator.pop(context);
-//            Navigator.pop(context, true);
-//            Navigator.pop(context, true);
             ShowFunctions.showToast(msg: "Berhasil Ditolak!");
           Navigator.of(context, rootNavigator: true).pop(true);
 //          Navigator.pop(_scaffoldState.currentState.context,true);
@@ -238,12 +223,6 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
           text: "Batal",
           onPressed: () {
             selectionController!.close();
-//          selectionController.loadedAktivitas.forEach((element)async{
-//            setujui(element.idDataKinerja,element.waktuDiakui,element.tglKinerja);
-//          });
-//            Navigator.pop(context);
-//          Navigator.pop(context, true);
-//          ShowFunctions.showToast(msg: "Berhasil Disetujui!");
           Navigator.of(context, rootNavigator: true).pop(true);
 //          Navigator.pop(_scaffoldState.currentState.context,true);
           },
@@ -252,9 +231,6 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
     this.setState(() {
 
     });
-    //ContentControl.deleteSongs(selectionController.selectionSet);
-//    Scaffold.of(context).showSnackBar(SnackBar(content: Text(selectionController.loadedAktivitas.first.toString())));
-    //semuaAktivitas.add(selectionController.selectionSet)
 
   }
   void _handleKembalikan() {
@@ -282,10 +258,6 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
               });
               //setujui(element.idDataKinerja,element.waktuDiakui,element.tglKinerja);
             });
-//            Navigator.pop(context, "Berhasil Disetujui!");
-//            Navigator.pop(context);
-//            Navigator.pop(context, true);
-//            Navigator.pop(context, true);
             ShowFunctions.showToast(msg: "Berhasil Dikembalikan!");
           Navigator.of(context, rootNavigator: true).pop(true);
 //          Navigator.pop(_scaffoldState.currentState.context,true);
@@ -295,12 +267,6 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
           text: "Batal",
           onPressed: () {
             selectionController!.close();
-//          selectionController.loadedAktivitas.forEach((element)async{
-//            setujui(element.idDataKinerja,element.waktuDiakui,element.tglKinerja);
-//          });
-//            Navigator.pop(context);
-//          Navigator.pop(context, true);
-//          ShowFunctions.showToast(msg: "Berhasil Disetujui!");
           Navigator.of(context, rootNavigator: true).pop(true);
 //          Navigator.pop(_scaffoldState.currentState.context,true);
           },
@@ -339,10 +305,6 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
               });
               //setujui(element.idDataKinerja,element.waktuDiakui,element.tglKinerja);
             });
-            // for (var element in selectionController!.loadedAktivitas) {
-            //   print('Menyetujui aktivitas: ${element.idDataKinerja}');
-            //   await api.setujuiAktivitas(tokenlogin, element.idDataKinerja!, element.waktuDiakui!, element.tglKinerja!);
-            // }
             setState(() {});
             ShowFunctions.showToast(msg: "Semua aktivitas berhasil disetujui!");
             Navigator.of(context, rootNavigator: true).pop(true);

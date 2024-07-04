@@ -4,6 +4,7 @@ import 'package:ekinerja2020/service/ApiService.dart';
 class AboutPage extends StatelessWidget {
   final List<VersionInfo> versionInfoList = [
     // Tambahkan item perbaikan untuk versi-versi lain di atas sini
+    VersionInfo(version: "6.3.pb.20062024", author: "Imanaji Hari Sayekti", changes: "Perbaikan jika data atasan null, memepercepat load verifikasi dan dashboard, tambah field nip dan panggol di dashboard, reload navbar grade dan capaian"),
     VersionInfo(version: "6.2.pb.22052024", author: "Imanaji Hari Sayekti", changes: "Perbaikan jumlah diakui verifikasi, peringatan input, delete tidak bisa,selesai edit tidak refresh,fitur verifikasi semua"),
     VersionInfo(version: "6.1.pb.23042024", author: "Imanaji Hari Sayekti", changes: "Perubahan logo pemkab kebumen yang benar"),
     VersionInfo(version: "5.2.pb.21112023", author: "Imanaji Hari Sayekti", changes: "Perbaikan tampilan form tambah, perbaikan tampilan saat dark mode"),

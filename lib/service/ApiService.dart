@@ -13,72 +13,26 @@ import 'package:ekinerja2020/response/daftar_pegawaiverifikasi_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
-  String username="", nama="",tokenlogin="";
+  String username="", nama=""; //,tokenlogin="";
   List? jsonku;
-
-  //Development
-  // String urlGetdataPribadi = "https://development.kebumenkab.go.id/siltapkin/2020/index.php/api/rekam/dataDiri?token=";
-  // static String baseUrl = "https://development.kebumenkab.go.id/siltapkin/2020/index.php/api/rekam/";
-  // static String baseUrlLogin = "https://development.kebumenkab.go.id/siltapkin/2020/index.php/api/login/proseslogin";
-  // static String baseTampilPegawaiVerifikasi = "https://development.kebumenkab.go.id/siltapkin/2020/index.php/api/verifikasi/";
-  // static String baseLaporan = "https://development.kebumenkab.go.id/siltapkin/2020/index.php/api/laporan/";
-  // static String baseStatusLogout = "https://development.kebumenkab.go.id/siltapkin/2020/index.php/api/Login/proses_logout";
-  // static String baseStatusRunning = "https://development.kebumenkab.go.id/siltapkin/2020/index.php/api/status/running";
-  // static String baseSudahverfiPribadi = "https://development.kebumenkab.go.id/siltapkin/2020/index.php/api/rekam/verif_individu_bulanan?token=";
-  // String baseDaftarPekerjaan = "https://development.kebumenkab.go.id/siltapkin/2020/index.php/api/master_data/pekerjaan_lepas?token=";
-  // static String versionCodeSekarang = "9"; //harus sama dengan version di buildernya
-  // static String versionBuildSekarang = "Version 2.0.db.27082021";
 
   // static String urlUtama = "https://development.kebumenkab.go.id/siltapkin/index.php/api/";
   static String urlUtama = "https://tukin.kebumenkab.go.id/api/";
   // static String urlUtama = "https://tukin.kebumenkab.go.id/2020/index.php/api/";
-  static String versionCodeSekarang = "14"; //harus sama dengan version di buildernya
-  static String tahunSekarang = "2024";
-  static String versionBuildSekarang = "Version 6.2.pb.22052024";
+  // static String versionCodeSekarang = "15"; //harus sama dengan version di build.gradle app-nya
+  // static String tahunSekarang = DateTime.now().year.toString();//"2024";
+  // static String versionBuildSekarang = "Version 6.3.pb.20062024";
 
-  // String urlGetdataPribadi = "https://development.kebumenkab.go.id/siltapkin/index.php/api/rekam/dataDiri?token=";
-  // static String baseUrl = "https://development.kebumenkab.go.id/siltapkin/index.php/api/rekam/";
-  // static String baseUrlLogin = "https://development.kebumenkab.go.id/siltapkin/index.php/api/login/proseslogin";
-  // static String baseTampilPegawaiVerifikasi = "https://development.kebumenkab.go.id/siltapkin/index.php/api/verifikasi/";
-  // static String baseLaporan = "https://development.kebumenkab.go.id/siltapkin/index.php/api/laporan/";
-  // static String baseStatusLogout = "https://development.kebumenkab.go.id/siltapkin/index.php/api/Login/proses_logout";
-  // static String baseStatusRunning = "https://development.kebumenkab.go.id/siltapkin/index.php/api/status/running";
-  // static String baseSudahverfiPribadi = "https://development.kebumenkab.go.id/siltapkin/index.php/api/rekam/verif_individu_bulanan?token=";
-  // String baseDaftarPekerjaan = "https://development.kebumenkab.go.id/siltapkin/index.php/api/master_data/pekerjaan_lepas?token=";
-
-
-  //Production
- // String urlGetdataPribadi = "https://tukin.kebumenkab.go.id/api/rekam/dataDiri?token=";
- // static String baseUrl = "https://tukin.kebumenkab.go.id/api/rekam/";
- // static String baseUrlLogin = "https://tukin.kebumenkab.go.id/api/login/proseslogin";
- // static String baseTampilPegawaiVerifikasi = "https://tukin.kebumenkab.go.id/api/verifikasi/";
- // static String baseLaporan = "https://tukin.kebumenkab.go.id/api/laporan/";
- // static String baseStatusLogout = "https://tukin.kebumenkab.go.id/api/Login/proses_logout";
- // static String baseStatusRunning = "https://tukin.kebumenkab.go.id/api/status/running";
- // static String baseSudahverfiPribadi = "https://tukin.kebumenkab.go.id/api/rekam/verif_individu_bulanan?token=";
- // String baseDaftarPekerjaan = "https://tukin.kebumenkab.go.id/api/master_data/pekerjaan_lepas?token=";
- // static String versionCodeSekarang = "10"; //harus sama dengan version di buildernya
- // static String versionBuildSekarang = "Version 2.0.pb.30112021";
-
-
-
-//  String baseUrlVerifikasi = "https://development.kebumenkab.go.id/siltapkin/2020/index.php/api/verifikasi/tampilpegawaidetail?token="+tokenlogin+"&id_pns=";
-//  @override
-//  void initState() {
-//    // TODO: implement initState
-//    getPrefFromApi();
-//  }
-
-  getPrefFromApi() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    tokenlogin = preferences.getString("tokenlogin")!;
-  }
+  // getPrefFromApi() async {
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   tokenlogin = preferences.getString("tokenlogin")!;
+  // }
 
 
   DaftarPegawaiVerifikasiResponse pegawairesponse = new DaftarPegawaiVerifikasiResponse();
   Future<List<DaftarPegawaiVerifikasi>?> getAllPegawaiVer(String tokenDafAktiv) async {
     //Map<String, dynamic> inputMap = {'DEMO-API-KEY': '$key'};
-    getPrefFromApi();
+    // getPrefFromApi();
     final response = await http.post(Uri.parse(
       ApiService.urlUtama+"verifikasi/tampilpegawai?token="+tokenDafAktiv),
 //      headers: {
@@ -101,7 +55,7 @@ class ApiService {
   //get data detail pegawai yang mau diverifikasi oleh verifikator saja
   DaftarListPegawaiVerifikasiResponse listpegawairesponse = new DaftarListPegawaiVerifikasiResponse();
   Future<List<DaftarListPegawaiVerifikasi>?> getDetailPegawaiDiVer(String tokenDafAktiv) async {
-    getPrefFromApi();
+    // getPrefFromApi();
     final response = await http.post(Uri.parse(
         ApiService.urlUtama+"verifikasi/list_Pegawai_staf?token="+tokenDafAktiv),
     );
@@ -117,7 +71,7 @@ class ApiService {
   //get data bulan ini bulan lalu menit sudah dari pegawai yang mau diverifikasi oleh verifikator by id pns
   DaftarBulanSemuaVerifikasiResponse listBulanMenitresponse = new DaftarBulanSemuaVerifikasiResponse();
   Future<List<DaftarBulanSemuaVerifikasi>?> getBulanMenitPegawaiDiVer(String tokenDafAktiv,String idPns) async {
-    getPrefFromApi();
+    // getPrefFromApi();
     final response = await http.post(Uri.parse(
         ApiService.urlUtama+"verifikasi/bulan_semua?token="+tokenDafAktiv+"&id_pns="+idPns),
     );
@@ -143,9 +97,9 @@ class ApiService {
   }
 
   DaftarSkpResponse allSkp = new DaftarSkpResponse();
-  Future<List<DaftarSkp>?> getSemuaSkp()async{
-    await getPrefFromApi();
-    final response = await http.get(Uri.parse(ApiService.urlUtama+"skp/daftar_skp?token="+tokenlogin));
+  Future<List<DaftarSkp>?> getSemuaSkp( String tokenLemparan)async{
+    // await getPrefFromApi();
+    final response = await http.get(Uri.parse(ApiService.urlUtama+"skp/daftar_skp?token="+tokenLemparan));
     allSkp = DaftarSkpResponse.fromJson(json.decode(response.body));
     if (response.statusCode == 200) {
       List<DaftarSkp> data = allSkp.data!;
@@ -321,7 +275,7 @@ class ApiService {
   }
 
   Future<bool> delete(String idDataKinerja, String tokenDelete) async {
-    getPrefFromApi();
+    // getPrefFromApi();
     // Map<String, dynamic> inputMap = {
     //   //'DEMO-API-KEY': '$key',
     //   'id_data_kinerja': idDataKinerja
@@ -418,16 +372,6 @@ class ApiService {
     } else{
       return null;
     }
-//    lapIndividu = DaftarAktivitasResponse.fromJson(json.decode(response.body));
-//    if (response.statusCode == 200) {
-//      if(lapIndividu.status == "true"){
-//        var data = lapIndividu.data;
-//        return data;
-//      }
-//
-//    } else {
-//      return null;
-//    }
   }
 
   laporanInividuTahunan(String tokenByID, String tahunGet) async {
@@ -535,6 +479,5 @@ class ApiService {
       return null;
     }
   }
-
 
 }

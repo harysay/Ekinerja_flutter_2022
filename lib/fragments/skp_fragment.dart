@@ -117,7 +117,7 @@ class _SkpFragmentState extends State<SkpFragment>{
     return Scaffold(
       key: _scaffoldState,
       body: FutureBuilder<List<DaftarSkp>?>(
-        future: api.getSemuaSkp(),
+        future: api.getSemuaSkp(tokenlistaktivitas),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             semuaSkp = snapshot.data!;

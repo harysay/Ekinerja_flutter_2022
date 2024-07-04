@@ -143,12 +143,13 @@ class JsonImageListWidget extends State<VerifikasiFragment> {
                                 title: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Flexible(
+                                    FittedBox(
+                                      fit: BoxFit.scaleDown,
                                       child: Text(
                                         data.namaPgawai!,
                                         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                       ),
-                                    )
+                                    ),
                                   ],
                                 ),
                                 subtitle: FutureBuilder<List<DaftarBulanSemuaVerifikasi>?>(
