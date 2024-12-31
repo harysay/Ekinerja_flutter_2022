@@ -140,7 +140,7 @@ class _SecondFragmentState extends State<SecondFragment> with TickerProviderStat
                           return Center(
                             child: Text(
                               "Tidak Ada Data",
-                              style: Theme.of(context).textTheme.bodyText1,
+                              style: Theme.of(context).textTheme.bodyLarge,
                             ),
                           );
                         } else {
@@ -193,7 +193,7 @@ class _SecondFragmentState extends State<SecondFragment> with TickerProviderStat
                         labelColor: (Colors.blue[300])!,
                         indicatorSize: TabBarIndicatorSize.label,
                         unselectedLabelColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-                        labelStyle: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 15.0, fontWeight: FontWeight.w900),
+                        labelStyle: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 15.0, fontWeight: FontWeight.w900),
                         tabs: _tabsAktivitas,
                       ),
                     ),
@@ -272,7 +272,7 @@ class _AktivitasListTabState extends State<AktivitasListTab>
               return Center(
                 child: Text(
                   "Tidak Ada Data",
-                  style: Theme.of(context).textTheme.bodyText1,
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
               );
             }else{
@@ -476,7 +476,7 @@ class _AktivitasListTabVerifikasi extends State<AktivitasListTabVerifikasi>
             return Center(
               child: Text(
                 "Tidak Ada Data",
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
             );
           }else{

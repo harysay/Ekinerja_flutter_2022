@@ -233,7 +233,7 @@ class _FormSkpState extends State<FormSkp> {
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: <Widget>[
-                                        Text("Tanggal aktivitas",style: Theme.of(context).textTheme.caption),
+                                        Text("Tanggal aktivitas",style: Theme.of(context).textTheme.bodySmall),
                                         Container(
                                           child: Row(
                                             children: <Widget>[
@@ -370,7 +370,7 @@ class _FormSkpState extends State<FormSkp> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,//membuat isi kolom rata kiri
                                 children: <Widget>[
-                                  Text("Jam mulai",style: Theme.of(context).textTheme.caption),
+                                  Text("Jam mulai",style: Theme.of(context).textTheme.bodySmall),
                                   Container(
                                     child: Row(
                                       children: <Widget>[
@@ -443,7 +443,7 @@ class _FormSkpState extends State<FormSkp> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,//membuat isi kolom rata kiri
                                 children: <Widget>[
-                                  Text("Jam Selesai",style: Theme.of(context).textTheme.caption),
+                                  Text("Jam Selesai",style: Theme.of(context).textTheme.bodySmall),
                                   Container(
                                     child: Row(
                                       children: <Widget>[
@@ -701,7 +701,7 @@ class _FormSkpState extends State<FormSkp> {
                           Spacer(),
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              primary: Colors.orange[400],
+                              backgroundColor: Colors.orange[400],
                               minimumSize: const Size.fromHeight(50),
                             ),
                             onPressed: () {

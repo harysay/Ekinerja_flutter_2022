@@ -14,7 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ekinerja2020/verifikasi/ui/icon_button.dart';
 import 'package:http/http.dart' as http;
 import 'package:ekinerja2020/response/daftar_aktivitas_response.dart';
-import 'package:catcher/catcher.dart';
+// import 'package:catcher/catcher.dart';
 
 import 'animations.dart';
 import 'selection_widgets.dart';

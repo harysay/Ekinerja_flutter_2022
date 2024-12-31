@@ -125,7 +125,7 @@ class _SkpFragmentState extends State<SkpFragment>{
               return Center(
                 child: Text(
                   "Tidak Ada Data",
-                  style: Theme.of(context).textTheme.subtitle1,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
               );
             } else {

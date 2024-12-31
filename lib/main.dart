@@ -39,17 +39,17 @@ class MyApp extends StatelessWidget {
           ),
           brightness: Brightness.light,
           textTheme: TextTheme(
-              bodyText1: TextStyle(
+              bodyLarge: TextStyle(
                   fontSize: 18,
                   fontFamily: 'BreeSerif',
                   height: 1.5
               ),
-              bodyText2: TextStyle(
+              bodyMedium: TextStyle(
                   fontSize: 16,
                   fontFamily: 'Nunito',
                   height: 1.5
               ),
-              subtitle1: TextStyle(
+              titleMedium: TextStyle(
                 fontSize: 14,
                 fontFamily: 'Nunito',
                 // fontFamily: 'Pasifico',
@@ -120,3 +120,5 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 }
+
+

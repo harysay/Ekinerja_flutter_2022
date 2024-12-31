@@ -322,7 +322,7 @@ class _PageLoginState extends State<PageLogin> {
                       padding: const EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
                       child: ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.amber,
+                          backgroundColor: Colors.amber,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.0),
                             side: const BorderSide(color: Colors.blue),

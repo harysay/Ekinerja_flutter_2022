@@ -182,7 +182,7 @@ abstract class ShowFunctions {
               ],
             ),
             contentPadding: EdgeInsets.zero,
-            contentTextStyle: Theme.of(context).textTheme.subtitle1!.copyWith(
+            contentTextStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
                   fontWeight: FontWeight.w500,
                   fontSize: 15.0,
                 ),

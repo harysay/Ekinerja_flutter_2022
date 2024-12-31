@@ -312,7 +312,7 @@ class _SelectableActivityTileState extends State<SelectableActivityTile>
   @override
   Widget build(BuildContext context) {
     return ListTileTheme(
-      selectedColor: Theme.of(context).textTheme.bodyText1!.color,
+      selectedColor: Theme.of(context).textTheme.bodyLarge!.color,
       child: ListTile(
         subtitle: Text(
           widget.listAktivitas.uraianPekerjaan!,
@@ -320,7 +320,7 @@ class _SelectableActivityTileState extends State<SelectableActivityTile>
           style: TextStyle(
             fontSize: 13.5,
             fontWeight: FontWeight.w500,
-            color: Theme.of(context).textTheme.caption!.color,
+            color: Theme.of(context).textTheme.bodySmall!.color,
             height: 0.9,
           ),
         ),

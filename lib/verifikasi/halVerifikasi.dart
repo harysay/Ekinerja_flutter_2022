@@ -19,7 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ekinerja2020/verifikasi/ui/icon_button.dart';
 import 'package:http/http.dart' as http;
 import 'package:ekinerja2020/response/daftar_aktivitas_response.dart';
-import 'package:catcher/catcher.dart';
+// import 'package:catcher/catcher.dart';
 
 import 'animations.dart';
 import 'selection_widgets.dart';
@@ -34,7 +34,7 @@ export 'switcher.dart';
 const kPrimaryColor = Color(0xff4995f7);
 
 void main() async {
-  Catcher(rootWidget: App());
+  // Catcher(rootWidget: App());
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -50,7 +50,7 @@ void main() async {
 
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 class App extends StatefulWidget {
-  static GlobalKey<NavigatorState>? get navigatorKey => Catcher.navigatorKey;
+  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   @override
   _AppState createState() => _AppState();
 }
@@ -475,7 +475,7 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
                             topRight: const Radius.circular(3.0),
                           ),
                         ),
-                        labelColor: Theme.of(context).textTheme.headline6!.color,
+                        labelColor: Theme.of(context).textTheme.titleLarge!.color,
                         indicatorSize: TabBarIndicatorSize.label,
                         unselectedLabelColor: Theme.of(context)
                             .colorScheme
@@ -483,7 +483,7 @@ class _HalVerifState extends State<HalVerif> with TickerProviderStateMixin {
                             .withOpacity(0.6),
                         labelStyle: Theme.of(context)
                             .textTheme
-                            .headline6!
+                            .titleLarge!
                             .copyWith(
                             fontSize: 15.0, fontWeight: FontWeight.w900),
                         tabs: _tabs,
@@ -548,7 +548,7 @@ class _AktivitasListTabState extends State<AktivitasListTab>
             return Center(
               child: Text(
                 "Tidak Ada Data",
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
             );
           }else{

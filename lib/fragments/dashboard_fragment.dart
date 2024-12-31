@@ -71,7 +71,7 @@ class _FirstFragmentState extends State<FirstFragment>{
   }
 
   Widget buildDataRow(String label, String value,double jarakTitik) {
-    TextStyle? styleDashboard = Theme.of(context).textTheme.bodyText2;
+    TextStyle? styleDashboard = Theme.of(context).textTheme.bodyMedium;
     return LayoutBuilder(
       builder: (context, constraints) {
         return Row(
@@ -90,7 +90,7 @@ class _FirstFragmentState extends State<FirstFragment>{
     );
   }
   Widget buildDataRowInfo(String label, String value,double jarakTitik) {
-    TextStyle? styleDashboard = Theme.of(context).textTheme.bodyText2;
+    TextStyle? styleDashboard = Theme.of(context).textTheme.bodyMedium;
     return LayoutBuilder(
       builder: (context, constraints) {
         return Row(
@@ -266,8 +266,8 @@ class _FirstFragmentState extends State<FirstFragment>{
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    TextStyle? styleDashboard = Theme.of(context).textTheme.bodyText2;
-    TextStyle? styleTitle = Theme.of(context).textTheme.bodyText1;
+    TextStyle? styleDashboard = Theme.of(context).textTheme.bodyMedium;
+    TextStyle? styleTitle = Theme.of(context).textTheme.bodyLarge;
     return new SingleChildScrollView(
       padding: EdgeInsets.all(16.0),
       child:Center(

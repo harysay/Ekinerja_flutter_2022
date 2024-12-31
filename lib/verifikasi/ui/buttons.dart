@@ -75,11 +75,11 @@ class DialogRaisedButton extends StatelessWidget {
       ),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          onPrimary: Colors.white,
+          foregroundColor: Colors.white,
           animationDuration: Duration(milliseconds: 1000),
-          primary: Colors.orangeAccent,
+          backgroundColor: Colors.orangeAccent,
           shadowColor: Colors.redAccent,
-          backgroundColor: Theme.of(context).colorScheme.primary,
+          // backgroundColor: Theme.of(context).colorScheme.primary,
           padding: padding,
           elevation: 10,
           shape: RoundedRectangleBorder(
