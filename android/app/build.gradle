@@ -40,9 +40,9 @@ android {
     signingConfigs {
         release {
             keyAlias "kebumenkab" //keystoreProperties['keyAlias']
-            keyPassword "kbmkominf0" //keystoreProperties['keyPassword']
-            storeFile file('D:/KOMINFO/kebumenkab.jks') //file(keystoreProperties['storeFile'])
-            storePassword "kbmkominf0"//keystoreProperties['storePassword']
+            keyPassword "isipassMu" //keystoreProperties['keyPassword']
+            storeFile file('D:/KOMINFO/file.jks') //file(keystoreProperties['storeFile'])
+            storePassword "isipassMu"//keystoreProperties['storePassword']
         }
     }
     buildTypes {
