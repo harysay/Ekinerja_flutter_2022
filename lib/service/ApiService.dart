@@ -16,9 +16,8 @@ class ApiService {
   String username="", nama=""; //,tokenlogin="";
   List? jsonku;
 
-  // static String urlUtama = "https://development.kebumenkab.go.id/siltapkin/index.php/api/";
-  static String urlUtama = "https://tukin.kebumenkab.go.id/api/";
-  // static String urlUtama = "https://tukin.kebumenkab.go.id/2020/index.php/api/";
+  
+  static String urlUtama = "https://url.apimu.go.id/api/";
   // static String versionCodeSekarang = "15"; //harus sama dengan version di build.gradle app-nya
   // static String tahunSekarang = DateTime.now().year.toString();//"2024";
   // static String versionBuildSekarang = "Version 6.3.pb.20062024";
